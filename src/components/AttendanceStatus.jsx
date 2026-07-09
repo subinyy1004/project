@@ -51,7 +51,7 @@ export default function AttendanceStatus() {
                 fontSize: 12,
                 fontWeight: 400,
                 lineHeight: '18px',
-                color: s.accent,
+                color: colors.accent,
               }}
             >
               내 오늘 상태
@@ -80,12 +80,12 @@ export default function AttendanceStatus() {
               fontSize: 12,
               fontWeight: 400,
               lineHeight: '18px',
-              color: s.accent,
+              color: colors.accent,
             }}
           >
             변경
           </span>
-          <Icon name="chevron_right" size={16} color={s.accent} />
+          <Icon name="chevron_right" size={16} color={colors.accent} />
         </div>
 
         {open && (
