@@ -76,8 +76,9 @@ export default function ScheduleSection() {
                   fontWeight: 400,
                   lineHeight: '16.5px',
                   color: colors.mutedText,
+                  backgroundColor: colors.white,
                   padding: '2px 8px',
-                  borderRadius: 4,
+                  borderRadius: 100,
                 }}
               >
                 {event.status}
