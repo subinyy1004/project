@@ -10,30 +10,11 @@ const options = [
   { key: 'adjust', icon: 'swap_horiz', label: '조정 부탁드립니다' },
 ]
 
-const formatDateLabel = (iso) => {
-  if (!iso) return ''
-  const parts = iso.split('-')
-  return `${parseInt(parts[1])}월 ${parseInt(parts[2])}일`
-}
+const avatars = ['김', '박', '이', '최', '정']
 
-const durationLabel = (min) => {
-  if (!min) return ''
-  const h = Math.floor(min / 60)
-  const m = min % 60
-  if (h === 0) return `${m}분`
-  if (m === 0) return `${h}시간`
-  return `${h}시간 ${m}분`
-}
-
-export default function ConfirmationPage({ onNavigate, meetingForm }) {
+export default function ConfirmationPage({ onNavigate }) {
   const [selectedOption, setSelectedOption] = useState(null)
   const [memo, setMemo] = useState('')
-
-  const title = meetingForm?.title || '스프린트 회의'
-  const dateLabel = formatDateLabel(meetingForm?.startDate)
-  const dur = durationLabel(meetingForm?.selectedTime)
-  const participants = [...(meetingForm?.mandatory || []), ...(meetingForm?.optional || [])]
-  const participantCount = participants.length
 
   return (
     <div
@@ -114,7 +95,7 @@ export default function ConfirmationPage({ onNavigate, meetingForm }) {
                 marginBottom: 6,
               }}
             >
-              {title}
+              스프린트 회고
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
               <Icon name="schedule" size={16} color={colors.lightText} />
@@ -127,7 +108,7 @@ export default function ConfirmationPage({ onNavigate, meetingForm }) {
                   color: colors.border,
                 }}
               >
-                {dateLabel}{dur ? ` (${dur})` : ''}
+                7월 19일 15:00 – 16:00 (1시간)
               </span>
             </div>
           </div>
@@ -145,7 +126,7 @@ export default function ConfirmationPage({ onNavigate, meetingForm }) {
                   color: colors.tertiaryText,
                 }}
               >
-                주최
+                주최: 최PM
               </span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
@@ -159,11 +140,11 @@ export default function ConfirmationPage({ onNavigate, meetingForm }) {
                   color: colors.tertiaryText,
                 }}
               >
-                참석자 {participantCount}명
+                참석자 6명
               </span>
             </div>
             <div style={{ display: 'flex', gap: 6 }}>
-              {participants.slice(0, 5).map((name, i) => (
+              {avatars.map((a, i) => (
                 <div
                   key={i}
                   style={{
@@ -185,35 +166,33 @@ export default function ConfirmationPage({ onNavigate, meetingForm }) {
                       color: colors.tertiaryText,
                     }}
                   >
-                    {name[0]}
+                    {a}
                   </span>
                 </div>
               ))}
-              {participants.length > 5 && (
-                <div
+              <div
+                style={{
+                  width: 28,
+                  height: 28,
+                  borderRadius: 14,
+                  backgroundColor: colors.border,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <span
                   style={{
-                    width: 28,
-                    height: 28,
-                    borderRadius: 14,
-                    backgroundColor: colors.border,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
+                    fontFamily: fonts.pretendard,
+                    fontSize: 11,
+                    fontWeight: 500,
+                    lineHeight: '16.5px',
+                    color: colors.tertiaryText,
                   }}
                 >
-                  <span
-                    style={{
-                      fontFamily: fonts.pretendard,
-                      fontSize: 11,
-                      fontWeight: 500,
-                      lineHeight: '16.5px',
-                      color: colors.tertiaryText,
-                    }}
-                  >
-                    +{participants.length - 5}
-                  </span>
-                </div>
-              )}
+                  +1
+                </span>
+              </div>
             </div>
           </div>
         </div>

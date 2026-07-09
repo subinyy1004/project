@@ -77,7 +77,7 @@ function App() {
   }
 
   if (page === 'meeting-confirm') {
-    return <ConfirmationPage onNavigate={handleNavigate} meetingForm={meetingForm} />
+    return <ConfirmationPage onNavigate={handleNavigate} />
   }
 
   if (page === 'meeting-complete') {
