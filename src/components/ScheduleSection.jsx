@@ -1,8 +1,19 @@
 import { fonts, colors } from '../designTokens'
 import { events } from '../data'
 
-export default function ScheduleSection({ selectedDay }) {
+export default function ScheduleSection({ selectedDay, newMeetings = [] }) {
   const dayEvents = events[selectedDay] || []
+  const dayNewMeetings = newMeetings.filter(m => {
+    const d = new Date(m.date + 'T00:00:00')
+    return d.getDate() === selectedDay
+  })
+
+  const allEvents = [...dayEvents, ...dayNewMeetings.map(m => ({
+    time: m.time,
+    title: m.title,
+    duration: m.duration,
+    status: m.status,
+  }))]
 
   return (
     <div style={{ padding: '12px 16px', display: 'flex', flexDirection: 'column', gap: 12 }}>
@@ -18,7 +29,7 @@ export default function ScheduleSection({ selectedDay }) {
           gap: 4,
         }}
       >
-        {dayEvents.map((event, i) => (
+        {allEvents.map((event, i) => (
           <div key={i}>
             <div
               style={{

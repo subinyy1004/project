@@ -9,6 +9,7 @@ function App() {
   const [page, setPage] = useState('calendar')
   const [meetingForm, setMeetingForm] = useState(null)
   const [viewDate, setViewDate] = useState(null)
+  const [newMeetings, setNewMeetings] = useState([])
 
   const handleNavigate = (pageName, formData) => {
     if (formData) {
@@ -16,6 +17,17 @@ function App() {
         setViewDate(formData.viewDate)
         const { viewDate: vd, ...rest } = formData
         if (Object.keys(rest).length > 0) setMeetingForm(prev => ({ ...prev, ...rest }))
+
+        const rec = meetingForm?.selectedRec
+        const time = rec?.time?.split(' – ')[0] || '15:00'
+        const duration = rec?.time || '15:00 – 16:00'
+        setNewMeetings(prev => [...prev, {
+          date: vd,
+          time,
+          title: meetingForm?.title || '스프린트 회의',
+          duration,
+          status: '편하게 가능',
+        }])
       } else {
         setMeetingForm(prev => ({ ...prev, ...formData }))
       }
@@ -42,7 +54,7 @@ function App() {
     return <CompletionPage onNavigate={handleNavigate} meetingForm={meetingForm} selectedRec={meetingForm?.selectedRec} />
   }
 
-  return <CalendarPage onNavigate={handleNavigate} initialDate={viewDate} />
+  return <CalendarPage onNavigate={handleNavigate} initialDate={viewDate} newMeetings={newMeetings} />
 }
 
 export default App

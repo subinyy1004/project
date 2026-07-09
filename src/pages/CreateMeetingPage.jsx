@@ -34,6 +34,9 @@ export default function CreateMeetingPage({ onNavigate }) {
   const removeMandatory = (name) => setMandatory(mandatory.filter(p => p.name !== name))
   const removeOptional = (name) => setOptional(optional.filter(p => p.name !== name))
 
+  const today = new Date()
+  const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`
+
   const daysInMonth = new Date(2026, 7, 0).getDate()
   const dateList = Array.from({ length: daysInMonth }, (_, i) => {
     const d = new Date(2026, 6, i + 1)
@@ -44,16 +47,13 @@ export default function CreateMeetingPage({ onNavigate }) {
     const weekday = ['일','월','화','수','목','금','토'][d.getDay()]
     const label = `${d.getMonth() + 1}월 ${d.getDate()}일 (${weekday})`
     return { iso, label }
-  })
+  }).filter(d => d.iso >= todayStr)
 
   const formatDate = (iso) => {
     if (!iso) return ''
     const parts = iso.split('-')
     return `${parseInt(parts[1])}월 ${parseInt(parts[2])}일`
   }
-
-  const today = new Date()
-  const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`
 
   const isFormValid =
     title.trim() !== '' &&

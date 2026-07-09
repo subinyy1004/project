@@ -23,7 +23,7 @@ function getCalendarDays(year, month) {
   return days
 }
 
-export default function CalendarGrid({ year, month, selectedDay, onSelectDay }) {
+export default function CalendarGrid({ year, month, selectedDay, onSelectDay, newMeetings = [] }) {
   const weeks = getCalendarDays(year, month)
 
   return (
@@ -57,6 +57,11 @@ export default function CalendarGrid({ year, month, selectedDay, onSelectDay }) 
 
             const isSelected = day === selectedDay
             const dayEvents = events[day] || []
+            const hasNewMeeting = newMeetings.some(m => {
+              const d = new Date(m.date + 'T00:00:00')
+              return d.getDate() === day && d.getMonth() === month && d.getFullYear() === year
+            })
+            const dotCount = dayEvents.length + (hasNewMeeting ? 1 : 0)
 
             return (
               <div
@@ -97,7 +102,7 @@ export default function CalendarGrid({ year, month, selectedDay, onSelectDay }) 
                   </span>
                 </div>
                 <div style={{ height: 10, display: 'flex', alignItems: 'center', gap: 2 }}>
-                  {dayEvents.map((_, i) => (
+                  {Array.from({ length: dotCount }).map((_, i) => (
                     <div
                       key={i}
                       style={{

@@ -3,6 +3,35 @@ import Icon from '../components/Icon'
 import BottomNav from '../components/BottomNav'
 import StatusBar from '../components/StatusBar'
 
+const personLookup = [
+  { name: '김디자이너', role: '디자이너' },
+  { name: '박엔지니어', role: '엔지니어' },
+  { name: '이PM', role: 'PM' },
+  { name: '최QA', role: 'QA' },
+  { name: '정디자이너', role: '디자이너' },
+  { name: '한엔지니어', role: '엔지니어' },
+  { name: '윤운영', role: '운영' },
+  { name: '강기획', role: '기획' },
+  { name: '서마케팅', role: '마케팅' },
+  { name: '조엔지니어', role: '개발' },
+  { name: '류디자이너', role: '디자인' },
+  { name: '문QA', role: 'QA' },
+]
+
+const defaultStatus = { status: '편하게 가능', icon: 'check_circle', iconColor: '#3182F6', badgeBg: '#E8F1FF', textColor: '#0050C3' }
+
+function buildParticipants(names, recParticipants) {
+  return names.map(name => {
+    const person = personLookup.find(p => p.name === name)
+    const matched = recParticipants.find(p => p.name === name)
+    return {
+      name,
+      role: person?.role || '',
+      ...(matched || defaultStatus),
+    }
+  })
+}
+
 function ParticipantRow({ p }) {
   return (
     <div
@@ -96,6 +125,9 @@ function ParticipantRow({ p }) {
 export default function RecommendDetailPage({ onNavigate, meetingForm, selectedRec }) {
   const rec = selectedRec
   if (!rec) return null
+
+  const mandatoryParticipants = buildParticipants(meetingForm?.mandatory || [], mandatoryParticipants || [])
+  const optionalParticipants = buildParticipants(meetingForm?.optional || [], optionalParticipants || [])
 
   return (
     <div
@@ -228,12 +260,12 @@ export default function RecommendDetailPage({ onNavigate, meetingForm, selectedR
                 color: colors.secondaryText,
               }}
             >
-              필수 참석자 {rec.mandatoryParticipants.length}명
+              필수 참석자 {mandatoryParticipants.length}명
             </span>
           </div>
 
           <div>
-            {rec.mandatoryParticipants.map((p, i) => (
+            {mandatoryParticipants.map((p, i) => (
               <ParticipantRow key={i} p={p} />
             ))}
           </div>
@@ -256,12 +288,12 @@ export default function RecommendDetailPage({ onNavigate, meetingForm, selectedR
                 color: colors.secondaryText,
               }}
             >
-              선택 참석자 {rec.optionalParticipants.length}명
+              선택 참석자 {optionalParticipants.length}명
             </span>
           </div>
 
           <div>
-            {rec.optionalParticipants.map((p, i) => (
+            {optionalParticipants.map((p, i) => (
               <ParticipantRow key={i} p={p} />
             ))}
           </div>
