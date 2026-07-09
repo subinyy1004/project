@@ -360,14 +360,11 @@ export default function CreateMeetingPage({ onNavigate }) {
           onClose={(result) => {
             setShowSheet(false)
             if (result) {
-              const items = result.names.map(name =>
+              const toItems = (names) => names.map(name =>
                 allPeople.find(p => p.name === name) || { initial: name[0], name }
               )
-              if (result.tab === 'mandatory') {
-                setMandatory(prev => [...prev, ...items])
-              } else {
-                setOptional(prev => [...prev, ...items])
-              }
+              setMandatory(prev => [...prev, ...toItems(result.mandatory)])
+              setOptional(prev => [...prev, ...toItems(result.optional)])
             }
           }}
         />

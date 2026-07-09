@@ -12,16 +12,14 @@ const people = [
 ]
 
 export default function AddParticipantsSheet({ existingMandatory = [], existingOptional = [], onClose }) {
-  const [tab, setTab] = useState('mandatory')
   const [query, setQuery] = useState('')
-  const [pendingMandatory, setPendingMandatory] = useState(new Set())
-  const [pendingOptional, setPendingOptional] = useState(new Set())
+  const [assignment, setAssignment] = useState({})
 
-  const existingNames = useMemo(() => {
-    const names = new Set()
-    existingMandatory.forEach(p => names.add(p.name))
-    existingOptional.forEach(p => names.add(p.name))
-    return names
+  const existingMap = useMemo(() => {
+    const m = {}
+    existingMandatory.forEach(p => { m[p.name] = 'mandatory' })
+    existingOptional.forEach(p => { m[p.name] = 'optional' })
+    return m
   }, [existingMandatory, existingOptional])
 
   const filtered = useMemo(() => {
@@ -30,33 +28,37 @@ export default function AddParticipantsSheet({ existingMandatory = [], existingO
     return people.filter(p => p.name.includes(q) || p.dept.includes(q))
   }, [query])
 
-  const togglePerson = (name) => {
-    if (tab === 'mandatory') {
-      setPendingMandatory((prev) => {
-        const next = new Set(prev)
-        if (next.has(name)) next.delete(name)
-        else next.add(name)
-        return next
-      })
-    } else {
-      setPendingOptional((prev) => {
-        const next = new Set(prev)
-        if (next.has(name)) next.delete(name)
-        else next.add(name)
-        return next
-      })
+  const setRole = (name, role) => {
+    setAssignment((prev) => {
+      const next = { ...prev }
+      if (next[name] === role) delete next[name]
+      else next[name] = role
+      return next
+    })
+  }
+
+  const allAssignments = { ...existingMap }
+  for (const [name, role] of Object.entries(assignment)) {
+    if (role === 'mandatory' || role === 'optional') {
+      allAssignments[name] = role
     }
   }
 
+  const pendingMandatory = Object.entries(assignment)
+    .filter(([, v]) => v === 'mandatory')
+    .map(([k]) => k)
+  const pendingOptional = Object.entries(assignment)
+    .filter(([, v]) => v === 'optional')
+    .map(([k]) => k)
+
+  const totalPending = pendingMandatory.length + pendingOptional.length
+
   const submit = () => {
-    const names = [...(tab === 'mandatory' ? pendingMandatory : pendingOptional)]
-    onClose({ tab, names })
+    onClose({
+      mandatory: pendingMandatory,
+      optional: pendingOptional,
+    })
   }
-
-  const isInOtherPending = (name) =>
-    tab === 'mandatory' ? pendingOptional.has(name) : pendingMandatory.has(name)
-
-  const currentPending = tab === 'mandatory' ? pendingMandatory : pendingOptional
 
   return (
     <div
@@ -165,76 +167,22 @@ export default function AddParticipantsSheet({ existingMandatory = [], existingO
           </div>
         </div>
 
-        {/* Toggle buttons */}
-        <div style={{ padding: '0 16px', marginBottom: 12 }}>
-          <div
-            style={{
-              display: 'flex',
-              gap: 8,
-              padding: 4,
-              backgroundColor: '#F7F8F9',
-              borderRadius: 8,
-            }}
-          >
-            <button
-              onClick={() => setTab('mandatory')}
-              style={{
-                flex: 1,
-                padding: '9px 16px',
-                backgroundColor: tab === 'mandatory' ? colors.primaryText : '#F7F8F9',
-                border: 'none',
-                borderRadius: 8,
-                cursor: 'pointer',
-                fontFamily: fonts.pretendard,
-                fontSize: 12,
-                fontWeight: tab === 'mandatory' ? 600 : 400,
-                lineHeight: '18px',
-                color: tab === 'mandatory' ? colors.white : colors.tertiaryText,
-              }}
-            >
-              필수 참석자로 추가
-            </button>
-            <button
-              onClick={() => setTab('optional')}
-              style={{
-                flex: 1,
-                padding: '9px 16px',
-                backgroundColor: tab === 'optional' ? colors.primaryText : '#F7F8F9',
-                border: 'none',
-                borderRadius: 8,
-                cursor: 'pointer',
-                fontFamily: fonts.pretendard,
-                fontSize: 12,
-                fontWeight: tab === 'optional' ? 600 : 400,
-                lineHeight: '18px',
-                color: tab === 'optional' ? colors.white : colors.tertiaryText,
-              }}
-            >
-              선택 참석자로 추가
-            </button>
-          </div>
-        </div>
-
         {/* Divider */}
         <div style={{ height: 1, backgroundColor: colors.borderLighter }} />
 
         {/* Participant list */}
         <div style={{ flex: 1, overflow: 'auto' }}>
           {filtered.map((p, i) => {
-            const isSelected = currentPending.has(p.name)
-            const isDisabled = existingNames.has(p.name) || isInOtherPending(p.name)
+            const role = allAssignments[p.name] || null
             return (
               <div
                 key={i}
-                onClick={() => !isDisabled && togglePerson(p.name)}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
                   gap: 12,
                   padding: '14px 20px',
                   borderBottom: i < filtered.length - 1 ? `1px solid ${colors.borderLighter}` : 'none',
-                  cursor: isDisabled ? 'not-allowed' : 'pointer',
-                  opacity: isDisabled ? 0.4 : 1,
                 }}
               >
                 <div
@@ -287,20 +235,41 @@ export default function AddParticipantsSheet({ existingMandatory = [], existingO
                   </div>
                 </div>
 
-                <div
-                  style={{
-                    width: 24,
-                    height: 24,
-                    borderRadius: 6,
-                    border: `1px solid ${isSelected ? colors.primaryText : colors.border}`,
-                    backgroundColor: isSelected ? colors.primaryText : colors.white,
-                    flexShrink: 0,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  {isSelected && <Icon name="check" size={16} color={colors.white} />}
+                <div style={{ display: 'flex', gap: 6 }}>
+                  <button
+                    onClick={() => setRole(p.name, 'mandatory')}
+                    style={{
+                      padding: '4px 12px',
+                      borderRadius: 20,
+                      border: 'none',
+                      backgroundColor: role === 'mandatory' ? colors.primaryText : colors.white,
+                      fontFamily: fonts.pretendard,
+                      fontSize: 12,
+                      fontWeight: role === 'mandatory' ? 600 : 400,
+                      lineHeight: '18px',
+                      color: role === 'mandatory' ? colors.white : colors.secondaryText,
+                      cursor: 'pointer',
+                    }}
+                  >
+                    필수
+                  </button>
+                  <button
+                    onClick={() => setRole(p.name, 'optional')}
+                    style={{
+                      padding: '4px 12px',
+                      borderRadius: 20,
+                      border: `1px solid ${role === 'optional' ? colors.primaryText : colors.borderLight}`,
+                      backgroundColor: role === 'optional' ? colors.primaryText : colors.white,
+                      fontFamily: fonts.pretendard,
+                      fontSize: 12,
+                      fontWeight: role === 'optional' ? 600 : 400,
+                      lineHeight: '18px',
+                      color: role === 'optional' ? colors.white : colors.secondaryText,
+                      cursor: 'pointer',
+                    }}
+                  >
+                    선택
+                  </button>
                 </div>
               </div>
             )
@@ -315,20 +284,20 @@ export default function AddParticipantsSheet({ existingMandatory = [], existingO
           }}
         >
           <button
-            disabled={currentPending.size === 0}
+            disabled={totalPending === 0}
             onClick={submit}
             style={{
               width: '100%',
               padding: '18px 16px',
-              backgroundColor: currentPending.size > 0 ? colors.primaryText : colors.borderLight,
+              backgroundColor: totalPending > 0 ? colors.primaryText : colors.borderLight,
               border: 'none',
               borderRadius: 12,
               fontFamily: fonts.pretendard,
               fontSize: 16,
               fontWeight: 600,
               lineHeight: '20.8px',
-              color: currentPending.size > 0 ? colors.white : colors.lightText,
-              cursor: currentPending.size > 0 ? 'pointer' : 'not-allowed',
+              color: totalPending > 0 ? colors.white : colors.lightText,
+              cursor: totalPending > 0 ? 'pointer' : 'not-allowed',
             }}
           >
             추가하기
