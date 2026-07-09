@@ -1,7 +1,9 @@
 import { fonts, colors } from '../designTokens'
 import Icon from './Icon'
 
-export default function CalendarHeader() {
+const MONTHS = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월']
+
+export default function CalendarHeader({ year, month, onPrevMonth, onNextMonth, onToday }) {
   return (
     <div
       style={{
@@ -21,13 +23,14 @@ export default function CalendarHeader() {
             color: colors.primaryText,
           }}
         >
-          7월 2026
+          {MONTHS[month]} {year}
         </span>
         <Icon name="expand_more" size={20} color={colors.mutedText} />
       </div>
 
       <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
         <div
+          onClick={onToday}
           style={{
             border: `1px solid ${colors.border}`,
             borderRadius: 20,
@@ -35,6 +38,7 @@ export default function CalendarHeader() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
+            cursor: 'pointer',
           }}
         >
           <span
@@ -49,8 +53,12 @@ export default function CalendarHeader() {
             오늘
           </span>
         </div>
-        <Icon name="chevron_left" size={24} color={colors.mutedText} />
-        <Icon name="chevron_right" size={24} color={colors.mutedText} />
+        <div onClick={onPrevMonth} style={{ cursor: 'pointer', display: 'flex' }}>
+          <Icon name="chevron_left" size={24} color={colors.mutedText} />
+        </div>
+        <div onClick={onNextMonth} style={{ cursor: 'pointer', display: 'flex' }}>
+          <Icon name="chevron_right" size={24} color={colors.mutedText} />
+        </div>
       </div>
     </div>
   )

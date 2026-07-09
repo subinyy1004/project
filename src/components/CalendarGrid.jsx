@@ -22,9 +22,9 @@ function getCalendarDays(year, month) {
   return days
 }
 
-const weeks = getCalendarDays(2026, 6)
+export default function CalendarGrid({ year, month, selectedDay, onSelectDay }) {
+  const weeks = getCalendarDays(year, month)
 
-export default function CalendarGrid() {
   return (
     <div style={{ padding: '0 16px', display: 'flex', flexDirection: 'column', gap: 4 }}>
       <div style={{ display: 'flex' }}>
@@ -54,12 +54,13 @@ export default function CalendarGrid() {
               return <div key={`e-${di}`} style={{ flex: 1 }} />
             }
 
-            const isSelected = day === 16
+            const isSelected = day === selectedDay
             const dayEvents = events[day] || []
 
             return (
               <div
                 key={day}
+                onClick={() => onSelectDay(day)}
                 style={{
                   flex: 1,
                   display: 'flex',
@@ -67,6 +68,7 @@ export default function CalendarGrid() {
                   alignItems: 'center',
                   paddingTop: 4,
                   gap: 2,
+                  cursor: 'pointer',
                 }}
               >
                 <div
@@ -78,6 +80,7 @@ export default function CalendarGrid() {
                     alignItems: 'center',
                     justifyContent: 'center',
                     backgroundColor: isSelected ? colors.primaryText : 'transparent',
+                    transition: 'background-color 0.15s',
                   }}
                 >
                   <span

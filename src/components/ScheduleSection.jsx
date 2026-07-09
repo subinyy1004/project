@@ -2,9 +2,9 @@ import { fonts, colors } from '../designTokens'
 import { events } from '../data'
 import Icon from './Icon'
 
-const todayEvents = events[16]
+export default function ScheduleSection({ selectedDay, onNavigate }) {
+  const dayEvents = events[selectedDay] || []
 
-export default function ScheduleSection({ onNavigate }) {
   return (
     <div style={{ padding: '12px 16px', display: 'flex', flexDirection: 'column', gap: 12 }}>
       <SectionLabel text="오늘 일정" />
@@ -19,7 +19,7 @@ export default function ScheduleSection({ onNavigate }) {
           gap: 4,
         }}
       >
-        {todayEvents.map((event, i) => (
+        {dayEvents.map((event, i) => (
           <div key={i}>
             <div
               style={{

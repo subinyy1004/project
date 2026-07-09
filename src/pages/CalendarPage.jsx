@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import StatusBar from '../components/StatusBar'
 import CalendarHeader from '../components/CalendarHeader'
 import CalendarGrid from '../components/CalendarGrid'
@@ -7,6 +8,36 @@ import BottomNav from '../components/BottomNav'
 import { frame } from '../designTokens'
 
 export default function CalendarPage({ onNavigate }) {
+  const today = new Date()
+  const [currentYear, setCurrentYear] = useState(today.getFullYear())
+  const [currentMonth, setCurrentMonth] = useState(today.getMonth())
+  const [selectedDay, setSelectedDay] = useState(today.getDate())
+
+  const goToPrevMonth = () => {
+    if (currentMonth === 0) {
+      setCurrentYear(y => y - 1)
+      setCurrentMonth(11)
+    } else {
+      setCurrentMonth(m => m - 1)
+    }
+  }
+
+  const goToNextMonth = () => {
+    if (currentMonth === 11) {
+      setCurrentYear(y => y + 1)
+      setCurrentMonth(0)
+    } else {
+      setCurrentMonth(m => m + 1)
+    }
+  }
+
+  const goToToday = () => {
+    const now = new Date()
+    setCurrentYear(now.getFullYear())
+    setCurrentMonth(now.getMonth())
+    setSelectedDay(now.getDate())
+  }
+
   return (
     <div
       style={{
@@ -22,10 +53,21 @@ export default function CalendarPage({ onNavigate }) {
     >
       <StatusBar />
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 10 }}>
-        <CalendarHeader />
-        <CalendarGrid />
+        <CalendarHeader
+          year={currentYear}
+          month={currentMonth}
+          onPrevMonth={goToPrevMonth}
+          onNextMonth={goToNextMonth}
+          onToday={goToToday}
+        />
+        <CalendarGrid
+          year={currentYear}
+          month={currentMonth}
+          selectedDay={selectedDay}
+          onSelectDay={setSelectedDay}
+        />
         <AttendanceStatus />
-        <ScheduleSection onNavigate={onNavigate} />
+        <ScheduleSection selectedDay={selectedDay} onNavigate={onNavigate} />
       </div>
       <BottomNav />
     </div>
