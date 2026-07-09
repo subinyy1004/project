@@ -1,35 +1,25 @@
 import { fonts, colors, frame } from '../designTokens'
 import Icon from '../components/Icon'
+import BottomNav from '../components/BottomNav'
 import StatusBar from '../components/StatusBar'
 
-const formatDate = (iso) => {
-  if (!iso) return ''
-  const parts = iso.split('-')
-  return `${parseInt(parts[1])}월 ${parseInt(parts[2])}일`
-}
-
-const durationLabel = (min) => {
-  if (!min) return ''
-  const h = Math.floor(min / 60)
-  const m = min % 60
-  if (h === 0) return `${m}분`
-  if (m === 0) return `${h}시간`
-  return `${h}시간 ${m}분`
-}
-
 export default function MeetingCompletePage({ onNavigate, meetingForm }) {
-  const title = meetingForm?.title || '스프린트 회의'
-  const dateLabel = formatDate(meetingForm?.startDate)
-  const selectedTime = meetingForm?.selectedRec?.time || ''
-  const dur = durationLabel(meetingForm?.selectedTime)
+  const title = meetingForm?.title || '스프린트 회고'
+  const dateLabel = meetingForm?.startDate
+    ? (() => { const p = meetingForm.startDate.split('-'); return `${parseInt(p[1])}월 ${parseInt(p[2])}일` })()
+    : '7월 19일'
+  const selectedTime = meetingForm?.selectedRec?.time || '15:00 – 16:00'
+  const dur = meetingForm?.selectedTime || 60
+  const durLabel = dur >= 60 ? `${dur / 60}시간` : '30분'
   const participants = [...(meetingForm?.mandatory || []), ...(meetingForm?.optional || [])]
+  const participantCount = participants.length || 6
 
   return (
     <div
       style={{
         width: frame.width,
         minHeight: frame.height,
-        backgroundColor: '#F7F8F9',
+        backgroundColor: '#FFFFFF',
         display: 'flex',
         flexDirection: 'column',
         borderRadius: 40,
@@ -38,184 +28,193 @@ export default function MeetingCompletePage({ onNavigate, meetingForm }) {
     >
       <StatusBar />
 
-      {/* NavHeader */}
+      {/* Spacer for nav header area */}
+      <div style={{ height: 56 }} />
+
+      {/* Body */}
       <div
         style={{
+          flex: 1,
           display: 'flex',
+          flexDirection: 'column',
           alignItems: 'center',
-          justifyContent: 'center',
           padding: '0 16px',
-          height: 56,
-          backgroundColor: colors.white,
-          borderBottom: `1px solid ${colors.borderLight}`,
-          position: 'relative',
         }}
       >
+        {/* check_circle icon */}
+        <Icon name="check_circle" size={48} color="#22C559" />
+        <div style={{ height: 16 }} />
+
+        {/* Title */}
         <div
-          onClick={() => onNavigate('meeting-confirm')}
-          style={{
-            position: 'absolute',
-            left: 16,
-            cursor: 'pointer',
-            display: 'flex',
-          }}
-        >
-          <Icon name="arrow_back" size={24} color={colors.secondaryText} />
-        </div>
-        <span
           style={{
             fontFamily: fonts.pretendard,
-            fontSize: 16,
+            fontSize: 24,
             fontWeight: 700,
-            lineHeight: '20.8px',
-            color: colors.primaryText,
+            lineHeight: '31.2px',
+            color: '#111111',
+            textAlign: 'center',
           }}
         >
           회의가 확정되었습니다
-        </span>
-      </div>
+        </div>
+        <div style={{ height: 8 }} />
 
-      {/* Body */}
-      <div style={{ flex: 1, overflowY: 'auto', padding: 20 }}>
-        {/* Meeting info card */}
+        {/* Description */}
         <div
           style={{
-            border: `1px solid ${colors.primaryText}`,
-            borderRadius: 16,
-            overflow: 'hidden',
-            marginBottom: 24,
+            fontFamily: fonts.pretendard,
+            fontSize: 14,
+            fontWeight: 400,
+            lineHeight: '21px',
+            color: '#AAAAAA',
+            textAlign: 'center',
+          }}
+        >
+          참석자 모두에게 알림을 보냈습니다
+        </div>
+        <div style={{ height: 24 }} />
+
+        {/* Meeting info */}
+        <div
+          style={{
+            width: '100%',
+            borderRadius: 12,
+            backgroundColor: '#F8F8F8',
+            padding: '16px 20px',
           }}
         >
           <div
             style={{
-              backgroundColor: colors.primaryText,
-              padding: '14px 16px',
+              fontFamily: fonts.pretendard,
+              fontSize: 18,
+              fontWeight: 700,
+              lineHeight: '23.4px',
+              color: '#111111',
+              marginBottom: 12,
             }}
           >
-            <div
+            {title}
+          </div>
+
+          {/* Time */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+            <Icon name="schedule" size={20} color="#AAAAAA" />
+            <span
               style={{
                 fontFamily: fonts.pretendard,
-                fontSize: 18,
-                fontWeight: 700,
-                lineHeight: '23.4px',
-                color: colors.white,
-                marginBottom: 6,
+                fontSize: 15,
+                fontWeight: 400,
+                lineHeight: '22.5px',
+                color: '#333333',
               }}
             >
-              {title}
-            </div>
-            {(dateLabel || selectedTime) && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                <Icon name="schedule" size={16} color={colors.lightText} />
+              {dateLabel} {selectedTime} ({durLabel})
+            </span>
+          </div>
+
+          {/* Participant count */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+            <Icon name="group" size={20} color="#AAAAAA" />
+            <span
+              style={{
+                fontFamily: fonts.pretendard,
+                fontSize: 15,
+                fontWeight: 400,
+                lineHeight: '22.5px',
+                color: '#333333',
+              }}
+            >
+              {participantCount}명 참석 확정
+            </span>
+          </div>
+
+          {/* Organizer */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <Icon name="person" size={20} color="#AAAAAA" />
+            <span
+              style={{
+                fontFamily: fonts.pretendard,
+                fontSize: 15,
+                fontWeight: 400,
+                lineHeight: '22.5px',
+                color: '#333333',
+              }}
+            >
+              주최: 최PM
+            </span>
+          </div>
+
+          {/* Avatars */}
+          <div style={{ display: 'flex', gap: 4, marginTop: 12 }}>
+            {['김', '박', '이', '최', '정'].map((init, i) => (
+              <div
+                key={i}
+                style={{
+                  width: 32,
+                  height: 32,
+                  borderRadius: 16,
+                  backgroundColor: '#E4E4E4',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
                 <span
                   style={{
                     fontFamily: fonts.pretendard,
-                    fontSize: 14,
-                    fontWeight: 400,
-                    lineHeight: '21px',
-                    color: colors.border,
+                    fontSize: 12,
+                    fontWeight: 500,
+                    lineHeight: '18px',
+                    color: '#555555',
                   }}
                 >
-                  {dateLabel}{selectedTime ? ` ${selectedTime}` : ''}{dur ? ` (${dur})` : ''}
+                  {init}
                 </span>
               </div>
-            )}
-          </div>
-
-          <div style={{ padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: 10 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-              <Icon name="person" size={16} color={colors.lightText} />
-              <span
-                style={{
-                  fontFamily: fonts.inter,
-                  fontSize: 14,
-                  fontWeight: 400,
-                  lineHeight: '21px',
-                  color: colors.tertiaryText,
-                }}
-              >
-                주최
-              </span>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-              <Icon name="group" size={16} color={colors.lightText} />
+            ))}
+            <div
+              style={{
+                width: 32,
+                height: 32,
+                borderRadius: 16,
+                backgroundColor: '#D4D4D4',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
               <span
                 style={{
                   fontFamily: fonts.pretendard,
-                  fontSize: 14,
-                  fontWeight: 400,
-                  lineHeight: '21px',
-                  color: colors.tertiaryText,
+                  fontSize: 12,
+                  fontWeight: 500,
+                  lineHeight: '18px',
+                  color: '#555555',
                 }}
               >
-                참석자 {participants.length}명
+                +{participantCount > 5 ? participantCount - 5 : 1}
               </span>
             </div>
-            {participants.length > 0 && (
-              <div style={{ display: 'flex', gap: 6 }}>
-                {participants.slice(0, 5).map((name, i) => (
-                  <div
-                    key={i}
-                    style={{
-                      width: 28,
-                      height: 28,
-                      borderRadius: 14,
-                      backgroundColor: colors.borderLight,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    <span
-                      style={{
-                        fontFamily: fonts.pretendard,
-                        fontSize: 11,
-                        fontWeight: 500,
-                        lineHeight: '16.5px',
-                        color: colors.tertiaryText,
-                      }}
-                    >
-                      {name[0]}
-                    </span>
-                  </div>
-                ))}
-                {participants.length > 5 && (
-                  <div
-                    style={{
-                      width: 28,
-                      height: 28,
-                      borderRadius: 14,
-                      backgroundColor: colors.border,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    <span
-                      style={{
-                        fontFamily: fonts.pretendard,
-                        fontSize: 11,
-                        fontWeight: 500,
-                        lineHeight: '16.5px',
-                        color: colors.tertiaryText,
-                      }}
-                    >
-                      +{participants.length - 5}
-                    </span>
-                  </div>
-                )}
-              </div>
-            )}
           </div>
         </div>
+      </div>
 
-        {/* CTA buttons */}
+      {/* CTA area */}
+      <div
+        style={{
+          padding: 16,
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 8,
+        }}
+      >
         <button
           onClick={() => onNavigate('meetings')}
           style={{
             width: '100%',
             height: 56,
-            backgroundColor: colors.primaryText,
+            backgroundColor: '#111111',
             borderRadius: 12,
             border: 'none',
             cursor: 'pointer',
@@ -223,8 +222,7 @@ export default function MeetingCompletePage({ onNavigate, meetingForm }) {
             fontSize: 16,
             fontWeight: 600,
             lineHeight: '20.8px',
-            color: colors.white,
-            marginBottom: 8,
+            color: '#FFFFFF',
           }}
         >
           완료
@@ -234,20 +232,27 @@ export default function MeetingCompletePage({ onNavigate, meetingForm }) {
           style={{
             width: '100%',
             height: 56,
-            backgroundColor: colors.white,
+            backgroundColor: 'transparent',
             borderRadius: 12,
-            border: `1px solid ${colors.borderLight}`,
+            border: 'none',
             cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: 6,
             fontFamily: fonts.pretendard,
             fontSize: 16,
             fontWeight: 600,
             lineHeight: '20.8px',
-            color: colors.secondaryText,
+            color: '#333333',
           }}
         >
+          <Icon name="event_available" size={18} color="#555555" />
           캘린더에서 보기
         </button>
       </div>
+
+      <BottomNav activeTab="meetings" onTabClick={(key) => onNavigate(key)} />
     </div>
   )
 }
