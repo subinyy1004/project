@@ -12,21 +12,34 @@ const timeOptions = [
   { label: '2시간', value: 120 },
 ]
 
-const mandatoryParticipants = [
-  { initial: '김', name: '김디자이너' },
-  { initial: '박', name: '박엔지니어' },
-  { initial: '이', name: '이PM' },
+const initialMandatory = [
+  {initial: '김', name: '김디자이너'},
+  {initial: '박', name: '박엔지니어'},
+  {initial: '이', name: '이PM'},
 ]
 
-const optionalParticipants = [
-  { initial: '최', name: '최QA' },
-  { initial: '정', name: '정디자이너' },
-  { initial: '한', name: '한엔지니어' },
+const initialOptional = [
+  {initial: '최', name: '최QA'},
+  {initial: '정', name: '정디자이너'},
+  {initial: '한', name: '한엔지니어'},
 ]
 
 export default function CreateMeetingPage({ onNavigate }) {
   const [selectedTime, setSelectedTime] = useState(60)
   const [showSheet, setShowSheet] = useState(false)
+  const [title, setTitle] = useState('스프린트 회고')
+  const [mandatory, setMandatory] = useState(initialMandatory)
+  const [optional, setOptional] = useState(initialOptional)
+  const [startDate, setStartDate] = useState('2026-07-19')
+  const [endDate, setEndDate] = useState('2026-07-19')
+
+  const removeMandatory = (name) => setMandatory(mandatory.filter(p => p.name !== name))
+  const removeOptional = (name) => setOptional(optional.filter(p => p.name !== name))
+
+  const formatDate = (iso) => {
+    const d = new Date(iso + 'T00:00:00')
+    return `${d.getMonth() + 1}월 ${d.getDate()}일`
+  }
 
   return (
     <div
@@ -123,17 +136,21 @@ export default function CreateMeetingPage({ onNavigate }) {
                 padding: '12px 16px',
               }}
             >
-              <span
+              <input
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
                 style={{
+                  width: '100%',
+                  border: 'none',
+                  outline: 'none',
                   fontFamily: fonts.pretendard,
                   fontSize: 16,
                   fontWeight: 400,
                   lineHeight: '20.8px',
                   color: colors.primaryText,
+                  background: 'transparent',
                 }}
-              >
-                스프린트 회고
-              </span>
+              />
             </div>
           </div>
 
@@ -195,16 +212,17 @@ export default function CreateMeetingPage({ onNavigate }) {
                       color: colors.secondaryText,
                     }}
                   >
-                    필수 참석자 3명
+                    필수 참석자 {mandatory.length}명
                   </span>
                 </div>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-                  {mandatoryParticipants.map((p) => (
+                  {mandatory.map((p) => (
                     <ParticipantChip
                       key={p.name}
                       initial={p.initial}
                       name={p.name}
                       variant="mandatory"
+                      onRemove={() => removeMandatory(p.name)}
                     />
                   ))}
                 </div>
@@ -223,16 +241,17 @@ export default function CreateMeetingPage({ onNavigate }) {
                       color: colors.mutedText,
                     }}
                   >
-                    선택 참석자 3명
+                    선택 참석자 {optional.length}명
                   </span>
                 </div>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-                  {optionalParticipants.map((p) => (
+                  {optional.map((p) => (
                     <ParticipantChip
                       key={p.name}
                       initial={p.initial}
                       name={p.name}
                       variant="optional"
+                      onRemove={() => removeOptional(p.name)}
                     />
                   ))}
                 </div>
@@ -276,9 +295,33 @@ export default function CreateMeetingPage({ onNavigate }) {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             <SectionLabel text="날짜" />
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <DateChip date="7월 19일" />
+              <DateChip date={formatDate(startDate)}>
+                <input
+                  type="date"
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    opacity: 0,
+                    cursor: 'pointer',
+                  }}
+                />
+              </DateChip>
               <Icon name="arrow_forward" size={16} color={colors.lightText} />
-              <DateChip date="7월 19일" />
+              <DateChip date={formatDate(endDate)}>
+                <input
+                  type="date"
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    opacity: 0,
+                    cursor: 'pointer',
+                  }}
+                />
+              </DateChip>
             </div>
           </div>
         </div>
@@ -332,7 +375,7 @@ function SectionLabel({ text }) {
   )
 }
 
-function ParticipantChip({ initial, name, variant }) {
+function ParticipantChip({ initial, name, variant, onRemove }) {
   const isMandatory = variant === 'mandatory'
   return (
     <div
@@ -380,20 +423,23 @@ function ParticipantChip({ initial, name, variant }) {
       >
         {name}
       </span>
-      <Icon
-        name="close"
-        size={14}
-        color={isMandatory ? colors.mutedText : colors.lightText}
-      />
+      <div style={{ cursor: 'pointer', display: 'flex' }} onClick={onRemove}>
+        <Icon
+          name="close"
+          size={14}
+          color={isMandatory ? colors.mutedText : colors.lightText}
+        />
+      </div>
     </div>
   )
 }
 
-function DateChip({ date }) {
+function DateChip({ date, children }) {
   return (
     <div
       style={{
         flex: 1,
+        position: 'relative',
         display: 'flex',
         alignItems: 'center',
         gap: 8,
@@ -415,6 +461,7 @@ function DateChip({ date }) {
       >
         {date}
       </span>
+      {children}
     </div>
   )
 }
