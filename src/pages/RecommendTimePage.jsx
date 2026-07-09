@@ -1,12 +1,13 @@
+import { useMemo } from 'react'
 import { fonts, colors, frame } from '../designTokens'
 import Icon from '../components/Icon'
 import BottomNav from '../components/BottomNav'
 import StatusBar from '../components/StatusBar'
 
-const recommendations = [
+const baseRecommendations = [
   {
     rank: 1,
-    time: '15:00 – 16:00',
+    start: '15:00',
     stars: 5,
     mandatoryAvail: 3,
     optionalAvail: 2,
@@ -24,7 +25,7 @@ const recommendations = [
   },
   {
     rank: 2,
-    time: '10:00 – 11:00',
+    start: '10:00',
     stars: 4,
     mandatoryAvail: 2,
     optionalAvail: 1,
@@ -42,7 +43,7 @@ const recommendations = [
   },
   {
     rank: 3,
-    time: '16:30 – 17:30',
+    start: '16:30',
     stars: 2,
     mandatoryAvail: 1,
     optionalAvail: 2,
@@ -60,10 +61,26 @@ const recommendations = [
   },
 ]
 
+function addMinutes(time, minutes) {
+  const [h, m] = time.split(':').map(Number)
+  const total = h * 60 + m + minutes
+  const nh = Math.floor(total / 60)
+  const nm = total % 60
+  return `${String(nh).padStart(2, '0')}:${String(nm).padStart(2, '0')}`
+}
+
 export default function RecommendTimePage({ onNavigate, meetingForm }) {
   const totalPeople = (meetingForm?.mandatory?.length || 0) + (meetingForm?.optional?.length || 0)
   const mTotal = meetingForm?.mandatory?.length || 3
   const oTotal = meetingForm?.optional?.length || 3
+  const duration = meetingForm?.selectedTime || 60
+
+  const recommendations = useMemo(() =>
+    baseRecommendations.map(r => ({
+      ...r,
+      time: `${r.start} – ${addMinutes(r.start, duration)}`,
+    })),
+  [duration])
   return (
     <div
       style={{
