@@ -140,7 +140,7 @@ export default function RecommendTimePage({ onNavigate }) {
                     width: 24,
                     height: 24,
                     borderRadius: 12,
-                    backgroundColor: colors.primaryText,
+                    backgroundColor: i === 0 ? colors.primaryText : colors.borderLight,
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -152,7 +152,7 @@ export default function RecommendTimePage({ onNavigate }) {
                       fontSize: 12,
                       fontWeight: 700,
                       lineHeight: '18px',
-                      color: colors.white,
+                      color: i === 0 ? colors.white : colors.primaryText,
                     }}
                   >
                     {rec.rank}

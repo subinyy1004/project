@@ -54,18 +54,23 @@ export default function CreateMeetingPage({ onNavigate }) {
           borderBottom: `1px solid ${colors.borderLight}`,
         }}
       >
-        <Icon name="arrow_back" size={24} color={colors.secondaryText} />
-        <span
-          style={{
-            fontFamily: fonts.pretendard,
-            fontSize: 16,
-            fontWeight: 700,
-            lineHeight: '20.8px',
-            color: colors.primaryText,
-          }}
+        <div
+          style={{ display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer' }}
+          onClick={() => onNavigate('calendar')}
         >
-          새 회의
-        </span>
+          <Icon name="arrow_back" size={24} color={colors.secondaryText} />
+          <span
+            style={{
+              fontFamily: fonts.pretendard,
+              fontSize: 16,
+              fontWeight: 700,
+              lineHeight: '20.8px',
+              color: colors.primaryText,
+            }}
+          >
+            새 회의
+          </span>
+        </div>
       </div>
 
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
