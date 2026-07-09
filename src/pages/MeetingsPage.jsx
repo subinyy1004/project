@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { fonts, colors, frame } from '../designTokens'
 import Icon from '../components/Icon'
 import BottomNav from '../components/BottomNav'
@@ -12,7 +13,28 @@ const requests = [
   },
 ]
 
-export default function MeetingsPage({ onNavigate }) {
+const formatDate = (iso) => {
+  if (!iso) return ''
+  const parts = iso.split('-')
+  return `${parseInt(parts[1])}월 ${parseInt(parts[2])}일`
+}
+
+const durationLabel = (min) => {
+  if (!min) return ''
+  const h = Math.floor(min / 60)
+  const m = min % 60
+  if (h === 0) return `${m}분`
+  if (m === 0) return `${h}시간`
+  return `${h}시간 ${m}분`
+}
+
+export default function MeetingsPage({ onNavigate, meetingForm }) {
+  const [tab, setTab] = useState('requested')
+
+  const createdTitle = meetingForm?.title || '스프린트 회의'
+  const createdDate = formatDate(meetingForm?.startDate)
+  const createdDuration = durationLabel(meetingForm?.selectedTime)
+  const participants = [...(meetingForm?.mandatory || []), ...(meetingForm?.optional || [])]
   return (
     <div
       style={{
@@ -57,39 +79,44 @@ export default function MeetingsPage({ onNavigate }) {
         }}
       >
         <div
+          onClick={() => setTab('requested')}
           style={{
             flex: 1,
             paddingBottom: 12,
-            borderBottom: `1.5px solid ${colors.primaryText}`,
+            borderBottom: tab === 'requested' ? `1.5px solid ${colors.primaryText}` : '1.5px solid transparent',
             textAlign: 'center',
+            cursor: 'pointer',
           }}
         >
           <span
             style={{
               fontFamily: fonts.pretendard,
               fontSize: 14,
-              fontWeight: 700,
+              fontWeight: tab === 'requested' ? 700 : 400,
               lineHeight: '21px',
-              color: colors.primaryText,
+              color: tab === 'requested' ? colors.primaryText : colors.lightText,
             }}
           >
             요청받은 회의
           </span>
         </div>
         <div
+          onClick={() => setTab('mine')}
           style={{
             flex: 1,
             paddingBottom: 12,
+            borderBottom: tab === 'mine' ? `1.5px solid ${colors.primaryText}` : '1.5px solid transparent',
             textAlign: 'center',
+            cursor: 'pointer',
           }}
         >
           <span
             style={{
               fontFamily: fonts.pretendard,
               fontSize: 14,
-              fontWeight: 400,
+              fontWeight: tab === 'mine' ? 700 : 400,
               lineHeight: '21px',
-              color: colors.lightText,
+              color: tab === 'mine' ? colors.primaryText : colors.lightText,
             }}
           >
             내가 만든 회의
@@ -97,72 +124,210 @@ export default function MeetingsPage({ onNavigate }) {
         </div>
       </div>
 
-      {/* Request list */}
+      {/* Content */}
       <div style={{ flex: 1, padding: '12px 16px', display: 'flex', flexDirection: 'column', gap: 8 }}>
-        {requests.map((req, i) => (
+        {tab === 'requested' ? (
+          requests.map((req, i) => (
+            <div
+              key={i}
+              onClick={() => onNavigate('meeting-confirm')}
+              style={{
+                backgroundColor: '#F8F8F8',
+                borderRadius: 12,
+                padding: '12px 16px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 12,
+                cursor: 'pointer',
+              }}
+            >
+              <div
+                style={{
+                  width: 40,
+                  height: 40,
+                  borderRadius: 20,
+                  backgroundColor: colors.borderLight,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexShrink: 0,
+                }}
+              >
+                <span
+                  style={{
+                    fontFamily: fonts.pretendard,
+                    fontSize: 15,
+                    fontWeight: 500,
+                    lineHeight: '22.5px',
+                    color: colors.tertiaryText,
+                  }}
+                >
+                  {req.initial}
+                </span>
+              </div>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div
+                  style={{
+                    fontFamily: fonts.pretendard,
+                    fontSize: 14,
+                    fontWeight: 600,
+                    lineHeight: '21px',
+                    color: colors.primaryText,
+                  }}
+                >
+                  {req.message}
+                </div>
+                <div
+                  style={{
+                    fontFamily: fonts.pretendard,
+                    fontSize: 12,
+                    fontWeight: 400,
+                    lineHeight: '18px',
+                    color: colors.lightText,
+                  }}
+                >
+                  {req.time}
+                </div>
+              </div>
+            </div>
+          ))
+        ) : meetingForm ? (
           <div
-            key={i}
-            onClick={() => onNavigate('meeting-confirm')}
             style={{
-              backgroundColor: '#F8F8F8',
-              borderRadius: 12,
-              padding: '12px 16px',
-              display: 'flex',
-              alignItems: 'center',
-              gap: 12,
-              cursor: 'pointer',
+              border: `1px solid ${colors.primaryText}`,
+              borderRadius: 16,
+              overflow: 'hidden',
             }}
           >
             <div
               style={{
-                width: 40,
-                height: 40,
-                borderRadius: 20,
-                backgroundColor: colors.borderLight,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                flexShrink: 0,
+                backgroundColor: colors.primaryText,
+                padding: '14px 16px',
               }}
             >
-              <span
+              <div
                 style={{
                   fontFamily: fonts.pretendard,
-                  fontSize: 15,
-                  fontWeight: 500,
-                  lineHeight: '22.5px',
-                  color: colors.tertiaryText,
+                  fontSize: 18,
+                  fontWeight: 700,
+                  lineHeight: '23.4px',
+                  color: colors.white,
+                  marginBottom: 6,
                 }}
               >
-                {req.initial}
-              </span>
+                {createdTitle}
+              </div>
+              {createdDate && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                  <Icon name="schedule" size={16} color={colors.lightText} />
+                  <span
+                    style={{
+                      fontFamily: fonts.pretendard,
+                      fontSize: 14,
+                      fontWeight: 400,
+                      lineHeight: '21px',
+                      color: colors.border,
+                    }}
+                  >
+                    {createdDate}{createdDuration ? ` (${createdDuration})` : ''}
+                  </span>
+                </div>
+              )}
             </div>
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div
-                style={{
-                  fontFamily: fonts.pretendard,
-                  fontSize: 14,
-                  fontWeight: 600,
-                  lineHeight: '21px',
-                  color: colors.primaryText,
-                }}
-              >
-                {req.message}
+            <div style={{ padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: 10 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <Icon name="group" size={16} color={colors.lightText} />
+                <span
+                  style={{
+                    fontFamily: fonts.pretendard,
+                    fontSize: 14,
+                    fontWeight: 400,
+                    lineHeight: '21px',
+                    color: colors.tertiaryText,
+                  }}
+                >
+                  참석자 {participants.length}명
+                </span>
               </div>
-              <div
-                style={{
-                  fontFamily: fonts.pretendard,
-                  fontSize: 12,
-                  fontWeight: 400,
-                  lineHeight: '18px',
-                  color: colors.lightText,
-                }}
-              >
-                {req.time}
-              </div>
+              {participants.length > 0 && (
+                <div style={{ display: 'flex', gap: 6 }}>
+                  {participants.slice(0, 5).map((name, i) => (
+                    <div
+                      key={i}
+                      style={{
+                        width: 28,
+                        height: 28,
+                        borderRadius: 14,
+                        backgroundColor: colors.borderLight,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <span
+                        style={{
+                          fontFamily: fonts.pretendard,
+                          fontSize: 11,
+                          fontWeight: 500,
+                          lineHeight: '16.5px',
+                          color: colors.tertiaryText,
+                        }}
+                      >
+                        {name[0]}
+                      </span>
+                    </div>
+                  ))}
+                  {participants.length > 5 && (
+                    <div
+                      style={{
+                        width: 28,
+                        height: 28,
+                        borderRadius: 14,
+                        backgroundColor: colors.border,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <span
+                        style={{
+                          fontFamily: fonts.pretendard,
+                          fontSize: 11,
+                          fontWeight: 500,
+                          lineHeight: '16.5px',
+                          color: colors.tertiaryText,
+                        }}
+                      >
+                        +{participants.length - 5}
+                      </span>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           </div>
-        ))}
+        ) : (
+          <div
+            style={{
+              flex: 1,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <span
+              style={{
+                fontFamily: fonts.pretendard,
+                fontSize: 14,
+                fontWeight: 400,
+                lineHeight: '21px',
+                color: colors.lightText,
+              }}
+            >
+              아직 만든 회의가 없습니다.
+            </span>
+          </div>
+        )}
       </div>
 
       <BottomNav activeTab="meetings" onTabClick={(key) => onNavigate(key)} />

@@ -73,7 +73,7 @@ function App() {
   }
 
   if (page === 'meetings') {
-    return <MeetingsPage onNavigate={handleNavigate} />
+    return <MeetingsPage onNavigate={handleNavigate} meetingForm={meetingForm} />
   }
 
   if (page === 'meeting-confirm') {
