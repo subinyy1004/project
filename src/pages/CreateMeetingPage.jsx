@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { fonts, colors, frame } from '../designTokens'
 import Icon from '../components/Icon'
 import BottomNav from '../components/BottomNav'
@@ -23,6 +23,9 @@ export default function CreateMeetingPage({ onNavigate }) {
 
   const removeMandatory = (name) => setMandatory(mandatory.filter(p => p.name !== name))
   const removeOptional = (name) => setOptional(optional.filter(p => p.name !== name))
+
+  const startRef = useRef(null)
+  const endRef = useRef(null)
 
   const formatDate = (iso) => {
     if (!iso) return ''
@@ -285,31 +288,31 @@ export default function CreateMeetingPage({ onNavigate }) {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             <SectionLabel text="날짜" />
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <DateChip date={formatDate(startDate)} placeholder="시작일 선택">
+              <DateChip
+                date={formatDate(startDate)}
+                placeholder="시작일 선택"
+                onClick={() => startRef.current?.showPicker()}
+              >
                 <input
+                  ref={startRef}
                   type="date"
                   value={startDate}
                   onChange={(e) => setStartDate(e.target.value)}
-                  style={{
-                    position: 'absolute',
-                    inset: 0,
-                    opacity: 0,
-                    cursor: 'pointer',
-                  }}
+                  style={{ display: 'none' }}
                 />
               </DateChip>
               <Icon name="arrow_forward" size={16} color={colors.lightText} />
-              <DateChip date={formatDate(endDate)} placeholder="종료일 선택">
+              <DateChip
+                date={formatDate(endDate)}
+                placeholder="종료일 선택"
+                onClick={() => endRef.current?.showPicker()}
+              >
                 <input
+                  ref={endRef}
                   type="date"
                   value={endDate}
                   onChange={(e) => setEndDate(e.target.value)}
-                  style={{
-                    position: 'absolute',
-                    inset: 0,
-                    opacity: 0,
-                    cursor: 'pointer',
-                  }}
+                  style={{ display: 'none' }}
                 />
               </DateChip>
             </div>
@@ -424,10 +427,11 @@ function ParticipantChip({ initial, name, variant, onRemove }) {
   )
 }
 
-function DateChip({ date, placeholder, children }) {
+function DateChip({ date, placeholder, onClick, children }) {
   const display = date || placeholder
   return (
     <div
+      onClick={onClick}
       style={{
         flex: 1,
         position: 'relative',
@@ -438,6 +442,7 @@ function DateChip({ date, placeholder, children }) {
         backgroundColor: colors.white,
         border: `1px solid ${colors.borderLight}`,
         borderRadius: 8,
+        cursor: 'pointer',
       }}
     >
       <Icon name="calendar_today" size={16} color={colors.mutedText} />
