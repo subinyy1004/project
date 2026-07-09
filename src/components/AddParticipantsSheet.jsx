@@ -241,8 +241,8 @@ export default function AddParticipantsSheet({ existingMandatory = [], existingO
                     style={{
                       padding: '4px 12px',
                       borderRadius: 20,
-                      border: 'none',
-                      backgroundColor: role === 'mandatory' ? colors.primaryText : colors.white,
+                      border: `1px solid ${role === 'mandatory' ? colors.primaryText : colors.borderLight}`,
+                      backgroundColor: role === 'mandatory' ? colors.primaryText : '#F8F8F8',
                       fontFamily: fonts.pretendard,
                       fontSize: 12,
                       fontWeight: role === 'mandatory' ? 600 : 400,
