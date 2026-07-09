@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { fonts, colors } from '../designTokens'
 import Icon from './Icon'
 
@@ -11,6 +12,19 @@ const people = [
 ]
 
 export default function AddParticipantsSheet({ onClose }) {
+  const [selected, setSelected] = useState(new Set())
+
+  const togglePerson = (name) => {
+    setSelected((prev) => {
+      const next = new Set(prev)
+      if (next.has(name)) next.delete(name)
+      else next.add(name)
+      return next
+    })
+  }
+
+  const hasSelection = selected.size > 0
+
   return (
     <div
       style={{
@@ -165,79 +179,89 @@ export default function AddParticipantsSheet({ onClose }) {
 
         {/* Participant list */}
         <div style={{ flex: 1, overflow: 'auto' }}>
-          {people.map((p, i) => (
-            <div
-              key={i}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 12,
-                padding: '14px 20px',
-                borderBottom: i < people.length - 1 ? `1px solid ${colors.borderLighter}` : 'none',
-              }}
-            >
+          {people.map((p, i) => {
+            const isSelected = selected.has(p.name)
+            return (
               <div
+                key={i}
+                onClick={() => togglePerson(p.name)}
                 style={{
-                  width: 40,
-                  height: 40,
-                  borderRadius: 20,
-                  backgroundColor: colors.borderLight,
                   display: 'flex',
                   alignItems: 'center',
-                  justifyContent: 'center',
-                  flexShrink: 0,
+                  gap: 12,
+                  padding: '14px 20px',
+                  borderBottom: i < people.length - 1 ? `1px solid ${colors.borderLighter}` : 'none',
+                  cursor: 'pointer',
                 }}
               >
-                <span
-                  style={{
-                    fontFamily: fonts.pretendard,
-                    fontSize: 15,
-                    fontWeight: 500,
-                    lineHeight: '22.5px',
-                    color: colors.tertiaryText,
-                  }}
-                >
-                  {p.initial}
-                </span>
-              </div>
-
-              <div style={{ flex: 1 }}>
                 <div
                   style={{
-                    fontFamily: fonts.pretendard,
-                    fontSize: 15,
-                    fontWeight: 500,
-                    lineHeight: '22.5px',
-                    color: colors.primaryText,
+                    width: 40,
+                    height: 40,
+                    borderRadius: 20,
+                    backgroundColor: colors.borderLight,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexShrink: 0,
                   }}
                 >
-                  {p.name}
+                  <span
+                    style={{
+                      fontFamily: fonts.pretendard,
+                      fontSize: 15,
+                      fontWeight: 500,
+                      lineHeight: '22.5px',
+                      color: colors.tertiaryText,
+                    }}
+                  >
+                    {p.initial}
+                  </span>
                 </div>
+
+                <div style={{ flex: 1 }}>
+                  <div
+                    style={{
+                      fontFamily: fonts.pretendard,
+                      fontSize: 15,
+                      fontWeight: 500,
+                      lineHeight: '22.5px',
+                      color: colors.primaryText,
+                    }}
+                  >
+                    {p.name}
+                  </div>
+                  <div
+                    style={{
+                      fontFamily: fonts.pretendard,
+                      fontSize: 12,
+                      fontWeight: 500,
+                      lineHeight: '18px',
+                      color: colors.lightText,
+                    }}
+                  >
+                    {p.dept}
+                  </div>
+                </div>
+
                 <div
                   style={{
-                    fontFamily: fonts.pretendard,
-                    fontSize: 12,
-                    fontWeight: 500,
-                    lineHeight: '18px',
-                    color: colors.lightText,
+                    width: 24,
+                    height: 24,
+                    borderRadius: 6,
+                    border: `1px solid ${isSelected ? colors.primaryText : colors.border}`,
+                    backgroundColor: isSelected ? colors.primaryText : colors.white,
+                    flexShrink: 0,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
                   }}
                 >
-                  {p.dept}
+                  {isSelected && <Icon name="check" size={16} color={colors.white} />}
                 </div>
               </div>
-
-              <div
-                style={{
-                  width: 24,
-                  height: 24,
-                  borderRadius: 6,
-                  border: `1px solid ${colors.border}`,
-                  backgroundColor: colors.white,
-                  flexShrink: 0,
-                }}
-              />
-            </div>
-          ))}
+            )
+          })}
         </div>
 
         {/* Bottom action button */}
@@ -248,19 +272,19 @@ export default function AddParticipantsSheet({ onClose }) {
           }}
         >
           <button
-            disabled
+            disabled={!hasSelection}
             style={{
               width: '100%',
               padding: '18px 16px',
-              backgroundColor: colors.borderLight,
+              backgroundColor: hasSelection ? colors.primaryText : colors.borderLight,
               border: 'none',
               borderRadius: 12,
               fontFamily: fonts.pretendard,
               fontSize: 16,
               fontWeight: 600,
               lineHeight: '20.8px',
-              color: colors.lightText,
-              cursor: 'not-allowed',
+              color: hasSelection ? colors.white : colors.lightText,
+              cursor: hasSelection ? 'pointer' : 'not-allowed',
             }}
           >
             추가하기
