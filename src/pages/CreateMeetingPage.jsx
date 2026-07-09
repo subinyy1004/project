@@ -12,31 +12,20 @@ const timeOptions = [
   { label: '2시간', value: 120 },
 ]
 
-const initialMandatory = [
-  {initial: '김', name: '김디자이너'},
-  {initial: '박', name: '박엔지니어'},
-  {initial: '이', name: '이PM'},
-]
-
-const initialOptional = [
-  {initial: '최', name: '최QA'},
-  {initial: '정', name: '정디자이너'},
-  {initial: '한', name: '한엔지니어'},
-]
-
 export default function CreateMeetingPage({ onNavigate }) {
-  const [selectedTime, setSelectedTime] = useState(60)
+  const [selectedTime, setSelectedTime] = useState(30)
   const [showSheet, setShowSheet] = useState(false)
-  const [title, setTitle] = useState('스프린트 회고')
-  const [mandatory, setMandatory] = useState(initialMandatory)
-  const [optional, setOptional] = useState(initialOptional)
-  const [startDate, setStartDate] = useState('2026-07-19')
-  const [endDate, setEndDate] = useState('2026-07-19')
+  const [title, setTitle] = useState('')
+  const [mandatory, setMandatory] = useState([])
+  const [optional, setOptional] = useState([])
+  const [startDate, setStartDate] = useState('')
+  const [endDate, setEndDate] = useState('')
 
   const removeMandatory = (name) => setMandatory(mandatory.filter(p => p.name !== name))
   const removeOptional = (name) => setOptional(optional.filter(p => p.name !== name))
 
   const formatDate = (iso) => {
+    if (!iso) return ''
     const d = new Date(iso + 'T00:00:00')
     return `${d.getMonth() + 1}월 ${d.getDate()}일`
   }
@@ -139,6 +128,7 @@ export default function CreateMeetingPage({ onNavigate }) {
               <input
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
+                placeholder="회의 제목 입력"
                 style={{
                   width: '100%',
                   border: 'none',
@@ -295,7 +285,7 @@ export default function CreateMeetingPage({ onNavigate }) {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             <SectionLabel text="날짜" />
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <DateChip date={formatDate(startDate)}>
+              <DateChip date={formatDate(startDate)} placeholder="시작일 선택">
                 <input
                   type="date"
                   value={startDate}
@@ -309,7 +299,7 @@ export default function CreateMeetingPage({ onNavigate }) {
                 />
               </DateChip>
               <Icon name="arrow_forward" size={16} color={colors.lightText} />
-              <DateChip date={formatDate(endDate)}>
+              <DateChip date={formatDate(endDate)} placeholder="종료일 선택">
                 <input
                   type="date"
                   value={endDate}
@@ -434,7 +424,8 @@ function ParticipantChip({ initial, name, variant, onRemove }) {
   )
 }
 
-function DateChip({ date, children }) {
+function DateChip({ date, placeholder, children }) {
+  const display = date || placeholder
   return (
     <div
       style={{
@@ -456,10 +447,10 @@ function DateChip({ date, children }) {
           fontSize: 14,
           fontWeight: 400,
           lineHeight: '21px',
-          color: colors.secondaryText,
+          color: date ? colors.secondaryText : colors.lightText,
         }}
       >
-        {date}
+        {display}
       </span>
       {children}
     </div>
