@@ -5,6 +5,8 @@ import RecommendTimePage from './pages/RecommendTimePage'
 import RecommendDetailPage from './pages/RecommendDetailPage'
 import CompletionPage from './pages/CompletionPage'
 import MeetingsPage from './pages/MeetingsPage'
+import ConfirmationPage from './pages/ConfirmationPage'
+import MeetingCompletePage from './pages/MeetingCompletePage'
 
 function App() {
   const [page, setPage] = useState('calendar')
@@ -72,6 +74,14 @@ function App() {
 
   if (page === 'meetings') {
     return <MeetingsPage onNavigate={handleNavigate} />
+  }
+
+  if (page === 'meeting-confirm') {
+    return <ConfirmationPage onNavigate={handleNavigate} />
+  }
+
+  if (page === 'meeting-complete') {
+    return <MeetingCompletePage onNavigate={handleNavigate} />
   }
 
   return <CalendarPage onNavigate={handleNavigate} initialDate={viewDate} newMeetings={newMeetings} />
