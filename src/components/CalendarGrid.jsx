@@ -95,21 +95,19 @@ export default function CalendarGrid({ year, month, selectedDay, onSelectDay }) 
                     {day}
                   </span>
                 </div>
-                {dayEvents.length > 0 && (
-                  <div style={{ display: 'flex', gap: 2 }}>
-                    {dayEvents.map((_, i) => (
-                      <div
-                        key={i}
-                        style={{
-                          width: 4,
-                          height: 4,
-                          borderRadius: 2,
-                          backgroundColor: colors.dotMarker,
-                        }}
-                      />
-                    ))}
-                  </div>
-                )}
+                <div style={{ height: 10, display: 'flex', alignItems: 'center', gap: 2 }}>
+                  {dayEvents.map((_, i) => (
+                    <div
+                      key={i}
+                      style={{
+                        width: 4,
+                        height: 4,
+                        borderRadius: 2,
+                        backgroundColor: colors.dotMarker,
+                      }}
+                    />
+                  ))}
+                </div>
               </div>
             )
           })}
