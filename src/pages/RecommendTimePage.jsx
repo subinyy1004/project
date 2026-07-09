@@ -8,27 +8,29 @@ const recommendations = [
     rank: 1,
     time: '15:00 – 16:00',
     stars: 5,
-    mandatory: '3/3명 가능',
-    optional: '2/3명 가능',
+    mandatoryAvail: 3,
+    optionalAvail: 2,
   },
   {
     rank: 2,
     time: '10:00 – 11:00',
     stars: 4,
-    mandatory: '2/3명 가능',
-    optional: '1/3명 가능',
+    mandatoryAvail: 2,
+    optionalAvail: 1,
   },
   {
     rank: 3,
     time: '16:30 – 17:30',
     stars: 2,
-    mandatory: '1/3명 가능',
-    optional: '2/3명 가능',
+    mandatoryAvail: 1,
+    optionalAvail: 2,
   },
 ]
 
 export default function RecommendTimePage({ onNavigate, meetingForm }) {
   const totalPeople = (meetingForm?.mandatory?.length || 0) + (meetingForm?.optional?.length || 0)
+  const mTotal = meetingForm?.mandatory?.length || 3
+  const oTotal = meetingForm?.optional?.length || 3
   return (
     <div
       style={{
@@ -217,7 +219,7 @@ export default function RecommendTimePage({ onNavigate, meetingForm }) {
                     color: colors.primaryText,
                   }}
                 >
-                  필수 {rec.mandatory}
+                  필수 {rec.mandatoryAvail}/{mTotal}명 가능
                 </span>
               </div>
               <div
@@ -237,7 +239,7 @@ export default function RecommendTimePage({ onNavigate, meetingForm }) {
                     color: colors.primaryText,
                   }}
                 >
-                  선택 {rec.optional}
+                  선택 {rec.optionalAvail}/{oTotal}명 가능
                 </span>
               </div>
             </div>
