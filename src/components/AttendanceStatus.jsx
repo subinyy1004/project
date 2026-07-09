@@ -4,9 +4,16 @@ import Icon from './Icon'
 
 const statusOptions = ['편하게 가능', '어렵습니다', '조정 가능']
 
+const statusStyle = {
+  '편하게 가능': { bg: colors.blueLight, icon: colors.blue, accent: colors.accent },
+  '어렵습니다': { bg: '#FEF2F2', icon: '#EF4444', accent: '#EF4444' },
+  '조정 가능': { bg: '#FEE685', icon: '#E17100', accent: '#E17100' },
+}
+
 export default function AttendanceStatus() {
   const [status, setStatus] = useState('편하게 가능')
   const [open, setOpen] = useState(false)
+  const s = statusStyle[status]
 
   return (
     <div style={{ padding: '0 16px 12px', display: 'flex', flexDirection: 'column', gap: 12 }}>
@@ -29,13 +36,13 @@ export default function AttendanceStatus() {
               width: 40,
               height: 40,
               borderRadius: 20,
-              backgroundColor: colors.blueLight,
+              backgroundColor: s.bg,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
             }}
           >
-            <Icon name="check_circle" size={20} color={colors.blue} />
+            <Icon name="check_circle" size={20} color={s.icon} />
           </div>
           <div>
             <div
@@ -44,7 +51,7 @@ export default function AttendanceStatus() {
                 fontSize: 12,
                 fontWeight: 400,
                 lineHeight: '18px',
-                color: colors.accent,
+                color: s.accent,
               }}
             >
               내 오늘 상태
@@ -73,12 +80,12 @@ export default function AttendanceStatus() {
               fontSize: 12,
               fontWeight: 400,
               lineHeight: '18px',
-              color: colors.accent,
+              color: s.accent,
             }}
           >
             변경
           </span>
-          <Icon name="chevron_right" size={16} color={colors.accent} />
+          <Icon name="chevron_right" size={16} color={s.accent} />
         </div>
 
         {open && (
