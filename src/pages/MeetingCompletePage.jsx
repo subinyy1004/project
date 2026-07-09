@@ -13,6 +13,7 @@ export default function MeetingCompletePage({ onNavigate, meetingForm }) {
   const durLabel = dur >= 60 ? `${dur / 60}시간` : '30분'
   const participants = [...(meetingForm?.mandatory || []), ...(meetingForm?.optional || [])]
   const participantCount = participants.length || 6
+  const requestId = meetingForm?.requestId
 
   return (
     <div
@@ -226,7 +227,7 @@ export default function MeetingCompletePage({ onNavigate, meetingForm }) {
         }}
       >
         <button
-          onClick={() => onNavigate('meetings')}
+          onClick={() => onNavigate('meetings', { _confirmComplete: requestId })}
           style={{
             width: '100%',
             height: 56,
@@ -244,7 +245,7 @@ export default function MeetingCompletePage({ onNavigate, meetingForm }) {
           완료
         </button>
         <button
-          onClick={() => onNavigate('calendar', { viewDate: meetingForm?.startDate })}
+          onClick={() => onNavigate('calendar', { viewDate: meetingForm?.startDate, _confirmComplete: requestId })}
           style={{
             width: '100%',
             height: 56,

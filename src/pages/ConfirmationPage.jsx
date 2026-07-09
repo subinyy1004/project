@@ -12,7 +12,7 @@ const options = [
 
 const avatars = ['김', '박', '이', '최', '정']
 
-export default function ConfirmationPage({ onNavigate }) {
+export default function ConfirmationPage({ onNavigate, meetingForm }) {
   const [selectedOption, setSelectedOption] = useState(null)
   const [memo, setMemo] = useState('')
 
@@ -301,7 +301,7 @@ export default function ConfirmationPage({ onNavigate }) {
         <button
           onClick={() => {
             if (!selectedOption) return
-            onNavigate('meeting-complete')
+            onNavigate('meeting-complete', { requestId: meetingForm?.requestId })
           }}
           style={{
             width: '100%',

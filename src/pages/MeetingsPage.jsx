@@ -28,7 +28,7 @@ const durationLabel = (min) => {
   return `${h}시간 ${m}분`
 }
 
-export default function MeetingsPage({ onNavigate, meetingForm }) {
+export default function MeetingsPage({ onNavigate, meetingForm, confirmedRequests }) {
   const [tab, setTab] = useState('requested')
 
   const createdTitle = meetingForm?.title || '스프린트 회의'
@@ -36,6 +36,8 @@ export default function MeetingsPage({ onNavigate, meetingForm }) {
   const selectedTime = meetingForm?.selectedRec?.time || ''
   const createdDuration = durationLabel(meetingForm?.selectedTime)
   const participants = [...(meetingForm?.mandatory || []), ...(meetingForm?.optional || [])]
+
+  const visibleRequests = requests.filter((_, i) => !confirmedRequests?.includes(i))
   return (
     <div
       style={{
@@ -128,10 +130,12 @@ export default function MeetingsPage({ onNavigate, meetingForm }) {
       {/* Content */}
       <div style={{ flex: 1, padding: '12px 16px', display: 'flex', flexDirection: 'column', gap: 8 }}>
         {tab === 'requested' ? (
-          requests.map((req, i) => (
+          visibleRequests.map((req) => {
+            const reqIndex = requests.indexOf(req)
+            return (
             <div
-              key={i}
-              onClick={() => onNavigate('meeting-confirm')}
+              key={reqIndex}
+              onClick={() => onNavigate('meeting-confirm', { requestId: reqIndex })}
               style={{
                 backgroundColor: '#F8F8F8',
                 borderRadius: 12,
@@ -191,8 +195,9 @@ export default function MeetingsPage({ onNavigate, meetingForm }) {
                 </div>
               </div>
             </div>
-          ))
-        ) : meetingForm ? (
+          )
+        })
+      ) : meetingForm ? (
           <div
             style={{
               border: `1px solid ${colors.primaryText}`,
