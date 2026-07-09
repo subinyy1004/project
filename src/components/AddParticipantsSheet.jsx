@@ -14,7 +14,8 @@ const people = [
 export default function AddParticipantsSheet({ existingMandatory = [], existingOptional = [], onClose }) {
   const [tab, setTab] = useState('mandatory')
   const [query, setQuery] = useState('')
-  const [pending, setPending] = useState(new Set())
+  const [pendingMandatory, setPendingMandatory] = useState(new Set())
+  const [pendingOptional, setPendingOptional] = useState(new Set())
 
   const existingNames = useMemo(() => {
     const names = new Set()
@@ -30,18 +31,32 @@ export default function AddParticipantsSheet({ existingMandatory = [], existingO
   }, [query])
 
   const togglePerson = (name) => {
-    setPending((prev) => {
-      const next = new Set(prev)
-      if (next.has(name)) next.delete(name)
-      else next.add(name)
-      return next
-    })
+    if (tab === 'mandatory') {
+      setPendingMandatory((prev) => {
+        const next = new Set(prev)
+        if (next.has(name)) next.delete(name)
+        else next.add(name)
+        return next
+      })
+    } else {
+      setPendingOptional((prev) => {
+        const next = new Set(prev)
+        if (next.has(name)) next.delete(name)
+        else next.add(name)
+        return next
+      })
+    }
   }
 
   const submit = () => {
-    const names = [...pending]
+    const names = [...(tab === 'mandatory' ? pendingMandatory : pendingOptional)]
     onClose({ tab, names })
   }
+
+  const isInOtherPending = (name) =>
+    tab === 'mandatory' ? pendingOptional.has(name) : pendingMandatory.has(name)
+
+  const currentPending = tab === 'mandatory' ? pendingMandatory : pendingOptional
 
   return (
     <div
@@ -62,6 +77,7 @@ export default function AddParticipantsSheet({ existingMandatory = [], existingO
           backgroundColor: colors.white,
           borderRadius: '20px 20px 0 0',
           maxHeight: '85%',
+          minHeight: '85%',
           display: 'flex',
           flexDirection: 'column',
         }}
@@ -205,8 +221,8 @@ export default function AddParticipantsSheet({ existingMandatory = [], existingO
         {/* Participant list */}
         <div style={{ flex: 1, overflow: 'auto' }}>
           {filtered.map((p, i) => {
-            const isSelected = pending.has(p.name)
-            const isDisabled = existingNames.has(p.name)
+            const isSelected = currentPending.has(p.name)
+            const isDisabled = existingNames.has(p.name) || isInOtherPending(p.name)
             return (
               <div
                 key={i}
@@ -299,20 +315,20 @@ export default function AddParticipantsSheet({ existingMandatory = [], existingO
           }}
         >
           <button
-            disabled={pending.size === 0}
+            disabled={currentPending.size === 0}
             onClick={submit}
             style={{
               width: '100%',
               padding: '18px 16px',
-              backgroundColor: pending.size > 0 ? colors.primaryText : colors.borderLight,
+              backgroundColor: currentPending.size > 0 ? colors.primaryText : colors.borderLight,
               border: 'none',
               borderRadius: 12,
               fontFamily: fonts.pretendard,
               fontSize: 16,
               fontWeight: 600,
               lineHeight: '20.8px',
-              color: pending.size > 0 ? colors.white : colors.lightText,
-              cursor: pending.size > 0 ? 'pointer' : 'not-allowed',
+              color: currentPending.size > 0 ? colors.white : colors.lightText,
+              cursor: currentPending.size > 0 ? 'pointer' : 'not-allowed',
             }}
           >
             추가하기
