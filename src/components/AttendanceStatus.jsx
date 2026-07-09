@@ -6,8 +6,8 @@ const statusOptions = ['편하게 가능', '어렵습니다', '조정 가능']
 
 const statusStyle = {
   '편하게 가능': { bg: colors.blueLight, iconColor: colors.blue, iconName: 'check_circle', accent: colors.accent },
-  '어렵습니다': { bg: '#FEF2F2', iconColor: '#EF4444', iconName: 'close', accent: '#EF4444' },
-  '조정 가능': { bg: '#FEE685', iconColor: '#E17100', iconName: 'change_history', accent: '#E17100' },
+  '어렵습니다': { bg: '#FEF2F2', iconColor: '#EF4444', iconName: 'cancel', accent: '#EF4444' },
+  '조정 가능': { bg: '#FEE685', iconColor: '#E17100', iconName: 'radio_button_checked', accent: '#E17100' },
 }
 
 export default function AttendanceStatus() {
