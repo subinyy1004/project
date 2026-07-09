@@ -81,7 +81,7 @@ function App() {
   }
 
   if (page === 'meeting-complete') {
-    return <MeetingCompletePage onNavigate={handleNavigate} />
+    return <MeetingCompletePage onNavigate={handleNavigate} meetingForm={meetingForm} />
   }
 
   return <CalendarPage onNavigate={handleNavigate} initialDate={viewDate} newMeetings={newMeetings} />

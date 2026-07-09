@@ -1,7 +1,7 @@
 import { fonts, colors, frame } from '../designTokens'
 import Icon from '../components/Icon'
 
-export default function MeetingCompletePage({ onNavigate }) {
+export default function MeetingCompletePage({ onNavigate, meetingForm }) {
   return (
     <div
       style={{
@@ -55,7 +55,7 @@ export default function MeetingCompletePage({ onNavigate }) {
 
         <div style={{ width: '100%', marginTop: 40, display: 'flex', flexDirection: 'column', gap: 8 }}>
           <button
-            onClick={() => onNavigate('calendar')}
+            onClick={() => onNavigate('calendar', { viewDate: meetingForm?.startDate })}
             style={{
               width: '100%',
               height: 56,
@@ -88,7 +88,7 @@ export default function MeetingCompletePage({ onNavigate }) {
               color: colors.lightText,
             }}
           >
-            회의 목록으로
+            완료
           </button>
         </div>
       </div>
