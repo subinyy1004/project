@@ -126,8 +126,8 @@ export default function RecommendDetailPage({ onNavigate, meetingForm, selectedR
   const rec = selectedRec
   if (!rec) return null
 
-  const mandatoryParticipants = buildParticipants(meetingForm?.mandatory || [], mandatoryParticipants || [])
-  const optionalParticipants = buildParticipants(meetingForm?.optional || [], optionalParticipants || [])
+  const mandatoryParticipants = buildParticipants(meetingForm?.mandatory || [], rec?.mandatoryParticipants || [])
+  const optionalParticipants = buildParticipants(meetingForm?.optional || [], rec?.optionalParticipants || [])
 
   return (
     <div
