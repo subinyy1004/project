@@ -53,18 +53,23 @@ export default function RecommendTimePage({ onNavigate }) {
           borderBottom: `1px solid ${colors.borderLight}`,
         }}
       >
-        <Icon name="arrow_back" size={24} color={colors.secondaryText} />
-        <span
-          style={{
-            fontFamily: fonts.pretendard,
-            fontSize: 16,
-            fontWeight: 700,
-            lineHeight: '20.8px',
-            color: colors.primaryText,
-          }}
+        <div
+          style={{ display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer' }}
+          onClick={() => onNavigate('create-meeting')}
         >
-          추천 시간
-        </span>
+          <Icon name="arrow_back" size={24} color={colors.secondaryText} />
+          <span
+            style={{
+              fontFamily: fonts.pretendard,
+              fontSize: 16,
+              fontWeight: 700,
+              lineHeight: '20.8px',
+              color: colors.primaryText,
+            }}
+          >
+            추천 시간
+          </span>
+        </div>
       </div>
 
       {/* Notice bar */}
@@ -84,7 +89,18 @@ export default function RecommendTimePage({ onNavigate }) {
             color: colors.primaryText,
           }}
         >
-          6명 참석 상황 분석 완료
+          6명
+        </span>
+        <span
+          style={{
+            fontFamily: fonts.pretendard,
+            fontSize: 14,
+            fontWeight: 600,
+            lineHeight: '21px',
+            color: colors.lightText,
+          }}
+        >
+          참석 상황 분석 완료
         </span>
       </div>
 
@@ -226,7 +242,7 @@ export default function RecommendTimePage({ onNavigate }) {
             </div>
 
             {/* View attendees link */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 2 }}>
               <span
                 style={{
                   fontFamily: fonts.pretendard,
