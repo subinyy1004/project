@@ -281,6 +281,7 @@ export default function CreateMeetingPage({ onNavigate }) {
         {/* 하단 버튼 */}
         <div style={{ padding: '16px' }}>
           <button
+            onClick={() => onNavigate('recommend-time')}
             style={{
               width: '100%',
               padding: '18px 16px',
