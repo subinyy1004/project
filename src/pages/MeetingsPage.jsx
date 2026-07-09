@@ -33,6 +33,7 @@ export default function MeetingsPage({ onNavigate, meetingForm }) {
 
   const createdTitle = meetingForm?.title || '스프린트 회의'
   const createdDate = formatDate(meetingForm?.startDate)
+  const selectedTime = meetingForm?.selectedRec?.time || ''
   const createdDuration = durationLabel(meetingForm?.selectedTime)
   const participants = [...(meetingForm?.mandatory || []), ...(meetingForm?.optional || [])]
   return (
@@ -229,12 +230,26 @@ export default function MeetingsPage({ onNavigate, meetingForm }) {
                       color: colors.border,
                     }}
                   >
-                    {createdDate}{createdDuration ? ` (${createdDuration})` : ''}
+                    {createdDate}{selectedTime ? ` ${selectedTime}` : ''}{createdDuration ? ` (${createdDuration})` : ''}
                   </span>
                 </div>
               )}
             </div>
             <div style={{ padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: 10 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <Icon name="person" size={16} color={colors.lightText} />
+                <span
+                  style={{
+                    fontFamily: fonts.inter,
+                    fontSize: 14,
+                    fontWeight: 400,
+                    lineHeight: '21px',
+                    color: colors.tertiaryText,
+                  }}
+                >
+                  주최
+                </span>
+              </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                 <Icon name="group" size={16} color={colors.lightText} />
                 <span
