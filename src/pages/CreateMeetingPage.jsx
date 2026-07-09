@@ -37,7 +37,10 @@ export default function CreateMeetingPage({ onNavigate }) {
   const daysInMonth = new Date(2026, 7, 0).getDate()
   const dateList = Array.from({ length: daysInMonth }, (_, i) => {
     const d = new Date(2026, 6, i + 1)
-    const iso = d.toISOString().slice(0, 10)
+    const yyyy = d.getFullYear()
+    const mm = String(d.getMonth() + 1).padStart(2, '0')
+    const dd = String(d.getDate()).padStart(2, '0')
+    const iso = `${yyyy}-${mm}-${dd}`
     const weekday = ['일','월','화','수','목','금','토'][d.getDay()]
     const label = `${d.getMonth() + 1}월 ${d.getDate()}일 (${weekday})`
     return { iso, label }
@@ -45,8 +48,8 @@ export default function CreateMeetingPage({ onNavigate }) {
 
   const formatDate = (iso) => {
     if (!iso) return ''
-    const d = new Date(iso + 'T00:00:00')
-    return `${d.getMonth() + 1}월 ${d.getDate()}일`
+    const parts = iso.split('-')
+    return `${parseInt(parts[1])}월 ${parseInt(parts[2])}일`
   }
 
   return (

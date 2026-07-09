@@ -3,6 +3,7 @@ import CalendarPage from './pages/CalendarPage'
 import CreateMeetingPage from './pages/CreateMeetingPage'
 import RecommendTimePage from './pages/RecommendTimePage'
 import RecommendDetailPage from './pages/RecommendDetailPage'
+import CompletionPage from './pages/CompletionPage'
 
 function App() {
   const [page, setPage] = useState('calendar')
@@ -23,6 +24,10 @@ function App() {
 
   if (page === 'recommend-detail') {
     return <RecommendDetailPage onNavigate={handleNavigate} meetingForm={meetingForm} selectedRec={meetingForm?.selectedRec} />
+  }
+
+  if (page === 'completion') {
+    return <CompletionPage onNavigate={handleNavigate} meetingForm={meetingForm} selectedRec={meetingForm?.selectedRec} />
   }
 
   return <CalendarPage onNavigate={handleNavigate} />

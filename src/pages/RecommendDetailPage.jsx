@@ -203,7 +203,7 @@ export default function RecommendDetailPage({ onNavigate, meetingForm, selectedR
                 color: '#D4D4D4',
               }}
             >
-              {rec.title}
+              {meetingForm?.title || rec.title}
             </span>
           </div>
         </div>
@@ -275,7 +275,7 @@ export default function RecommendDetailPage({ onNavigate, meetingForm, selectedR
           }}
         >
           <button
-            onClick={() => {/* 06_Calendar placeholder */}}
+            onClick={() => onNavigate('completion')}
             style={{
               width: '100%',
               height: 56,
