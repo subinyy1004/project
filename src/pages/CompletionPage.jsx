@@ -3,7 +3,7 @@ import Icon from '../components/Icon'
 import BottomNav from '../components/BottomNav'
 import StatusBar from '../components/StatusBar'
 
-const participantList = [
+const personLookup = [
   { initial: '김', name: '김디자이너', role: '디자이너' },
   { initial: '박', name: '박엔지니어', role: '엔지니어' },
   { initial: '이', name: '이PM', role: 'PM' },
@@ -12,12 +12,21 @@ const participantList = [
   { initial: '한', name: '한엔지니어', role: '엔지니어' },
 ]
 
+function findPerson(name) {
+  return personLookup.find(p => p.name === name) || { initial: name[0], name, role: '' }
+}
+
 export default function CompletionPage({ onNavigate, meetingForm, selectedRec }) {
   const rec = selectedRec
   const title = meetingForm?.title || rec?.title || '스프린트 회의'
   const time = rec?.time || '15:00 – 16:00'
   const dur = meetingForm?.selectedTime || 60
   const durLabel = dur >= 60 ? `${dur / 60}시간` : '30분'
+
+  const mandatoryNames = meetingForm?.mandatory || []
+  const optionalNames = meetingForm?.optional || []
+  const allNames = [...mandatoryNames, ...optionalNames]
+  const participantList = allNames.map(findPerson)
   const totalPeople = participantList.length
 
   const dateStr = meetingForm?.startDate
@@ -194,7 +203,7 @@ export default function CompletionPage({ onNavigate, meetingForm, selectedRec })
                   color: colors.lightText,
                 }}
               >
-                0 / {totalPeople + 3}명 응답
+                0 / {totalPeople}명 응답
               </span>
             </div>
             <div
@@ -356,7 +365,7 @@ export default function CompletionPage({ onNavigate, meetingForm, selectedRec })
           홈으로 돌아가기
         </button>
         <button
-          onClick={() => onNavigate('calendar')}
+          onClick={() => onNavigate('calendar', { viewDate: meetingForm?.startDate })}
           style={{
             width: '100%',
             height: 56,

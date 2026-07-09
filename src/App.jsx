@@ -8,9 +8,21 @@ import CompletionPage from './pages/CompletionPage'
 function App() {
   const [page, setPage] = useState('calendar')
   const [meetingForm, setMeetingForm] = useState(null)
+  const [viewDate, setViewDate] = useState(null)
 
   const handleNavigate = (pageName, formData) => {
-    if (formData) setMeetingForm(formData)
+    if (formData) {
+      if (formData.viewDate) {
+        setViewDate(formData.viewDate)
+        const { viewDate: vd, ...rest } = formData
+        if (Object.keys(rest).length > 0) setMeetingForm(prev => ({ ...prev, ...rest }))
+      } else {
+        setMeetingForm(prev => ({ ...prev, ...formData }))
+      }
+    }
+    if (pageName === 'calendar' && !formData?.viewDate) {
+      setViewDate(null)
+    }
     setPage(pageName)
   }
 
@@ -30,7 +42,7 @@ function App() {
     return <CompletionPage onNavigate={handleNavigate} meetingForm={meetingForm} selectedRec={meetingForm?.selectedRec} />
   }
 
-  return <CalendarPage onNavigate={handleNavigate} />
+  return <CalendarPage onNavigate={handleNavigate} initialDate={viewDate} />
 }
 
 export default App

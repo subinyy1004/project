@@ -8,11 +8,12 @@ import BottomNav from '../components/BottomNav'
 import Icon from '../components/Icon'
 import { fonts, colors, frame } from '../designTokens'
 
-export default function CalendarPage({ onNavigate }) {
+export default function CalendarPage({ onNavigate, initialDate }) {
   const today = new Date()
-  const [currentYear, setCurrentYear] = useState(today.getFullYear())
-  const [currentMonth, setCurrentMonth] = useState(today.getMonth())
-  const [selectedDay, setSelectedDay] = useState(today.getDate())
+  const initDate = initialDate ? new Date(initialDate + 'T00:00:00') : today
+  const [currentYear, setCurrentYear] = useState(initDate.getFullYear())
+  const [currentMonth, setCurrentMonth] = useState(initDate.getMonth())
+  const [selectedDay, setSelectedDay] = useState(initDate.getDate())
 
   const goToPrevMonth = () => {
     if (currentMonth === 0) {

@@ -52,6 +52,15 @@ export default function CreateMeetingPage({ onNavigate }) {
     return `${parseInt(parts[1])}월 ${parseInt(parts[2])}일`
   }
 
+  const today = new Date()
+  const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`
+
+  const isFormValid =
+    title.trim() !== '' &&
+    (mandatory.length + optional.length > 0) &&
+    startDate !== '' &&
+    endDate !== ''
+
   return (
     <div
       style={{
@@ -317,6 +326,7 @@ export default function CreateMeetingPage({ onNavigate }) {
                   <DateDropdown
                     dateList={dateList}
                     selected={startDate}
+                    todayStr={todayStr}
                     onSelect={(iso) => { setStartDate(iso); setOpenDropdown(null) }}
                   />
                 )}
@@ -332,6 +342,7 @@ export default function CreateMeetingPage({ onNavigate }) {
                   <DateDropdown
                     dateList={dateList}
                     selected={endDate}
+                    todayStr={todayStr}
                     onSelect={(iso) => { setEndDate(iso); setOpenDropdown(null) }}
                   />
                 )}
@@ -343,14 +354,17 @@ export default function CreateMeetingPage({ onNavigate }) {
         {/* 하단 버튼 */}
         <div style={{ padding: '16px' }}>
           <button
-            onClick={() => onNavigate('recommend-time', {
-              title,
-              mandatory: mandatory.map(p => p.name),
-              optional: optional.map(p => p.name),
-              selectedTime,
-              startDate,
-              endDate,
-            })}
+            onClick={() => {
+              if (!isFormValid) return
+              onNavigate('recommend-time', {
+                title,
+                mandatory: mandatory.map(p => p.name),
+                optional: optional.map(p => p.name),
+                selectedTime,
+                startDate,
+                endDate,
+              })
+            }}
             style={{
               width: '100%',
               padding: '18px 16px',
@@ -362,7 +376,8 @@ export default function CreateMeetingPage({ onNavigate }) {
               fontSize: 16,
               fontWeight: 600,
               lineHeight: '20.8px',
-              cursor: 'pointer',
+              cursor: isFormValid ? 'pointer' : 'not-allowed',
+              opacity: isFormValid ? 1 : 0.3,
             }}
           >
             추천 시간 보기
@@ -502,7 +517,7 @@ function DateChip({ date, placeholder, onClick }) {
   )
 }
 
-function DateDropdown({ dateList, selected, onSelect }) {
+function DateDropdown({ dateList, selected, todayStr, onSelect }) {
   return (
     <div
       style={{
@@ -520,24 +535,27 @@ function DateDropdown({ dateList, selected, onSelect }) {
         overflowY: 'auto',
       }}
     >
-      {dateList.map((d) => (
-        <div
-          key={d.iso}
-          onClick={() => onSelect(d.iso)}
-          style={{
-            padding: '10px 16px',
-            fontFamily: fonts.pretendard,
-            fontSize: 14,
-            fontWeight: d.iso === selected ? 600 : 400,
-            lineHeight: '21px',
-            color: colors.primaryText,
-            backgroundColor: d.iso === selected ? colors.borderLighter : 'transparent',
-            cursor: 'pointer',
-          }}
-        >
-          {d.label}
-        </div>
-      ))}
+      {dateList.map((d) => {
+        const isPast = d.iso < todayStr
+        return (
+          <div
+            key={d.iso}
+            onClick={() => { if (!isPast) onSelect(d.iso) }}
+            style={{
+              padding: '10px 16px',
+              fontFamily: fonts.pretendard,
+              fontSize: 14,
+              fontWeight: d.iso === selected ? 600 : 400,
+              lineHeight: '21px',
+              color: isPast ? colors.border : colors.primaryText,
+              backgroundColor: d.iso === selected ? colors.borderLighter : 'transparent',
+              cursor: isPast ? 'not-allowed' : 'pointer',
+            }}
+          >
+            {d.label}
+          </div>
+        )
+      })}
     </div>
   )
 }
