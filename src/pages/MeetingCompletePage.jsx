@@ -76,14 +76,7 @@ export default function MeetingCompletePage({ onNavigate, meetingForm }) {
         <div style={{ height: 24 }} />
 
         {/* Meeting info */}
-        <div
-          style={{
-            width: '100%',
-            borderRadius: 12,
-            backgroundColor: '#F8F8F8',
-            padding: '16px 20px',
-          }}
-        >
+        <div style={{ width: '100%' }}>
           <div
             style={{
               fontFamily: fonts.pretendard,
@@ -91,14 +84,15 @@ export default function MeetingCompletePage({ onNavigate, meetingForm }) {
               fontWeight: 700,
               lineHeight: '23.4px',
               color: '#111111',
-              marginBottom: 12,
+              marginBottom: 16,
+              padding: '0 4px',
             }}
           >
             {title}
           </div>
 
           {/* Time */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12, padding: '0 4px' }}>
             <Icon name="schedule" size={20} color="#AAAAAA" />
             <span
               style={{
@@ -114,7 +108,7 @@ export default function MeetingCompletePage({ onNavigate, meetingForm }) {
           </div>
 
           {/* Participant count */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12, padding: '0 4px' }}>
             <Icon name="group" size={20} color="#AAAAAA" />
             <span
               style={{
@@ -130,7 +124,7 @@ export default function MeetingCompletePage({ onNavigate, meetingForm }) {
           </div>
 
           {/* Organizer */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20, padding: '0 4px' }}>
             <Icon name="person" size={20} color="#AAAAAA" />
             <span
               style={{
@@ -146,7 +140,7 @@ export default function MeetingCompletePage({ onNavigate, meetingForm }) {
           </div>
 
           {/* Avatars */}
-          <div style={{ display: 'flex', gap: 4, marginTop: 12 }}>
+          <div style={{ display: 'flex', gap: 4, padding: '0 4px' }}>
             {['김', '박', '이', '최', '정'].map((init, i) => (
               <div
                 key={i}
