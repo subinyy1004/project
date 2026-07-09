@@ -1,8 +1,7 @@
 import { fonts, colors } from '../designTokens'
 import { events } from '../data'
-import Icon from './Icon'
 
-export default function ScheduleSection({ selectedDay, onNavigate }) {
+export default function ScheduleSection({ selectedDay }) {
   const dayEvents = events[selectedDay] || []
 
   return (
@@ -88,35 +87,6 @@ export default function ScheduleSection({ selectedDay, onNavigate }) {
         ))}
       </div>
 
-      <button
-        onClick={() => onNavigate?.('create-meeting')}
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: 8,
-          padding: '12px 20px',
-          backgroundColor: colors.primaryText,
-          borderRadius: 28,
-          boxShadow: '0 4px 16px rgba(0,0,0,0.20)',
-          alignSelf: 'flex-end',
-          border: 'none',
-          cursor: 'pointer',
-        }}
-      >
-        <Icon name="add" size={20} color={colors.white} />
-        <span
-          style={{
-            fontFamily: fonts.pretendard,
-            fontSize: 14,
-            fontWeight: 600,
-            lineHeight: '21px',
-            color: colors.white,
-          }}
-        >
-          회의 만들기
-        </span>
-      </button>
     </div>
   )
 }

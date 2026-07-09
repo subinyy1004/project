@@ -5,9 +5,9 @@ import Icon from './Icon'
 const statusOptions = ['편하게 가능', '어렵습니다', '조정 가능']
 
 const statusStyle = {
-  '편하게 가능': { bg: colors.blueLight, icon: colors.blue, accent: colors.accent },
-  '어렵습니다': { bg: '#FEF2F2', icon: '#EF4444', accent: '#EF4444' },
-  '조정 가능': { bg: '#FEE685', icon: '#E17100', accent: '#E17100' },
+  '편하게 가능': { bg: colors.blueLight, iconColor: colors.blue, iconName: 'check_circle', accent: colors.accent },
+  '어렵습니다': { bg: '#FEF2F2', iconColor: '#EF4444', iconName: 'close', accent: '#EF4444' },
+  '조정 가능': { bg: '#FEE685', iconColor: '#E17100', iconName: 'change_history', accent: '#E17100' },
 }
 
 export default function AttendanceStatus() {
@@ -42,7 +42,7 @@ export default function AttendanceStatus() {
               justifyContent: 'center',
             }}
           >
-            <Icon name="check_circle" size={20} color={s.icon} />
+            <Icon name={s.iconName} size={20} color={s.iconColor} />
           </div>
           <div>
             <div
