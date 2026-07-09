@@ -18,6 +18,7 @@ function getCalendarDays(year, month) {
       week = []
     }
   }
+  while (week.length < 7) week.push(null)
   if (week.length > 0) days.push(week)
   return days
 }
