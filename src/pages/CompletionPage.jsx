@@ -347,7 +347,7 @@ export default function CompletionPage({ onNavigate, meetingForm, selectedRec })
         }}
       >
         <button
-          onClick={() => onNavigate('calendar')}
+          onClick={() => onNavigate('calendar', { _saveMeeting: true })}
           style={{
             width: '100%',
             height: 56,

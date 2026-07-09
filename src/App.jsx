@@ -28,6 +28,21 @@ function App() {
           duration,
           status: '편하게 가능',
         }])
+      } else if (formData._saveMeeting) {
+        const { _saveMeeting, ...rest } = formData
+        if (Object.keys(rest).length > 0) setMeetingForm(prev => ({ ...prev, ...rest }))
+        setViewDate(null)
+
+        const rec = meetingForm?.selectedRec
+        const time = rec?.time?.split(' – ')[0] || '15:00'
+        const duration = rec?.time || '15:00 – 16:00'
+        setNewMeetings(prev => [...prev, {
+          date: meetingForm?.startDate,
+          time,
+          title: meetingForm?.title || '스프린트 회의',
+          duration,
+          status: '편하게 가능',
+        }])
       } else {
         setMeetingForm(prev => ({ ...prev, ...formData }))
       }
