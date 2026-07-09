@@ -389,7 +389,7 @@ export default function CompletionPage({ onNavigate, meetingForm, selectedRec })
         </button>
       </div>
 
-      <BottomNav />
+      <BottomNav activeTab="calendar" onTabClick={(key) => onNavigate(key)} />
     </div>
   )
 }

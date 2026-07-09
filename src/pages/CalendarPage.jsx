@@ -110,7 +110,7 @@ export default function CalendarPage({ onNavigate, initialDate, newMeetings }) {
         </button>
       </div>
 
-      <BottomNav />
+      <BottomNav activeTab="calendar" onTabClick={(key) => onNavigate(key)} />
     </div>
   )
 }

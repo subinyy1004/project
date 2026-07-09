@@ -2,10 +2,10 @@ import { fonts, colors } from '../designTokens'
 import Icon from './Icon'
 
 const tabs = [
-  { icon: 'calendar_month', label: 'Calendar', active: true },
-  { icon: 'event_available', label: 'Meetings', active: false },
-  { icon: 'groups', label: 'Teams', active: false },
-  { icon: 'person', label: 'Profile', active: false },
+  { icon: 'calendar_month', label: 'Calendar', key: 'calendar' },
+  { icon: 'event_available', label: 'Meetings', key: 'meetings' },
+  { icon: 'groups', label: 'Teams', key: 'teams' },
+  { icon: 'person', label: 'Profile', key: 'profile' },
 ]
 
 const groupsPath =
@@ -17,7 +17,7 @@ const GroupsIcon = ({ active }) => (
   </svg>
 )
 
-export default function BottomNav() {
+export default function BottomNav({ activeTab = 'calendar', onTabClick }) {
   return (
     <div
       style={{
@@ -26,43 +26,48 @@ export default function BottomNav() {
       }}
     >
       <div style={{ display: 'flex' }}>
-        {tabs.map((tab, i) => (
-          <div
-            key={i}
-            style={{
-              flex: 1,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: 4,
-              padding: '4px 0',
-              height: 56,
-            }}
-          >
-            {tab.icon === 'groups' ? (
-              <GroupsIcon active={tab.active} />
-            ) : (
-              <Icon
-                name={tab.icon}
-                size={24}
-                color={tab.active ? colors.primaryText : colors.lightText}
-              />
-            )}
-            <span
+        {tabs.map((tab, i) => {
+          const active = tab.key === activeTab
+          return (
+            <div
+              key={i}
+              onClick={() => onTabClick?.(tab.key)}
               style={{
-                fontFamily: fonts.pretendard,
-                fontSize: 12,
-                fontWeight: tab.active ? 600 : 400,
-                lineHeight: '18px',
-                textAlign: 'center',
-                color: tab.active ? colors.primaryText : colors.lightText,
+                flex: 1,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 4,
+                padding: '4px 0',
+                height: 56,
+                cursor: 'pointer',
               }}
             >
-              {tab.label}
-            </span>
-          </div>
-        ))}
+              {tab.icon === 'groups' ? (
+                <GroupsIcon active={active} />
+              ) : (
+                <Icon
+                  name={tab.icon}
+                  size={24}
+                  color={active ? colors.primaryText : colors.lightText}
+                />
+              )}
+              <span
+                style={{
+                  fontFamily: fonts.pretendard,
+                  fontSize: 12,
+                  fontWeight: active ? 600 : 400,
+                  lineHeight: '18px',
+                  textAlign: 'center',
+                  color: active ? colors.primaryText : colors.lightText,
+                }}
+              >
+                {tab.label}
+              </span>
+            </div>
+          )
+        })}
       </div>
       <div style={{ display: 'flex', justifyContent: 'center', padding: '8px 0' }}>
         <div

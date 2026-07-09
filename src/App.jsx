@@ -4,6 +4,7 @@ import CreateMeetingPage from './pages/CreateMeetingPage'
 import RecommendTimePage from './pages/RecommendTimePage'
 import RecommendDetailPage from './pages/RecommendDetailPage'
 import CompletionPage from './pages/CompletionPage'
+import MeetingsPage from './pages/MeetingsPage'
 
 function App() {
   const [page, setPage] = useState('calendar')
@@ -67,6 +68,10 @@ function App() {
 
   if (page === 'completion') {
     return <CompletionPage onNavigate={handleNavigate} meetingForm={meetingForm} selectedRec={meetingForm?.selectedRec} />
+  }
+
+  if (page === 'meetings') {
+    return <MeetingsPage onNavigate={handleNavigate} />
   }
 
   return <CalendarPage onNavigate={handleNavigate} initialDate={viewDate} newMeetings={newMeetings} />

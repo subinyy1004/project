@@ -385,7 +385,7 @@ export default function CreateMeetingPage({ onNavigate }) {
         </div>
       </div>
 
-      <BottomNav />
+      <BottomNav activeTab="calendar" onTabClick={(key) => onNavigate(key)} />
 
       {showSheet && (
         <AddParticipantsSheet

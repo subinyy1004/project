@@ -298,7 +298,7 @@ export default function RecommendTimePage({ onNavigate, meetingForm }) {
         ))}
       </div>
 
-      <BottomNav />
+      <BottomNav activeTab="calendar" onTabClick={(key) => onNavigate(key)} />
     </div>
   )
 }

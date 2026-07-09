@@ -327,7 +327,7 @@ export default function RecommendDetailPage({ onNavigate, meetingForm, selectedR
         </div>
       </div>
 
-      <BottomNav />
+      <BottomNav activeTab="calendar" onTabClick={(key) => onNavigate(key)} />
     </div>
   )
 }
