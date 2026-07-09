@@ -12,6 +12,15 @@ const timeOptions = [
   { label: '2시간', value: 120 },
 ]
 
+const allPeople = [
+  {initial: '윤', name: '윤운영', dept: '운영'},
+  {initial: '강', name: '강기획', dept: '기획'},
+  {initial: '서', name: '서마케팅', dept: '마케팅'},
+  {initial: '조', name: '조엔지니어', dept: '개발'},
+  {initial: '류', name: '류디자이너', dept: '디자인'},
+  {initial: '문', name: '문QA', dept: 'QA'},
+]
+
 export default function CreateMeetingPage({ onNavigate }) {
   const [selectedTime, setSelectedTime] = useState(30)
   const [showSheet, setShowSheet] = useState(false)
@@ -345,7 +354,23 @@ export default function CreateMeetingPage({ onNavigate }) {
       <BottomNav />
 
       {showSheet && (
-        <AddParticipantsSheet onClose={() => setShowSheet(false)} />
+        <AddParticipantsSheet
+          existingMandatory={mandatory}
+          existingOptional={optional}
+          onClose={(result) => {
+            setShowSheet(false)
+            if (result) {
+              const items = result.names.map(name =>
+                allPeople.find(p => p.name === name) || { initial: name[0], name }
+              )
+              if (result.tab === 'mandatory') {
+                setMandatory(prev => [...prev, ...items])
+              } else {
+                setOptional(prev => [...prev, ...items])
+              }
+            }
+          }}
+        />
       )}
     </div>
   )

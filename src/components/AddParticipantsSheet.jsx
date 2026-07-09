@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { fonts, colors } from '../designTokens'
 import Icon from './Icon'
 
@@ -11,11 +11,26 @@ const people = [
   { initial: '문', name: '문QA', dept: 'QA' },
 ]
 
-export default function AddParticipantsSheet({ onClose }) {
-  const [selected, setSelected] = useState(new Set())
+export default function AddParticipantsSheet({ existingMandatory = [], existingOptional = [], onClose }) {
+  const [tab, setTab] = useState('mandatory')
+  const [query, setQuery] = useState('')
+  const [pending, setPending] = useState(new Set())
+
+  const existingNames = useMemo(() => {
+    const names = new Set()
+    existingMandatory.forEach(p => names.add(p.name))
+    existingOptional.forEach(p => names.add(p.name))
+    return names
+  }, [existingMandatory, existingOptional])
+
+  const filtered = useMemo(() => {
+    if (!query.trim()) return people
+    const q = query.trim().toLowerCase()
+    return people.filter(p => p.name.includes(q) || p.dept.includes(q))
+  }, [query])
 
   const togglePerson = (name) => {
-    setSelected((prev) => {
+    setPending((prev) => {
       const next = new Set(prev)
       if (next.has(name)) next.delete(name)
       else next.add(name)
@@ -23,7 +38,10 @@ export default function AddParticipantsSheet({ onClose }) {
     })
   }
 
-  const hasSelection = selected.size > 0
+  const submit = () => {
+    const names = [...pending]
+    onClose({ tab, names })
+  }
 
   return (
     <div
@@ -36,7 +54,7 @@ export default function AddParticipantsSheet({ onClose }) {
         justifyContent: 'flex-end',
         zIndex: 100,
       }}
-      onClick={onClose}
+      onClick={() => onClose(null)}
     >
       <div
         onClick={(e) => e.stopPropagation()}
@@ -82,7 +100,7 @@ export default function AddParticipantsSheet({ onClose }) {
             참석자 추가
           </span>
           <button
-            onClick={onClose}
+            onClick={() => onClose(null)}
             style={{
               background: 'none',
               border: 'none',
@@ -112,17 +130,22 @@ export default function AddParticipantsSheet({ onClose }) {
             }}
           >
             <Icon name="search" size={18} color={colors.lightText} />
-            <span
+            <input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="이름 또는 부서 검색"
               style={{
+                flex: 1,
+                border: 'none',
+                outline: 'none',
+                background: 'transparent',
                 fontFamily: fonts.pretendard,
                 fontSize: 14,
                 fontWeight: 400,
                 lineHeight: '21px',
-                color: colors.lightText,
+                color: colors.primaryText,
               }}
-            >
-              이름 또는 부서 검색
-            </span>
+            />
           </div>
         </div>
 
@@ -138,35 +161,37 @@ export default function AddParticipantsSheet({ onClose }) {
             }}
           >
             <button
+              onClick={() => setTab('mandatory')}
               style={{
                 flex: 1,
                 padding: '9px 16px',
-                backgroundColor: colors.primaryText,
+                backgroundColor: tab === 'mandatory' ? colors.primaryText : '#F7F8F9',
                 border: 'none',
                 borderRadius: 8,
                 cursor: 'pointer',
                 fontFamily: fonts.pretendard,
                 fontSize: 12,
-                fontWeight: 600,
+                fontWeight: tab === 'mandatory' ? 600 : 400,
                 lineHeight: '18px',
-                color: colors.white,
+                color: tab === 'mandatory' ? colors.white : colors.tertiaryText,
               }}
             >
               필수 참석자로 추가
             </button>
             <button
+              onClick={() => setTab('optional')}
               style={{
                 flex: 1,
                 padding: '9px 16px',
-                backgroundColor: '#F7F8F9',
+                backgroundColor: tab === 'optional' ? colors.primaryText : '#F7F8F9',
                 border: 'none',
                 borderRadius: 8,
                 cursor: 'pointer',
                 fontFamily: fonts.pretendard,
                 fontSize: 12,
-                fontWeight: 400,
+                fontWeight: tab === 'optional' ? 600 : 400,
                 lineHeight: '18px',
-                color: colors.tertiaryText,
+                color: tab === 'optional' ? colors.white : colors.tertiaryText,
               }}
             >
               선택 참석자로 추가
@@ -179,19 +204,21 @@ export default function AddParticipantsSheet({ onClose }) {
 
         {/* Participant list */}
         <div style={{ flex: 1, overflow: 'auto' }}>
-          {people.map((p, i) => {
-            const isSelected = selected.has(p.name)
+          {filtered.map((p, i) => {
+            const isSelected = pending.has(p.name)
+            const isDisabled = existingNames.has(p.name)
             return (
               <div
                 key={i}
-                onClick={() => togglePerson(p.name)}
+                onClick={() => !isDisabled && togglePerson(p.name)}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
                   gap: 12,
                   padding: '14px 20px',
-                  borderBottom: i < people.length - 1 ? `1px solid ${colors.borderLighter}` : 'none',
-                  cursor: 'pointer',
+                  borderBottom: i < filtered.length - 1 ? `1px solid ${colors.borderLighter}` : 'none',
+                  cursor: isDisabled ? 'not-allowed' : 'pointer',
+                  opacity: isDisabled ? 0.4 : 1,
                 }}
               >
                 <div
@@ -272,19 +299,20 @@ export default function AddParticipantsSheet({ onClose }) {
           }}
         >
           <button
-            disabled={!hasSelection}
+            disabled={pending.size === 0}
+            onClick={submit}
             style={{
               width: '100%',
               padding: '18px 16px',
-              backgroundColor: hasSelection ? colors.primaryText : colors.borderLight,
+              backgroundColor: pending.size > 0 ? colors.primaryText : colors.borderLight,
               border: 'none',
               borderRadius: 12,
               fontFamily: fonts.pretendard,
               fontSize: 16,
               fontWeight: 600,
               lineHeight: '20.8px',
-              color: hasSelection ? colors.white : colors.lightText,
-              cursor: hasSelection ? 'pointer' : 'not-allowed',
+              color: pending.size > 0 ? colors.white : colors.lightText,
+              cursor: pending.size > 0 ? 'pointer' : 'not-allowed',
             }}
           >
             추가하기
