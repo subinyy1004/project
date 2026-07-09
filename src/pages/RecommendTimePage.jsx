@@ -27,7 +27,8 @@ const recommendations = [
   },
 ]
 
-export default function RecommendTimePage({ onNavigate }) {
+export default function RecommendTimePage({ onNavigate, meetingForm }) {
+  const totalPeople = (meetingForm?.mandatory?.length || 0) + (meetingForm?.optional?.length || 0)
   return (
     <div
       style={{
@@ -89,7 +90,7 @@ export default function RecommendTimePage({ onNavigate }) {
             color: colors.primaryText,
           }}
         >
-          6명
+          {totalPeople}명
         </span>
         <span
           style={{
