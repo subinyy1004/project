@@ -2,6 +2,7 @@ import { useState } from 'react'
 import CalendarPage from './pages/CalendarPage'
 import CreateMeetingPage from './pages/CreateMeetingPage'
 import RecommendTimePage from './pages/RecommendTimePage'
+import RecommendDetailPage from './pages/RecommendDetailPage'
 
 function App() {
   const [page, setPage] = useState('calendar')
@@ -18,6 +19,10 @@ function App() {
 
   if (page === 'recommend-time') {
     return <RecommendTimePage onNavigate={handleNavigate} meetingForm={meetingForm} />
+  }
+
+  if (page === 'recommend-detail') {
+    return <RecommendDetailPage onNavigate={handleNavigate} meetingForm={meetingForm} selectedRec={meetingForm?.selectedRec} />
   }
 
   return <CalendarPage onNavigate={handleNavigate} />

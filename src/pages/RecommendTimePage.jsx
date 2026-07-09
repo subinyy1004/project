@@ -10,6 +10,17 @@ const recommendations = [
     stars: 5,
     mandatoryAvail: 3,
     optionalAvail: 2,
+    title: '스프린트 회고',
+    mandatoryParticipants: [
+      { name: '김디자이너', role: '디자이너', status: '편하게 가능', icon: 'check_circle', iconColor: '#3182F6', badgeBg: '#E8F1FF', textColor: '#0050C3' },
+      { name: '박엔지니어', role: '엔지니어', status: '편하게 가능', icon: 'check_circle', iconColor: '#3182F6', badgeBg: '#E8F1FF', textColor: '#0050C3' },
+      { name: '이PM', role: 'PM', status: '편하게 가능', icon: 'check_circle', iconColor: '#3182F6', badgeBg: '#E8F1FF', textColor: '#0050C3' },
+    ],
+    optionalParticipants: [
+      { name: '최QA', role: 'QA', status: '편하게 가능', icon: 'check_circle', iconColor: '#3182F6', badgeBg: '#E8F1FF', textColor: '#0050C3' },
+      { name: '정디자이너', role: '디자이너', status: '조정 가능', icon: 'radio_button_checked', iconColor: '#E17100', badgeBg: '#FEE685', textColor: '#E17100' },
+      { name: '한엔지니어', role: '엔지니어', status: '어렵습니다', icon: 'cancel', iconColor: '#EF4444', badgeBg: '#FEF2F2', textColor: '#991B1B' },
+    ],
   },
   {
     rank: 2,
@@ -17,6 +28,17 @@ const recommendations = [
     stars: 4,
     mandatoryAvail: 2,
     optionalAvail: 1,
+    title: '스프린트 회고',
+    mandatoryParticipants: [
+      { name: '김디자이너', role: '디자이너', status: '편하게 가능', icon: 'check_circle', iconColor: '#3182F6', badgeBg: '#E8F1FF', textColor: '#0050C3' },
+      { name: '박엔지니어', role: '엔지니어', status: '편하게 가능', icon: 'check_circle', iconColor: '#3182F6', badgeBg: '#E8F1FF', textColor: '#0050C3' },
+      { name: '이PM', role: 'PM', status: '어렵습니다', icon: 'cancel', iconColor: '#EF4444', badgeBg: '#FEF2F2', textColor: '#991B1B' },
+    ],
+    optionalParticipants: [
+      { name: '최QA', role: 'QA', status: '조정 가능', icon: 'radio_button_checked', iconColor: '#E17100', badgeBg: '#FEE685', textColor: '#E17100' },
+      { name: '정디자이너', role: '디자이너', status: '어렵습니다', icon: 'cancel', iconColor: '#EF4444', badgeBg: '#FEF2F2', textColor: '#991B1B' },
+      { name: '한엔지니어', role: '엔지니어', status: '어렵습니다', icon: 'cancel', iconColor: '#EF4444', badgeBg: '#FEF2F2', textColor: '#991B1B' },
+    ],
   },
   {
     rank: 3,
@@ -24,6 +46,17 @@ const recommendations = [
     stars: 2,
     mandatoryAvail: 1,
     optionalAvail: 2,
+    title: '스프린트 회고',
+    mandatoryParticipants: [
+      { name: '김디자이너', role: '디자이너', status: '편하게 가능', icon: 'check_circle', iconColor: '#3182F6', badgeBg: '#E8F1FF', textColor: '#0050C3' },
+      { name: '박엔지니어', role: '엔지니어', status: '어렵습니다', icon: 'cancel', iconColor: '#EF4444', badgeBg: '#FEF2F2', textColor: '#991B1B' },
+      { name: '이PM', role: 'PM', status: '어렵습니다', icon: 'cancel', iconColor: '#EF4444', badgeBg: '#FEF2F2', textColor: '#991B1B' },
+    ],
+    optionalParticipants: [
+      { name: '최QA', role: 'QA', status: '편하게 가능', icon: 'check_circle', iconColor: '#3182F6', badgeBg: '#E8F1FF', textColor: '#0050C3' },
+      { name: '정디자이너', role: '디자이너', status: '편하게 가능', icon: 'check_circle', iconColor: '#3182F6', badgeBg: '#E8F1FF', textColor: '#0050C3' },
+      { name: '한엔지니어', role: '엔지니어', status: '어렵습니다', icon: 'cancel', iconColor: '#EF4444', badgeBg: '#FEF2F2', textColor: '#991B1B' },
+    ],
   },
 ]
 
@@ -121,11 +154,13 @@ export default function RecommendTimePage({ onNavigate, meetingForm }) {
         {recommendations.map((rec, i) => (
           <div
             key={i}
+            onClick={() => onNavigate('recommend-detail', { selectedRec: rec })}
             style={{
               backgroundColor: colors.white,
               border: `1px solid ${i === 0 ? colors.primaryText : colors.borderLight}`,
               borderRadius: 12,
               padding: 16,
+              cursor: 'pointer',
             }}
           >
             {/* Top row: rank badge + stars */}
