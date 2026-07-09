@@ -3,6 +3,7 @@ import { fonts, colors, frame } from '../designTokens'
 import Icon from '../components/Icon'
 import BottomNav from '../components/BottomNav'
 import StatusBar from '../components/StatusBar'
+import AddParticipantsSheet from '../components/AddParticipantsSheet'
 
 const timeOptions = [
   { label: '30분', value: 30 },
@@ -25,6 +26,7 @@ const optionalParticipants = [
 
 export default function CreateMeetingPage({ onNavigate }) {
   const [selectedTime, setSelectedTime] = useState(60)
+  const [showSheet, setShowSheet] = useState(false)
 
   return (
     <div
@@ -36,6 +38,7 @@ export default function CreateMeetingPage({ onNavigate }) {
         flexDirection: 'column',
         borderRadius: 40,
         overflow: 'hidden',
+        position: 'relative',
       }}
     >
       <StatusBar />
@@ -140,6 +143,7 @@ export default function CreateMeetingPage({ onNavigate }) {
             >
               <SectionLabel text="참석자" />
               <div
+                onClick={() => setShowSheet(true)}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -147,6 +151,7 @@ export default function CreateMeetingPage({ onNavigate }) {
                   border: `1px solid ${colors.border}`,
                   borderRadius: 20,
                   padding: '4px 12px',
+                  cursor: 'pointer',
                 }}
               >
                 <Icon name="person_add" size={14} color={colors.secondaryText} />
@@ -296,6 +301,10 @@ export default function CreateMeetingPage({ onNavigate }) {
       </div>
 
       <BottomNav />
+
+      {showSheet && (
+        <AddParticipantsSheet onClose={() => setShowSheet(false)} />
+      )}
     </div>
   )
 }
