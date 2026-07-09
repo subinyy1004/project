@@ -75,92 +75,125 @@ export default function MeetingCompletePage({ onNavigate, meetingForm }) {
         </div>
         <div style={{ height: 24 }} />
 
-        {/* Meeting info */}
+        {/* Meeting info card */}
         <div
           style={{
             width: '100%',
             borderRadius: 12,
-            backgroundColor: '#F8F8F8',
-            padding: '16px 20px',
+            border: `1px solid #E4E4E4`,
+            overflow: 'hidden',
           }}
         >
+          {/* Title - gray bg */}
           <div
             style={{
-              fontFamily: fonts.pretendard,
-              fontSize: 18,
-              fontWeight: 700,
-              lineHeight: '23.4px',
-              color: '#111111',
-              marginBottom: 12,
+              backgroundColor: '#F8F8F8',
+              padding: '14px 20px',
             }}
           >
-            {title}
-          </div>
-
-          {/* Time */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
-            <Icon name="schedule" size={20} color="#AAAAAA" />
             <span
               style={{
                 fontFamily: fonts.pretendard,
-                fontSize: 15,
-                fontWeight: 400,
-                lineHeight: '22.5px',
-                color: '#333333',
+                fontSize: 18,
+                fontWeight: 700,
+                lineHeight: '23.4px',
+                color: '#111111',
               }}
             >
-              {dateLabel} {selectedTime} ({durLabel})
+              {title}
             </span>
           </div>
 
-          <div style={{ height: 1, backgroundColor: '#E4E4E4', marginBottom: 12 }} />
+          {/* Content - white bg */}
+          <div style={{ backgroundColor: '#FFFFFF', padding: '16px 20px' }}>
+            {/* Time */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <Icon name="schedule" size={20} color="#AAAAAA" />
+              <span
+                style={{
+                  fontFamily: fonts.pretendard,
+                  fontSize: 15,
+                  fontWeight: 400,
+                  lineHeight: '22.5px',
+                  color: '#333333',
+                }}
+              >
+                {dateLabel} {selectedTime} ({durLabel})
+              </span>
+            </div>
 
-          {/* Participant count */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
-            <Icon name="group" size={20} color="#AAAAAA" />
-            <span
-              style={{
-                fontFamily: fonts.pretendard,
-                fontSize: 15,
-                fontWeight: 400,
-                lineHeight: '22.5px',
-                color: '#333333',
-              }}
-            >
-              {participantCount}명 참석 확정
-            </span>
-          </div>
+            <div style={{ height: 1, backgroundColor: '#E4E4E4', marginTop: 12, marginBottom: 12 }} />
 
-          <div style={{ height: 1, backgroundColor: '#E4E4E4', marginBottom: 12 }} />
+            {/* Participant count */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <Icon name="group" size={20} color="#AAAAAA" />
+              <span
+                style={{
+                  fontFamily: fonts.pretendard,
+                  fontSize: 15,
+                  fontWeight: 400,
+                  lineHeight: '22.5px',
+                  color: '#333333',
+                }}
+              >
+                {participantCount}명 참석 확정
+              </span>
+            </div>
 
-          {/* Organizer */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
-            <Icon name="person" size={20} color="#AAAAAA" />
-            <span
-              style={{
-                fontFamily: fonts.pretendard,
-                fontSize: 15,
-                fontWeight: 400,
-                lineHeight: '22.5px',
-                color: '#333333',
-              }}
-            >
-              주최: 최PM
-            </span>
-          </div>
+            <div style={{ height: 1, backgroundColor: '#E4E4E4', marginTop: 12, marginBottom: 12 }} />
 
-          <div style={{ height: 1, backgroundColor: '#E4E4E4', marginBottom: 12 }} />
+            {/* Organizer */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <Icon name="person" size={20} color="#AAAAAA" />
+              <span
+                style={{
+                  fontFamily: fonts.pretendard,
+                  fontSize: 15,
+                  fontWeight: 400,
+                  lineHeight: '22.5px',
+                  color: '#333333',
+                }}
+              >
+                주최: 최PM
+              </span>
+            </div>
 
-          {/* Avatars */}
-          <div style={{ display: 'flex', gap: 4 }}>
-            {['김', '박', '이', '최', '정'].map((init, i) => (
+            <div style={{ height: 1, backgroundColor: '#E4E4E4', marginTop: 12, marginBottom: 12 }} />
+
+            {/* Avatars */}
+            <div style={{ display: 'flex', gap: 4 }}>
+              {['김', '박', '이', '최', '정'].map((init, i) => (
+                <div
+                  key={i}
+                  style={{
+                    width: 32,
+                    height: 32,
+                    borderRadius: 16,
+                    backgroundColor: '#E4E4E4',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <span
+                    style={{
+                      fontFamily: fonts.pretendard,
+                      fontSize: 12,
+                      fontWeight: 500,
+                      lineHeight: '18px',
+                      color: '#555555',
+                    }}
+                  >
+                    {init}
+                  </span>
+                </div>
+              ))}
               <div
-                key={i}
                 style={{
                   width: 32,
                   height: 32,
                   borderRadius: 16,
-                  backgroundColor: '#E4E4E4',
+                  backgroundColor: '#D4D4D4',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -175,32 +208,9 @@ export default function MeetingCompletePage({ onNavigate, meetingForm }) {
                     color: '#555555',
                   }}
                 >
-                  {init}
+                  +{participantCount > 5 ? participantCount - 5 : 1}
                 </span>
               </div>
-            ))}
-            <div
-              style={{
-                width: 32,
-                height: 32,
-                borderRadius: 16,
-                backgroundColor: '#D4D4D4',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <span
-                style={{
-                  fontFamily: fonts.pretendard,
-                  fontSize: 12,
-                  fontWeight: 500,
-                  lineHeight: '18px',
-                  color: '#555555',
-                }}
-              >
-                +{participantCount > 5 ? participantCount - 5 : 1}
-              </span>
             </div>
           </div>
         </div>
