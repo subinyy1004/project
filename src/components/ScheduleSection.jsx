@@ -4,7 +4,7 @@ import Icon from './Icon'
 
 const todayEvents = events[16]
 
-export default function ScheduleSection() {
+export default function ScheduleSection({ onNavigate }) {
   return (
     <div style={{ padding: '12px 16px', display: 'flex', flexDirection: 'column', gap: 12 }}>
       <SectionLabel text="오늘 일정" />
@@ -88,7 +88,8 @@ export default function ScheduleSection() {
         ))}
       </div>
 
-      <div
+      <button
+        onClick={() => onNavigate?.('create-meeting')}
         style={{
           display: 'flex',
           alignItems: 'center',
@@ -99,6 +100,8 @@ export default function ScheduleSection() {
           borderRadius: 28,
           boxShadow: '0 4px 16px rgba(0,0,0,0.20)',
           alignSelf: 'flex-end',
+          border: 'none',
+          cursor: 'pointer',
         }}
       >
         <Icon name="add" size={20} color={colors.white} />
@@ -113,7 +116,7 @@ export default function ScheduleSection() {
         >
           회의 만들기
         </span>
-      </div>
+      </button>
     </div>
   )
 }

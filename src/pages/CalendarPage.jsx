@@ -25,7 +25,7 @@ export default function CalendarPage({ onNavigate }) {
         <CalendarHeader />
         <CalendarGrid />
         <AttendanceStatus />
-        <ScheduleSection />
+        <ScheduleSection onNavigate={onNavigate} />
       </div>
       <BottomNav />
     </div>
