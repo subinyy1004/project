@@ -52,6 +52,9 @@ function App() {
           duration,
           status: '편하게 가능',
           participants: [...(meetingForm?.mandatory || []), ...(meetingForm?.optional || [])],
+          mandatory: meetingForm?.mandatory || [],
+          optional: meetingForm?.optional || [],
+          organizer: '최PM',
         }
         setNewMeetings(prev => [...prev, meetingEntry])
         setMyMeetings(prev => [...prev, meetingEntry])
@@ -65,6 +68,10 @@ function App() {
           title: meetingForm?.title || '스프린트 회의',
           duration: mDuration || meetingForm?.selectedRec?.time || '15:00 – 16:00',
           status: '편하게 가능',
+          participants: [...(meetingForm?.mandatory || []), ...(meetingForm?.optional || [])],
+          mandatory: meetingForm?.mandatory || [],
+          optional: meetingForm?.optional || [],
+          organizer: '최PM',
         }])
       } else {
         setMeetingForm(prev => ({ ...prev, ...formData }))

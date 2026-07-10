@@ -30,6 +30,8 @@ const durationLabel = (min) => {
 
 export default function MeetingsPage({ onNavigate, myMeetings = [], confirmedRequests }) {
   const [tab, setTab] = useState('requested')
+  const [expandedIdx, setExpandedIdx] = useState(null)
+  const [hoveredName, setHoveredName] = useState(null)
 
   const visibleRequests = requests.filter((_, i) => !confirmedRequests?.includes(i))
   return (
@@ -191,10 +193,12 @@ export default function MeetingsPage({ onNavigate, myMeetings = [], confirmedReq
             </div>
           )
         })
-      ) : myMeetings.length > 0 ? myMeetings.map((mtg, i) => (
+      ) : myMeetings.length > 0 ? myMeetings.map((mtg, i) => {
+          const expanded = expandedIdx === i
+          return (
           <div
             key={i}
-            onClick={() => onNavigate('calendar', { _viewOnly: mtg.date })}
+            onClick={() => setExpandedIdx(expanded ? null : i)}
             style={{
               border: `1px solid ${colors.primaryText}`,
               borderRadius: 16,
@@ -253,10 +257,11 @@ export default function MeetingsPage({ onNavigate, myMeetings = [], confirmedReq
                     참석자 {mtg.participants.length}명
                   </span>
                 </div>
-                <div style={{ display: 'flex', gap: 6 }}>
+                <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center' }}>
                   {mtg.participants.slice(0, 5).map((name, j) => (
                     <div
                       key={j}
+                      onClick={e => { e.stopPropagation(); setHoveredName(hoveredName === name ? null : name) }}
                       style={{
                         width: 28,
                         height: 28,
@@ -265,6 +270,8 @@ export default function MeetingsPage({ onNavigate, myMeetings = [], confirmedReq
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
+                        position: 'relative',
+                        cursor: 'pointer',
                       }}
                     >
                       <span
@@ -278,6 +285,25 @@ export default function MeetingsPage({ onNavigate, myMeetings = [], confirmedReq
                       >
                         {name[0]}
                       </span>
+                      {hoveredName === name && (
+                        <div style={{
+                          position: 'absolute',
+                          bottom: '100%',
+                          left: '50%',
+                          transform: 'translateX(-50%)',
+                          marginBottom: 6,
+                          backgroundColor: colors.primaryText,
+                          color: colors.white,
+                          padding: '4px 8px',
+                          borderRadius: 6,
+                          fontSize: 11,
+                          fontFamily: fonts.pretendard,
+                          whiteSpace: 'nowrap',
+                          zIndex: 10,
+                        }}>
+                          {name}
+                        </div>
+                      )}
                     </div>
                   ))}
                   {mtg.participants.length > 5 && (
@@ -306,10 +332,36 @@ export default function MeetingsPage({ onNavigate, myMeetings = [], confirmedReq
                     </div>
                   )}
                 </div>
+                {expanded && (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 6, borderTop: `1px solid ${colors.borderLighter}`, paddingTop: 10 }}>
+                    {mtg.mandatory?.length > 0 && (
+                      <div>
+                        <span style={{ fontFamily: fonts.pretendard, fontSize: 12, fontWeight: 600, color: colors.lightText, marginRight: 8 }}>필수</span>
+                        {mtg.mandatory.map((n, j) => (
+                          <span key={j} style={{ fontFamily: fonts.pretendard, fontSize: 12, color: colors.tertiaryText }}>{j > 0 && ', '}{n}</span>
+                        ))}
+                      </div>
+                    )}
+                    {mtg.optional?.length > 0 && (
+                      <div>
+                        <span style={{ fontFamily: fonts.pretendard, fontSize: 12, fontWeight: 600, color: colors.lightText, marginRight: 8 }}>선택</span>
+                        {mtg.optional.map((n, j) => (
+                          <span key={j} style={{ fontFamily: fonts.pretendard, fontSize: 12, color: colors.tertiaryText }}>{j > 0 && ', '}{n}</span>
+                        ))}
+                      </div>
+                    )}
+                    {mtg.organizer && (
+                      <div>
+                        <span style={{ fontFamily: fonts.pretendard, fontSize: 12, fontWeight: 600, color: colors.lightText, marginRight: 8 }}>주최</span>
+                        <span style={{ fontFamily: fonts.pretendard, fontSize: 12, color: colors.tertiaryText }}>{mtg.organizer}</span>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             )}
           </div>
-        )) : (
+        )}) : (
           <div
             style={{
               flex: 1,
