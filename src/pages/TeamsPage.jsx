@@ -184,7 +184,7 @@ function MessengerView({ target, onBack, onNewChat }) {
               )}
               <div
                 style={{
-                  maxWidth: msg.from === '나' ? '72%' : 'calc(72% - 36px)',
+                  maxWidth: msg.from === '나' ? 240 : 204,
                   backgroundColor: msg.from === '나' ? colors.primaryText : '#F0F0F0',
                   color: msg.from === '나' ? colors.white : colors.primaryText,
                   borderRadius: 16,
