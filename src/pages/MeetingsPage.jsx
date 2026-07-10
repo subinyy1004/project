@@ -194,7 +194,7 @@ export default function MeetingsPage({ onNavigate, myMeetings = [], confirmedReq
       ) : myMeetings.length > 0 ? myMeetings.map((mtg, i) => (
           <div
             key={i}
-            onClick={() => onNavigate('calendar', { viewDate: mtg.date })}
+            onClick={() => onNavigate('calendar', { _viewOnly: mtg.date })}
             style={{
               border: `1px solid ${colors.primaryText}`,
               borderRadius: 16,

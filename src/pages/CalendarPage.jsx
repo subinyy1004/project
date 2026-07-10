@@ -70,7 +70,7 @@ export default function CalendarPage({ onNavigate, initialDate, newMeetings }) {
           newMeetings={newMeetings}
         />
         <AttendanceStatus />
-        <ScheduleSection selectedDay={selectedDay} newMeetings={newMeetings} />
+        <ScheduleSection selectedDay={selectedDay} currentYear={currentYear} currentMonth={currentMonth} newMeetings={newMeetings} />
       </div>
 
       <div

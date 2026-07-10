@@ -18,7 +18,9 @@ function App() {
 
   const handleNavigate = (pageName, formData) => {
     if (formData) {
-      if (formData.viewDate) {
+      if (formData._viewOnly) {
+        setViewDate(formData._viewOnly)
+      } else if (formData.viewDate) {
         setViewDate(formData.viewDate)
         const { viewDate: vd, _confirmComplete: cc, _time: mt, _duration: md, ...rest } = formData
         if (Object.keys(rest).length > 0) setMeetingForm(prev => ({ ...prev, ...rest }))

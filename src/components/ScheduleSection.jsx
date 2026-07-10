@@ -1,11 +1,11 @@
 import { fonts, colors } from '../designTokens'
 import { events } from '../data'
 
-export default function ScheduleSection({ selectedDay, newMeetings = [] }) {
+export default function ScheduleSection({ selectedDay, currentYear, currentMonth, newMeetings = [] }) {
   const dayEvents = events[selectedDay] || []
   const dayNewMeetings = newMeetings.filter(m => {
     const d = new Date(m.date + 'T00:00:00')
-    return !isNaN(d.getTime()) && d.getDate() === selectedDay
+    return !isNaN(d.getTime()) && d.getDate() === selectedDay && d.getMonth() === currentMonth && d.getFullYear() === currentYear
   })
 
   const allEvents = [...dayEvents, ...dayNewMeetings.map(m => ({
@@ -13,7 +13,7 @@ export default function ScheduleSection({ selectedDay, newMeetings = [] }) {
     title: m.title,
     duration: m.duration,
     status: m.status,
-  }))]
+  }))].sort((a, b) => a.time.localeCompare(b.time))
 
   return (
     <div style={{ padding: '12px 16px', display: 'flex', flexDirection: 'column', gap: 12 }}>
