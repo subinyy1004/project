@@ -4,6 +4,29 @@ import BottomNav from '../components/BottomNav'
 import Icon from '../components/Icon'
 import { fonts, colors, frame } from '../designTokens'
 
+const badgeColor = (s) => s === 'login' ? '#22C55E' : s === 'working' ? '#F59E0B' : '#FFFFFF'
+
+const initialMessages = {
+  '디자인팀 채팅': [
+    { from: '김디자인', text: '내일 회의 자료 준비되었나요?', time: '오전 9:45' },
+    { from: '박시안', text: '네 준비됐습니다!', time: '오전 9:47' },
+    { from: '이미소', text: '저도 다 했어요', time: '오전 9:50' },
+    { from: '최보라', text: '회의실 예약 완료했습니다', time: '오전 10:00' },
+    { from: '김디자인', text: '네, 그럼 내일 회의 때 뵙겠습니다', time: '오전 10:15' },
+  ],
+  '김민석': [
+    { from: '김민석', text: '혹시 회의실 예약하셨나요?', time: '오전 9:20' },
+    { from: '나', text: '아직이에요. 지금 할게요!', time: '오전 9:25' },
+    { from: '김민석', text: '회의실 예약했어요!', time: '오전 9:30' },
+  ],
+  '프로젝트 A': [
+    { from: '김민석', text: '프로젝트 일정 협의 필요합니다', time: '어제 오후 2:00' },
+    { from: '이수진', text: '내일 오후 어떠세요?', time: '어제 오후 2:10' },
+    { from: '박준호', text: '저는 가능합니다', time: '어제 오후 2:15' },
+    { from: '나', text: '이 부분은 내일까지 검토해올게요', time: '어제 오후 2:30' },
+  ],
+}
+
 const chats = [
   {
     type: 'group',
@@ -12,7 +35,7 @@ const chats = [
     lastMsg: '네, 그럼 내일 회의 때 뵙겠습니다',
     time: '오전 10:15',
     color: '#3182F6',
-    messenger: true,
+    status: 'login',
   },
   {
     type: 'dm',
@@ -20,7 +43,7 @@ const chats = [
     lastMsg: '회의실 예약했어요!',
     time: '오전 9:30',
     color: '#10B981',
-    messenger: true,
+    status: 'login',
   },
   {
     type: 'group',
@@ -29,7 +52,7 @@ const chats = [
     lastMsg: '이 부분은 내일까지 검토해올게요',
     time: '어제',
     color: '#F59E0B',
-    messenger: false,
+    status: 'logout',
   },
 ]
 
@@ -38,58 +61,157 @@ const teams = [
     name: '디자인팀',
     color: '#3182F6',
     members: [
-      { name: '김디자인', status: 'online' },
-      { name: '박시안', status: 'busy' },
-      { name: '이미소', status: 'online' },
-      { name: '최보라', status: 'away' },
-      { name: '한지민', status: 'online' },
-      { name: '강수정', status: 'offline' },
-      { name: '오세진', status: 'busy' },
-      { name: '윤다영', status: 'online' },
+      { name: '김디자인', status: 'login' },
+      { name: '박시안', status: 'working' },
+      { name: '이미소', status: 'login' },
+      { name: '최보라', status: 'working' },
+      { name: '한지민', status: 'login' },
+      { name: '강수정', status: 'logout' },
+      { name: '오세진', status: 'working' },
+      { name: '윤다영', status: 'login' },
     ],
   },
   {
     name: '개발팀',
     color: '#10B981',
     members: [
-      { name: '김민석', status: 'online' },
-      { name: '이수진', status: 'busy' },
-      { name: '박준호', status: 'online' },
-      { name: '정다은', status: 'away' },
-      { name: '최영호', status: 'offline' },
-      { name: '송지우', status: 'online' },
-      { name: '임현수', status: 'busy' },
-      { name: '권태영', status: 'online' },
-      { name: '조유진', status: 'away' },
-      { name: '백승훈', status: 'offline' },
-      { name: '문지환', status: 'online' },
-      { name: '양세영', status: 'busy' },
+      { name: '김민석', status: 'login' },
+      { name: '이수진', status: 'working' },
+      { name: '박준호', status: 'login' },
+      { name: '정다은', status: 'working' },
+      { name: '최영호', status: 'logout' },
+      { name: '송지우', status: 'login' },
+      { name: '임현수', status: 'working' },
+      { name: '권태영', status: 'login' },
+      { name: '조유진', status: 'working' },
+      { name: '백승훈', status: 'logout' },
+      { name: '문지환', status: 'login' },
+      { name: '양세영', status: 'working' },
     ],
   },
   {
     name: '마케팅팀',
     color: '#F59E0B',
     members: [
-      { name: '홍지영', status: 'online' },
-      { name: '김나래', status: 'busy' },
-      { name: '이동훈', status: 'away' },
-      { name: '박세희', status: 'online' },
-      { name: '최윤서', status: 'offline' },
+      { name: '홍지영', status: 'login' },
+      { name: '김나래', status: 'working' },
+      { name: '이동훈', status: 'working' },
+      { name: '박세희', status: 'login' },
+      { name: '최윤서', status: 'logout' },
     ],
   },
   {
     name: '기획팀',
     color: '#8B5CF6',
     members: [
-      { name: '정우진', status: 'online' },
-      { name: '강민수', status: 'busy' },
-      { name: '송혜진', status: 'online' },
-      { name: '배지원', status: 'away' },
-      { name: '임소영', status: 'offline' },
-      { name: '한상혁', status: 'online' },
+      { name: '정우진', status: 'login' },
+      { name: '강민수', status: 'working' },
+      { name: '송혜진', status: 'login' },
+      { name: '배지원', status: 'working' },
+      { name: '임소영', status: 'logout' },
+      { name: '한상혁', status: 'login' },
     ],
   },
 ]
+
+function MessengerView({ target, onBack }) {
+  const [messages, setMessages] = useState(initialMessages[target] || [])
+  const [input, setInput] = useState('')
+
+  const send = () => {
+    if (!input.trim()) return
+    const now = new Date()
+    const h = now.getHours()
+    const m = now.getMinutes()
+    const ampm = h < 12 ? '오전' : '오후'
+    const hour = h % 12 || 12
+    setMessages(prev => [...prev, { from: '나', text: input, time: `${ampm} ${hour}:${String(m).padStart(2, '0')}` }])
+    setInput('')
+  }
+
+  return (
+    <div
+      style={{
+        width: frame.width,
+        minHeight: frame.height,
+        backgroundColor: '#FFFFFF',
+        display: 'flex',
+        flexDirection: 'column',
+        borderRadius: 40,
+        overflow: 'hidden',
+      }}
+    >
+      <StatusBar />
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 16px', borderBottom: `1px solid ${colors.borderLight}` }}>
+        <div onClick={onBack} style={{ cursor: 'pointer' }}>
+          <Icon name="arrow_back" size={24} color={colors.primaryText} />
+        </div>
+        <span style={{ fontFamily: fonts.pretendard, fontSize: 16, fontWeight: 600, lineHeight: '24px', color: colors.primaryText }}>
+          {target}
+        </span>
+      </div>
+      <div style={{ flex: 1, padding: 16, display: 'flex', flexDirection: 'column', gap: 8, overflow: 'auto' }}>
+        {messages.map((msg, i) => (
+          <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: msg.from === '나' ? 'flex-end' : 'flex-start' }}>
+            <div
+              style={{
+                maxWidth: '80%',
+                backgroundColor: msg.from === '나' ? colors.primaryText : '#F0F0F0',
+                color: msg.from === '나' ? colors.white : colors.primaryText,
+                borderRadius: 16,
+                borderBottomRightRadius: msg.from === '나' ? 4 : 16,
+                borderBottomLeftRadius: msg.from === '나' ? 16 : 4,
+                padding: '10px 14px',
+                fontFamily: fonts.pretendard,
+                fontSize: 14,
+                fontWeight: 400,
+                lineHeight: '21px',
+              }}
+            >
+              {msg.text}
+            </div>
+            <span style={{ fontFamily: fonts.pretendard, fontSize: 10, fontWeight: 400, lineHeight: '15px', color: colors.mutedText, marginTop: 2, marginLeft: msg.from === '나' ? 0 : 4, marginRight: msg.from === '나' ? 4 : 0 }}>
+              {msg.from !== '나' && `${msg.from} · `}{msg.time}
+            </span>
+          </div>
+        ))}
+      </div>
+      <div style={{ display: 'flex', gap: 8, alignItems: 'center', padding: '12px 16px', borderTop: `1px solid ${colors.borderLight}` }}>
+        <input
+          value={input}
+          onChange={e => setInput(e.target.value)}
+          onKeyDown={e => e.key === 'Enter' && send()}
+          placeholder="메시지 입력..."
+          style={{
+            flex: 1,
+            border: `1px solid ${colors.borderLight}`,
+            borderRadius: 20,
+            padding: '10px 14px',
+            fontFamily: fonts.pretendard,
+            fontSize: 14,
+            outline: 'none',
+            backgroundColor: '#F8F8F8',
+          }}
+        />
+        <div
+          onClick={send}
+          style={{
+            width: 36,
+            height: 36,
+            borderRadius: 18,
+            backgroundColor: colors.primaryText,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+          }}
+        >
+          <Icon name="send" size={18} color={colors.white} />
+        </div>
+      </div>
+    </div>
+  )
+}
 
 export default function TeamsPage({ onNavigate }) {
   const [search, setSearch] = useState('')
@@ -97,61 +219,7 @@ export default function TeamsPage({ onNavigate }) {
   const [messaging, setMessaging] = useState(null)
 
   if (messaging) {
-    return (
-      <div
-        style={{
-          width: frame.width,
-          minHeight: frame.height,
-          backgroundColor: '#FFFFFF',
-          display: 'flex',
-          flexDirection: 'column',
-          borderRadius: 40,
-          overflow: 'hidden',
-        }}
-      >
-        <StatusBar />
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 16px', borderBottom: `1px solid ${colors.borderLight}` }}>
-          <div onClick={() => setMessaging(null)} style={{ cursor: 'pointer' }}>
-            <Icon name="arrow_back" size={24} color={colors.primaryText} />
-          </div>
-          <span style={{ fontFamily: fonts.pretendard, fontSize: 16, fontWeight: 600, lineHeight: '24px', color: colors.primaryText }}>
-            {messaging}
-          </span>
-        </div>
-        <div style={{ flex: 1, padding: 16, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
-          <div style={{ display: 'flex', gap: 8, alignItems: 'center', borderTop: `1px solid ${colors.borderLight}`, paddingTop: 12 }}>
-            <input
-              placeholder="메시지 입력..."
-              style={{
-                flex: 1,
-                border: `1px solid ${colors.borderLight}`,
-                borderRadius: 20,
-                padding: '10px 14px',
-                fontFamily: fonts.pretendard,
-                fontSize: 14,
-                outline: 'none',
-                backgroundColor: '#F8F8F8',
-              }}
-            />
-            <div
-              onClick={() => alert('메시지 전송!')}
-              style={{
-                width: 36,
-                height: 36,
-                borderRadius: 18,
-                backgroundColor: colors.primaryText,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer',
-              }}
-            >
-              <Icon name="send" size={18} color={colors.white} />
-            </div>
-          </div>
-        </div>
-      </div>
-    )
+    return <MessengerView target={messaging} onBack={() => setMessaging(null)} />
   }
 
   return (
@@ -225,6 +293,7 @@ export default function TeamsPage({ onNavigate }) {
           {chats.map((chat, i) => (
             <div
               key={i}
+              onClick={() => setMessaging(chat.name)}
               style={{
                 display: 'flex',
                 alignItems: 'flex-start',
@@ -232,6 +301,7 @@ export default function TeamsPage({ onNavigate }) {
                 backgroundColor: '#F8F8F8',
                 borderRadius: 12,
                 padding: '12px 16px',
+                cursor: 'pointer',
               }}
             >
               <div
@@ -267,7 +337,7 @@ export default function TeamsPage({ onNavigate }) {
                     height: 12,
                     borderRadius: 6,
                     border: `2px solid white`,
-                    backgroundColor: chat.messenger ? '#22C55E' : '#FFFFFF',
+                    backgroundColor: badgeColor(chat.status),
                   }}
                 />
               </div>
@@ -412,9 +482,7 @@ export default function TeamsPage({ onNavigate }) {
                 </div>
                 {expanded && (
                   <div style={{ backgroundColor: '#F0F0F0' }}>
-                    {team.members.map((member, j) => {
-                      const statusColor = member.status === 'online' ? '#22C55E' : member.status === 'busy' ? '#EF4444' : member.status === 'away' ? '#F59E0B' : '#D4D4D4'
-                      return (
+                    {team.members.map((member, j) => (
                       <div key={j}>
                         {j > 0 && <div style={{ height: 1, backgroundColor: colors.borderLight }} />}
                         <div style={{ padding: '14px 16px 14px 20px', display: 'flex', alignItems: 'center', gap: 12 }}>
@@ -443,7 +511,7 @@ export default function TeamsPage({ onNavigate }) {
                                 height: 10,
                                 borderRadius: 5,
                                 border: `2px solid #F0F0F0`,
-                                backgroundColor: member.status === 'online' || member.status === 'busy' ? '#22C55E' : '#FFFFFF',
+                                backgroundColor: badgeColor(member.status),
                               }}
                             />
                           </div>
@@ -458,7 +526,7 @@ export default function TeamsPage({ onNavigate }) {
                           </div>
                         </div>
                       </div>
-                    )})}
+                    ))}
                   </div>
                 )}
               </div>
