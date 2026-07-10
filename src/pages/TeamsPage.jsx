@@ -163,24 +163,44 @@ function MessengerView({ target, onBack, onNewChat }) {
       <div style={{ flex: 1, padding: 16, display: 'flex', flexDirection: 'column', gap: 8, overflow: 'auto' }}>
         {messages.map((msg, i) => (
           <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: msg.from === '나' ? 'flex-end' : 'flex-start' }}>
-            <div
-              style={{
-                maxWidth: '80%',
-                backgroundColor: msg.from === '나' ? colors.primaryText : '#F0F0F0',
-                color: msg.from === '나' ? colors.white : colors.primaryText,
-                borderRadius: 16,
-                borderBottomRightRadius: msg.from === '나' ? 4 : 16,
-                borderBottomLeftRadius: msg.from === '나' ? 16 : 4,
-                padding: '10px 14px',
-                fontFamily: fonts.pretendard,
-                fontSize: 14,
-                fontWeight: 400,
-                lineHeight: '21px',
-              }}
-            >
-              {msg.text}
+            <div style={{ display: 'flex', alignItems: 'flex-end', gap: 8 }}>
+              {msg.from !== '나' && (
+                <div
+                  style={{
+                    width: 28,
+                    height: 28,
+                    borderRadius: 14,
+                    backgroundColor: '#3182F6',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexShrink: 0,
+                  }}
+                >
+                  <span style={{ fontFamily: fonts.pretendard, fontSize: 11, fontWeight: 600, color: colors.white }}>
+                    {msg.from[0]}
+                  </span>
+                </div>
+              )}
+              <div
+                style={{
+                  maxWidth: msg.from === '나' ? '72%' : 'calc(72% - 36px)',
+                  backgroundColor: msg.from === '나' ? colors.primaryText : '#F0F0F0',
+                  color: msg.from === '나' ? colors.white : colors.primaryText,
+                  borderRadius: 16,
+                  borderBottomRightRadius: msg.from === '나' ? 4 : 16,
+                  borderBottomLeftRadius: msg.from === '나' ? 16 : 4,
+                  padding: '10px 14px',
+                  fontFamily: fonts.pretendard,
+                  fontSize: 14,
+                  fontWeight: 400,
+                  lineHeight: '21px',
+                }}
+              >
+                {msg.text}
+              </div>
             </div>
-            <span style={{ fontFamily: fonts.pretendard, fontSize: 10, fontWeight: 400, lineHeight: '15px', color: colors.mutedText, marginTop: 2, marginLeft: msg.from === '나' ? 0 : 4, marginRight: msg.from === '나' ? 4 : 0 }}>
+            <span style={{ fontFamily: fonts.pretendard, fontSize: 10, fontWeight: 400, lineHeight: '15px', color: colors.mutedText, marginTop: 2, marginLeft: msg.from === '나' ? 0 : 36, marginRight: msg.from === '나' ? 4 : 0 }}>
               {msg.from !== '나' && `${msg.from} · `}{msg.time}
             </span>
           </div>
