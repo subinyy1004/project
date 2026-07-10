@@ -136,7 +136,7 @@ function MessengerView({ target, onBack, onNewChat }) {
     const hour = h % 12 || 12
     setMessages(prev => [...prev, { from: '나', text, time: `${ampm} ${hour}:${String(m).padStart(2, '0')}` }])
     setInput('')
-    onNewChat?.(target)
+    onNewChat?.(target, text, `${ampm} ${hour}:${String(m).padStart(2, '0')}`)
   }
 
   return (
@@ -232,20 +232,15 @@ export default function TeamsPage({ onNavigate }) {
   const [messaging, setMessaging] = useState(null)
   const [chatList, setChatList] = useState(initialChats)
 
-  const handleNewChat = (name) => {
+  const handleNewChat = (name, text, time) => {
     if (chatList.some(c => c.name === name)) return
     const member = findMember(name)
     if (!member) return
-    const now = new Date()
-    const h = now.getHours()
-    const m = now.getMinutes()
-    const ampm = h < 12 ? '오전' : '오후'
-    const hour = h % 12 || 12
     setChatList(prev => [{
       type: 'dm',
       name,
-      lastMsg: '',
-      time: `${ampm} ${hour}:${String(m).padStart(2, '0')}`,
+      lastMsg: text,
+      time,
       color: member.teamColor,
       status: member.status,
     }, ...prev])
