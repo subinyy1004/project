@@ -233,17 +233,19 @@ export default function TeamsPage({ onNavigate }) {
   const [chatList, setChatList] = useState(initialChats)
 
   const handleNewChat = (name, text, time) => {
-    if (chatList.some(c => c.name === name)) return
     const member = findMember(name)
-    if (!member) return
-    setChatList(prev => [{
-      type: 'dm',
-      name,
-      lastMsg: text,
-      time,
-      color: member.teamColor,
-      status: member.status,
-    }, ...prev])
+    if (member && !chatList.some(c => c.name === name)) {
+      setChatList(prev => [{
+        type: 'dm',
+        name,
+        lastMsg: text,
+        time,
+        color: member.teamColor,
+        status: member.status,
+      }, ...prev])
+    } else {
+      setChatList(prev => prev.map(c => c.name === name ? { ...c, lastMsg: text, time } : c))
+    }
   }
 
   if (messaging) {
