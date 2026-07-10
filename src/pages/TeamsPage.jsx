@@ -115,17 +115,18 @@ const teams = [
 ]
 
 function MessengerView({ target, onBack }) {
-  const [messages, setMessages] = useState(initialMessages[target] || [])
+  const [messages, setMessages] = useState(() => initialMessages[target] || [])
   const [input, setInput] = useState('')
 
   const send = () => {
-    if (!input.trim()) return
+    const text = input.trim()
+    if (!text) return
     const now = new Date()
     const h = now.getHours()
     const m = now.getMinutes()
     const ampm = h < 12 ? '오전' : '오후'
     const hour = h % 12 || 12
-    setMessages(prev => [...prev, { from: '나', text: input, time: `${ampm} ${hour}:${String(m).padStart(2, '0')}` }])
+    setMessages(prev => [...prev, { from: '나', text, time: `${ampm} ${hour}:${String(m).padStart(2, '0')}` }])
     setInput('')
   }
 
@@ -180,7 +181,7 @@ function MessengerView({ target, onBack }) {
         <input
           value={input}
           onChange={e => setInput(e.target.value)}
-          onKeyDown={e => e.key === 'Enter' && send()}
+          onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); send() } }}
           placeholder="메시지 입력..."
           style={{
             flex: 1,
@@ -193,8 +194,9 @@ function MessengerView({ target, onBack }) {
             backgroundColor: '#F8F8F8',
           }}
         />
-        <div
+        <button
           onClick={send}
+          type="button"
           style={{
             width: 36,
             height: 36,
@@ -204,10 +206,12 @@ function MessengerView({ target, onBack }) {
             alignItems: 'center',
             justifyContent: 'center',
             cursor: 'pointer',
+            border: 'none',
+            padding: 0,
           }}
         >
           <Icon name="send" size={18} color={colors.white} />
-        </div>
+        </button>
       </div>
     </div>
   )
@@ -304,43 +308,6 @@ export default function TeamsPage({ onNavigate }) {
                 cursor: 'pointer',
               }}
             >
-              <div
-                style={{
-                  width: 40,
-                  height: 40,
-                  borderRadius: 20,
-                  backgroundColor: chat.color,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  flexShrink: 0,
-                  marginTop: 2,
-                  position: 'relative',
-                }}
-              >
-                <span
-                  style={{
-                    fontFamily: fonts.pretendard,
-                    fontSize: 15,
-                    fontWeight: 500,
-                    color: colors.white,
-                  }}
-                >
-                  {chat.name[0]}
-                </span>
-                <div
-                  style={{
-                    position: 'absolute',
-                    bottom: 0,
-                    right: 0,
-                    width: 12,
-                    height: 12,
-                    borderRadius: 6,
-                    border: `2px solid white`,
-                    backgroundColor: badgeColor(chat.status),
-                  }}
-                />
-              </div>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                   <span
@@ -364,7 +331,7 @@ export default function TeamsPage({ onNavigate }) {
                         color: colors.mutedText,
                       }}
                     >
-                      {chat.people.length}
+                      {chat.people.slice(0, 3).join(', ')}{chat.people.length > 3 ? ', ...' : ''}
                     </span>
                   )}
                 </div>
