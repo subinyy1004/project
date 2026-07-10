@@ -27,7 +27,7 @@ const initialMessages = {
   ],
 }
 
-const chats = [
+const initialChats = [
   {
     type: 'group',
     name: '디자인팀 채팅',
@@ -114,7 +114,15 @@ const teams = [
   },
 ]
 
-function MessengerView({ target, onBack }) {
+function findMember(name) {
+  for (const team of teams) {
+    const m = team.members.find(m => m.name === name)
+    if (m) return { ...m, teamColor: team.color }
+  }
+  return null
+}
+
+function MessengerView({ target, onBack, onNewChat }) {
   const [messages, setMessages] = useState(() => initialMessages[target] || [])
   const [input, setInput] = useState('')
 
@@ -128,6 +136,7 @@ function MessengerView({ target, onBack }) {
     const hour = h % 12 || 12
     setMessages(prev => [...prev, { from: '나', text, time: `${ampm} ${hour}:${String(m).padStart(2, '0')}` }])
     setInput('')
+    onNewChat?.(target)
   }
 
   return (
@@ -221,9 +230,29 @@ export default function TeamsPage({ onNavigate }) {
   const [search, setSearch] = useState('')
   const [expandedTeam, setExpandedTeam] = useState(null)
   const [messaging, setMessaging] = useState(null)
+  const [chatList, setChatList] = useState(initialChats)
+
+  const handleNewChat = (name) => {
+    if (chatList.some(c => c.name === name)) return
+    const member = findMember(name)
+    if (!member) return
+    const now = new Date()
+    const h = now.getHours()
+    const m = now.getMinutes()
+    const ampm = h < 12 ? '오전' : '오후'
+    const hour = h % 12 || 12
+    setChatList(prev => [{
+      type: 'dm',
+      name,
+      lastMsg: '',
+      time: `${ampm} ${hour}:${String(m).padStart(2, '0')}`,
+      color: member.teamColor,
+      status: member.status,
+    }, ...prev])
+  }
 
   if (messaging) {
-    return <MessengerView target={messaging} onBack={() => setMessaging(null)} />
+    return <MessengerView target={messaging} onBack={() => setMessaging(null)} onNewChat={handleNewChat} />
   }
 
   return (
@@ -294,7 +323,7 @@ export default function TeamsPage({ onNavigate }) {
           >
             최근 대화
           </span>
-          {chats.map((chat, i) => (
+          {chatList.map((chat, i) => (
             <div
               key={i}
               onClick={() => setMessaging(chat.name)}
@@ -322,31 +351,31 @@ export default function TeamsPage({ onNavigate }) {
                     {chat.name}
                   </span>
                   {chat.type === 'group' && (
-                    <span
-                      style={{
-                        fontFamily: fonts.pretendard,
-                        fontSize: 12,
-                        fontWeight: 400,
-                        lineHeight: '18px',
-                        color: colors.mutedText,
-                        marginLeft: 4,
-                      }}
-                    >
-                      {chat.people.length}
-                    </span>
-                  )}
-                  {chat.type === 'group' && (
-                    <span
-                      style={{
-                        fontFamily: fonts.pretendard,
-                        fontSize: 12,
-                        fontWeight: 400,
-                        lineHeight: '18px',
-                        color: colors.mutedText,
-                      }}
-                    >
-                      {chat.people.slice(0, 3).join(', ')}{chat.people.length > 3 ? ', ...' : ''}
-                    </span>
+                    <>
+                      <span
+                        style={{
+                          fontFamily: fonts.pretendard,
+                          fontSize: 12,
+                          fontWeight: 400,
+                          lineHeight: '18px',
+                          color: colors.mutedText,
+                          marginLeft: 4,
+                        }}
+                      >
+                        {chat.people.length}
+                      </span>
+                      <span
+                        style={{
+                          fontFamily: fonts.pretendard,
+                          fontSize: 12,
+                          fontWeight: 400,
+                          lineHeight: '18px',
+                          color: colors.mutedText,
+                        }}
+                      >
+                        {chat.people.slice(0, 3).join(', ')}{chat.people.length > 3 ? ', ...' : ''}
+                      </span>
+                    </>
                   )}
                 </div>
                 <div
