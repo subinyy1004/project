@@ -34,22 +34,57 @@ const teams = [
   {
     name: '디자인팀',
     color: '#3182F6',
-    members: ['김디자인', '박시안', '이미소', '최보라', '한지민', '강수정', '오세진', '윤다영'],
+    members: [
+      { name: '김디자인', status: 'online' },
+      { name: '박시안', status: 'busy' },
+      { name: '이미소', status: 'online' },
+      { name: '최보라', status: 'away' },
+      { name: '한지민', status: 'online' },
+      { name: '강수정', status: 'offline' },
+      { name: '오세진', status: 'busy' },
+      { name: '윤다영', status: 'online' },
+    ],
   },
   {
     name: '개발팀',
     color: '#10B981',
-    members: ['김민석', '이수진', '박준호', '정다은', '최영호', '송지우', '임현수', '권태영', '조유진', '백승훈', '문지환', '양세영'],
+    members: [
+      { name: '김민석', status: 'online' },
+      { name: '이수진', status: 'busy' },
+      { name: '박준호', status: 'online' },
+      { name: '정다은', status: 'away' },
+      { name: '최영호', status: 'offline' },
+      { name: '송지우', status: 'online' },
+      { name: '임현수', status: 'busy' },
+      { name: '권태영', status: 'online' },
+      { name: '조유진', status: 'away' },
+      { name: '백승훈', status: 'offline' },
+      { name: '문지환', status: 'online' },
+      { name: '양세영', status: 'busy' },
+    ],
   },
   {
     name: '마케팅팀',
     color: '#F59E0B',
-    members: ['홍지영', '김나래', '이동훈', '박세희', '최윤서'],
+    members: [
+      { name: '홍지영', status: 'online' },
+      { name: '김나래', status: 'busy' },
+      { name: '이동훈', status: 'away' },
+      { name: '박세희', status: 'online' },
+      { name: '최윤서', status: 'offline' },
+    ],
   },
   {
     name: '기획팀',
     color: '#8B5CF6',
-    members: ['정우진', '강민수', '송혜진', '배지원', '임소영', '한상혁'],
+    members: [
+      { name: '정우진', status: 'online' },
+      { name: '강민수', status: 'busy' },
+      { name: '송혜진', status: 'online' },
+      { name: '배지원', status: 'away' },
+      { name: '임소영', status: 'offline' },
+      { name: '한상혁', status: 'online' },
+    ],
   },
 ]
 
@@ -194,7 +229,9 @@ export default function TeamsPage({ onNavigate }) {
                     fontWeight: 400,
                     lineHeight: '18px',
                     color: colors.lightText,
-                    whiteSpace: 'nowrap',
+                    display: '-webkit-box',
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: 'vertical',
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
                   }}
@@ -297,30 +334,43 @@ export default function TeamsPage({ onNavigate }) {
                   <Icon name={expanded ? 'expand_less' : 'chevron_right'} size={20} color={colors.lightText} />
                 </div>
                 {expanded && (
-                  <div style={{ backgroundColor: '#F0F0F0', padding: '10px 16px 10px 68px', display: 'flex', flexDirection: 'column', gap: 8 }}>
-                    {team.members.map((name, j) => (
-                      <div key={j} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                        <div
-                          style={{
-                            width: 24,
-                            height: 24,
-                            borderRadius: 12,
-                            backgroundColor: team.color,
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            flexShrink: 0,
-                          }}
-                        >
-                          <span style={{ fontFamily: fonts.pretendard, fontSize: 10, fontWeight: 500, color: colors.white }}>
-                            {name[0]}
+                  <div style={{ backgroundColor: '#F0F0F0' }}>
+                    {team.members.map((member, j) => {
+                      const statusColor = member.status === 'online' ? '#22C55E' : member.status === 'busy' ? '#EF4444' : member.status === 'away' ? '#F59E0B' : '#D4D4D4'
+                      return (
+                      <div key={j}>
+                        {j > 0 && <div style={{ height: 1, backgroundColor: colors.borderLighter }} />}
+                        <div style={{ padding: '10px 16px 10px 68px', display: 'flex', alignItems: 'center', gap: 8 }}>
+                          <div
+                            style={{
+                              width: 24,
+                              height: 24,
+                              borderRadius: 12,
+                              backgroundColor: team.color,
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              flexShrink: 0,
+                              position: 'relative',
+                            }}
+                          >
+                            <span style={{ fontFamily: fonts.pretendard, fontSize: 10, fontWeight: 500, color: colors.white }}>
+                              {member.name[0]}
+                            </span>
+                          </div>
+                          <div style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: statusColor, flexShrink: 0 }} />
+                          <span style={{ flex: 1, fontFamily: fonts.pretendard, fontSize: 13, fontWeight: 400, lineHeight: '19.5px', color: colors.tertiaryText }}>
+                            {member.name}
                           </span>
+                          <div
+                            onClick={e => { e.stopPropagation(); alert(`${member.name}님에게 메시지 보내기`) }}
+                            style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+                          >
+                            <Icon name="chat_bubble_outline" size={18} color={colors.lightText} />
+                          </div>
                         </div>
-                        <span style={{ fontFamily: fonts.pretendard, fontSize: 13, fontWeight: 400, lineHeight: '19.5px', color: colors.tertiaryText }}>
-                          {name}
-                        </span>
                       </div>
-                    ))}
+                    )})}
                   </div>
                 )}
               </div>
