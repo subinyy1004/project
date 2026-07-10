@@ -91,6 +91,65 @@ const teams = [
 export default function TeamsPage({ onNavigate }) {
   const [search, setSearch] = useState('')
   const [expandedTeam, setExpandedTeam] = useState(null)
+  const [messaging, setMessaging] = useState(null)
+
+  if (messaging) {
+    return (
+      <div
+        style={{
+          width: frame.width,
+          minHeight: frame.height,
+          backgroundColor: '#FFFFFF',
+          display: 'flex',
+          flexDirection: 'column',
+          borderRadius: 40,
+          overflow: 'hidden',
+        }}
+      >
+        <StatusBar />
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 16px', borderBottom: `1px solid ${colors.borderLight}` }}>
+          <div onClick={() => setMessaging(null)} style={{ cursor: 'pointer' }}>
+            <Icon name="arrow_back" size={24} color={colors.primaryText} />
+          </div>
+          <span style={{ fontFamily: fonts.pretendard, fontSize: 16, fontWeight: 600, lineHeight: '24px', color: colors.primaryText }}>
+            {messaging}
+          </span>
+        </div>
+        <div style={{ flex: 1, padding: 16, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center', borderTop: `1px solid ${colors.borderLight}`, paddingTop: 12 }}>
+            <input
+              placeholder="메시지 입력..."
+              style={{
+                flex: 1,
+                border: `1px solid ${colors.borderLight}`,
+                borderRadius: 20,
+                padding: '10px 14px',
+                fontFamily: fonts.pretendard,
+                fontSize: 14,
+                outline: 'none',
+                backgroundColor: '#F8F8F8',
+              }}
+            />
+            <div
+              onClick={() => alert('메시지 전송!')}
+              style={{
+                width: 36,
+                height: 36,
+                borderRadius: 18,
+                backgroundColor: colors.primaryText,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+              }}
+            >
+              <Icon name="send" size={18} color={colors.white} />
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div
@@ -165,7 +224,7 @@ export default function TeamsPage({ onNavigate }) {
               key={i}
               style={{
                 display: 'flex',
-                alignItems: 'center',
+                alignItems: 'flex-start',
                 gap: 12,
                 backgroundColor: '#F8F8F8',
                 borderRadius: 12,
@@ -182,6 +241,7 @@ export default function TeamsPage({ onNavigate }) {
                   alignItems: 'center',
                   justifyContent: 'center',
                   flexShrink: 0,
+                  marginTop: 2,
                 }}
               >
                 <span
@@ -208,20 +268,20 @@ export default function TeamsPage({ onNavigate }) {
                   >
                     {chat.name}
                   </span>
-                  {chat.type === 'group' && (
-                    <span
-                      style={{
-                        fontFamily: fonts.pretendard,
-                        fontSize: 11,
-                        fontWeight: 400,
-                        lineHeight: '16.5px',
-                        color: colors.mutedText,
-                      }}
-                    >
-                      {chat.people.join(', ')}
-                    </span>
-                  )}
                 </div>
+                {chat.type === 'group' && (
+                  <span
+                    style={{
+                      fontFamily: fonts.pretendard,
+                      fontSize: 11,
+                      fontWeight: 400,
+                      lineHeight: '16.5px',
+                      color: colors.mutedText,
+                    }}
+                  >
+                    {chat.people.join(', ')}
+                  </span>
+                )}
                 <div
                   style={{
                     fontFamily: fonts.pretendard,
@@ -234,6 +294,7 @@ export default function TeamsPage({ onNavigate }) {
                     WebkitBoxOrient: 'vertical',
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
+                    marginTop: 2,
                   }}
                 >
                   {chat.lastMsg}
@@ -339,34 +400,33 @@ export default function TeamsPage({ onNavigate }) {
                       const statusColor = member.status === 'online' ? '#22C55E' : member.status === 'busy' ? '#EF4444' : member.status === 'away' ? '#F59E0B' : '#D4D4D4'
                       return (
                       <div key={j}>
-                        {j > 0 && <div style={{ height: 1, backgroundColor: colors.borderLighter }} />}
-                        <div style={{ padding: '10px 16px 10px 68px', display: 'flex', alignItems: 'center', gap: 8 }}>
+                        {j > 0 && <div style={{ height: 1, backgroundColor: colors.borderLight }} />}
+                        <div style={{ padding: '14px 16px 14px 20px', display: 'flex', alignItems: 'center', gap: 12 }}>
                           <div
                             style={{
-                              width: 24,
-                              height: 24,
-                              borderRadius: 12,
+                              width: 32,
+                              height: 32,
+                              borderRadius: 16,
                               backgroundColor: team.color,
                               display: 'flex',
                               alignItems: 'center',
                               justifyContent: 'center',
                               flexShrink: 0,
-                              position: 'relative',
                             }}
                           >
-                            <span style={{ fontFamily: fonts.pretendard, fontSize: 10, fontWeight: 500, color: colors.white }}>
+                            <span style={{ fontFamily: fonts.pretendard, fontSize: 13, fontWeight: 600, color: colors.white }}>
                               {member.name[0]}
                             </span>
                           </div>
-                          <div style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: statusColor, flexShrink: 0 }} />
-                          <span style={{ flex: 1, fontFamily: fonts.pretendard, fontSize: 13, fontWeight: 400, lineHeight: '19.5px', color: colors.tertiaryText }}>
+                          <div style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: statusColor, flexShrink: 0 }} />
+                          <span style={{ flex: 1, fontFamily: fonts.pretendard, fontSize: 15, fontWeight: 500, lineHeight: '22.5px', color: colors.tertiaryText }}>
                             {member.name}
                           </span>
                           <div
-                            onClick={e => { e.stopPropagation(); alert(`${member.name}님에게 메시지 보내기`) }}
+                            onClick={e => { e.stopPropagation(); setMessaging(member.name) }}
                             style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}
                           >
-                            <Icon name="chat_bubble_outline" size={18} color={colors.lightText} />
+                            <Icon name="chat_bubble_outline" size={20} color={colors.mutedText} />
                           </div>
                         </div>
                       </div>
