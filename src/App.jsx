@@ -31,6 +31,7 @@ function App() {
           title: meetingForm?.title || '스프린트 회의',
           duration: md || meetingForm?.selectedRec?.time || '15:00 – 16:00',
           status: '편하게 가능',
+          participants: [...(meetingForm?.mandatory || []), ...(meetingForm?.optional || [])],
         }
         setNewMeetings(prev => [...prev, meetingEntry])
         if (cc == null) setMyMeetings(prev => [...prev, meetingEntry])
@@ -48,6 +49,7 @@ function App() {
           time,
           duration,
           status: '편하게 가능',
+          participants: [...(meetingForm?.mandatory || []), ...(meetingForm?.optional || [])],
         }
         setNewMeetings(prev => [...prev, meetingEntry])
         setMyMeetings(prev => [...prev, meetingEntry])

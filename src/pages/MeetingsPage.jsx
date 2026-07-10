@@ -194,10 +194,12 @@ export default function MeetingsPage({ onNavigate, myMeetings = [], confirmedReq
       ) : myMeetings.length > 0 ? myMeetings.map((mtg, i) => (
           <div
             key={i}
+            onClick={() => onNavigate('calendar', { viewDate: mtg.date })}
             style={{
               border: `1px solid ${colors.primaryText}`,
               borderRadius: 16,
               overflow: 'hidden',
+              cursor: 'pointer',
             }}
           >
             <div
@@ -235,6 +237,77 @@ export default function MeetingsPage({ onNavigate, myMeetings = [], confirmedReq
                 </div>
               )}
             </div>
+            {mtg.participants && mtg.participants.length > 0 && (
+              <div style={{ padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: 10 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <Icon name="group" size={16} color={colors.lightText} />
+                  <span
+                    style={{
+                      fontFamily: fonts.pretendard,
+                      fontSize: 14,
+                      fontWeight: 400,
+                      lineHeight: '21px',
+                      color: colors.tertiaryText,
+                    }}
+                  >
+                    참석자 {mtg.participants.length}명
+                  </span>
+                </div>
+                <div style={{ display: 'flex', gap: 6 }}>
+                  {mtg.participants.slice(0, 5).map((name, j) => (
+                    <div
+                      key={j}
+                      style={{
+                        width: 28,
+                        height: 28,
+                        borderRadius: 14,
+                        backgroundColor: colors.borderLight,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <span
+                        style={{
+                          fontFamily: fonts.pretendard,
+                          fontSize: 11,
+                          fontWeight: 500,
+                          lineHeight: '16.5px',
+                          color: colors.tertiaryText,
+                        }}
+                      >
+                        {name[0]}
+                      </span>
+                    </div>
+                  ))}
+                  {mtg.participants.length > 5 && (
+                    <div
+                      style={{
+                        width: 28,
+                        height: 28,
+                        borderRadius: 14,
+                        backgroundColor: colors.border,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <span
+                        style={{
+                          fontFamily: fonts.pretendard,
+                          fontSize: 11,
+                          fontWeight: 500,
+                          lineHeight: '16.5px',
+                          color: colors.tertiaryText,
+                        }}
+                      >
+                        +{mtg.participants.length - 5}
+                      </span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         )) : (
           <div
