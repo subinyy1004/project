@@ -301,7 +301,7 @@ export default function ConfirmationPage({ onNavigate, meetingForm }) {
         <button
           onClick={() => {
             if (!selectedOption) return
-            onNavigate('meeting-complete', { requestId: meetingForm?.requestId })
+            onNavigate('meeting-complete', { requestId: meetingForm?.requestId, selectedOption })
           }}
           style={{
             width: '100%',

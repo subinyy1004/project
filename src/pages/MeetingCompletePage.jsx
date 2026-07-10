@@ -16,6 +16,11 @@ export default function MeetingCompletePage({ onNavigate, meetingForm }) {
   const requestId = meetingForm?.requestId
   const startDate = meetingForm?.startDate || '2026-07-19'
   const timeSlot = meetingForm?.selectedRec?.time || '15:00 – 16:00'
+  const selectedOption = meetingForm?.selectedOption
+  const isDecline = selectedOption === 'decline'
+  const calendarData = isDecline
+    ? {}
+    : { _confirmComplete: requestId, _date: startDate, _time: timeSlot.split(' – ')[0], _duration: timeSlot }
 
   return (
     <div
@@ -229,7 +234,7 @@ export default function MeetingCompletePage({ onNavigate, meetingForm }) {
         }}
       >
         <button
-          onClick={() => onNavigate('meetings', { _confirmComplete: requestId, _date: startDate, _time: timeSlot.split(' – ')[0], _duration: timeSlot })}
+          onClick={() => onNavigate('meetings', calendarData)}
           style={{
             width: '100%',
             height: 56,
@@ -247,7 +252,7 @@ export default function MeetingCompletePage({ onNavigate, meetingForm }) {
           완료
         </button>
         <button
-          onClick={() => onNavigate('calendar', { viewDate: startDate, _confirmComplete: requestId, _date: startDate, _time: timeSlot.split(' – ')[0], _duration: timeSlot })}
+          onClick={() => onNavigate('calendar', isDecline ? {} : { viewDate: startDate, ...calendarData })}
           style={{
             width: '100%',
             height: 56,
