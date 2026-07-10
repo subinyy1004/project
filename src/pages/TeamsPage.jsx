@@ -1,0 +1,109 @@
+import StatusBar from '../components/StatusBar'
+import BottomNav from '../components/BottomNav'
+import Icon from '../components/Icon'
+import { fonts, colors, frame } from '../designTokens'
+
+const teams = [
+  { name: '디자인팀', members: 8, color: '#3182F6' },
+  { name: '개발팀', members: 12, color: '#10B981' },
+  { name: '마케팅팀', members: 5, color: '#F59E0B' },
+  { name: '기획팀', members: 6, color: '#8B5CF6' },
+]
+
+export default function TeamsPage({ onNavigate }) {
+  return (
+    <div
+      style={{
+        width: frame.width,
+        minHeight: frame.height,
+        backgroundColor: '#FFFFFF',
+        display: 'flex',
+        flexDirection: 'column',
+        borderRadius: 40,
+        overflow: 'hidden',
+      }}
+    >
+      <StatusBar />
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 16, padding: '12px 16px 48px' }}>
+        <span
+          style={{
+            fontFamily: fonts.pretendard,
+            fontSize: 20,
+            fontWeight: 700,
+            lineHeight: '26px',
+            color: colors.primaryText,
+          }}
+        >
+          Teams
+        </span>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          {teams.map((team, i) => (
+            <div
+              key={i}
+              style={{
+                backgroundColor: '#F8F8F8',
+                borderRadius: 12,
+                padding: '14px 16px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 12,
+              }}
+            >
+              <div
+                style={{
+                  width: 40,
+                  height: 40,
+                  borderRadius: 20,
+                  backgroundColor: team.color,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexShrink: 0,
+                }}
+              >
+                <span
+                  style={{
+                    fontFamily: fonts.pretendard,
+                    fontSize: 16,
+                    fontWeight: 600,
+                    lineHeight: '24px',
+                    color: colors.white,
+                  }}
+                >
+                  {team.name[0]}
+                </span>
+              </div>
+              <div style={{ flex: 1 }}>
+                <div
+                  style={{
+                    fontFamily: fonts.pretendard,
+                    fontSize: 15,
+                    fontWeight: 600,
+                    lineHeight: '22.5px',
+                    color: colors.primaryText,
+                  }}
+                >
+                  {team.name}
+                </div>
+                <div
+                  style={{
+                    fontFamily: fonts.pretendard,
+                    fontSize: 13,
+                    fontWeight: 400,
+                    lineHeight: '19.5px',
+                    color: colors.lightText,
+                  }}
+                >
+                  멤버 {team.members}명
+                </div>
+              </div>
+              <Icon name="chevron_right" size={20} color={colors.lightText} />
+            </div>
+          ))}
+        </div>
+      </div>
+      <BottomNav activeTab="teams" onTabClick={(key) => onNavigate(key)} />
+    </div>
+  )
+}
