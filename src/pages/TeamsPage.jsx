@@ -12,6 +12,7 @@ const chats = [
     lastMsg: '네, 그럼 내일 회의 때 뵙겠습니다',
     time: '오전 10:15',
     color: '#3182F6',
+    messenger: true,
   },
   {
     type: 'dm',
@@ -19,6 +20,7 @@ const chats = [
     lastMsg: '회의실 예약했어요!',
     time: '오전 9:30',
     color: '#10B981',
+    messenger: true,
   },
   {
     type: 'group',
@@ -27,6 +29,7 @@ const chats = [
     lastMsg: '이 부분은 내일까지 검토해올게요',
     time: '어제',
     color: '#F59E0B',
+    messenger: false,
   },
 ]
 
@@ -242,6 +245,7 @@ export default function TeamsPage({ onNavigate }) {
                   justifyContent: 'center',
                   flexShrink: 0,
                   marginTop: 2,
+                  position: 'relative',
                 }}
               >
                 <span
@@ -254,6 +258,18 @@ export default function TeamsPage({ onNavigate }) {
                 >
                   {chat.name[0]}
                 </span>
+                <div
+                  style={{
+                    position: 'absolute',
+                    bottom: 0,
+                    right: 0,
+                    width: 12,
+                    height: 12,
+                    borderRadius: 6,
+                    border: `2px solid white`,
+                    backgroundColor: chat.messenger ? '#22C55E' : '#FFFFFF',
+                  }}
+                />
               </div>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
@@ -268,20 +284,20 @@ export default function TeamsPage({ onNavigate }) {
                   >
                     {chat.name}
                   </span>
+                  {chat.type === 'group' && (
+                    <span
+                      style={{
+                        fontFamily: fonts.pretendard,
+                        fontSize: 12,
+                        fontWeight: 400,
+                        lineHeight: '18px',
+                        color: colors.mutedText,
+                      }}
+                    >
+                      {chat.people.length}
+                    </span>
+                  )}
                 </div>
-                {chat.type === 'group' && (
-                  <span
-                    style={{
-                      fontFamily: fonts.pretendard,
-                      fontSize: 11,
-                      fontWeight: 400,
-                      lineHeight: '16.5px',
-                      color: colors.mutedText,
-                    }}
-                  >
-                    {chat.people.join(', ')}
-                  </span>
-                )}
                 <div
                   style={{
                     fontFamily: fonts.pretendard,
@@ -412,13 +428,25 @@ export default function TeamsPage({ onNavigate }) {
                               alignItems: 'center',
                               justifyContent: 'center',
                               flexShrink: 0,
+                              position: 'relative',
                             }}
                           >
                             <span style={{ fontFamily: fonts.pretendard, fontSize: 13, fontWeight: 600, color: colors.white }}>
                               {member.name[0]}
                             </span>
+                            <div
+                              style={{
+                                position: 'absolute',
+                                bottom: 0,
+                                right: 0,
+                                width: 10,
+                                height: 10,
+                                borderRadius: 5,
+                                border: `2px solid #F0F0F0`,
+                                backgroundColor: member.status === 'online' || member.status === 'busy' ? '#22C55E' : '#FFFFFF',
+                              }}
+                            />
                           </div>
-                          <div style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: statusColor, flexShrink: 0 }} />
                           <span style={{ flex: 1, fontFamily: fonts.pretendard, fontSize: 15, fontWeight: 500, lineHeight: '22.5px', color: colors.tertiaryText }}>
                             {member.name}
                           </span>
