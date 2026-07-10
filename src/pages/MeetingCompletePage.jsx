@@ -225,6 +225,8 @@ export default function MeetingCompletePage({ onNavigate, meetingForm }) {
         </div>
       )}
 
+      </div>
+
       {/* CTA area */}
       <div
         style={{
