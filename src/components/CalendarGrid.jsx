@@ -59,7 +59,7 @@ export default function CalendarGrid({ year, month, selectedDay, onSelectDay, ne
             const dayEvents = events[day] || []
             const hasNewMeeting = newMeetings.some(m => {
               const d = new Date(m.date + 'T00:00:00')
-              return d.getDate() === day && d.getMonth() === month && d.getFullYear() === year
+              return !isNaN(d.getTime()) && d.getDate() === day && d.getMonth() === month && d.getFullYear() === year
             })
             const dotCount = dayEvents.length + (hasNewMeeting ? 1 : 0)
 

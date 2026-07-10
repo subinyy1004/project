@@ -19,19 +19,16 @@ function App() {
     if (formData) {
       if (formData.viewDate) {
         setViewDate(formData.viewDate)
-        const { viewDate: vd, _confirmComplete: cc, ...rest } = formData
+        const { viewDate: vd, _confirmComplete: cc, _time: mt, _duration: md, ...rest } = formData
         if (Object.keys(rest).length > 0) setMeetingForm(prev => ({ ...prev, ...rest }))
 
         if (cc != null) setConfirmedRequests(prev => [...prev, cc])
 
-        const rec = meetingForm?.selectedRec
-        const time = rec?.time?.split(' – ')[0] || '15:00'
-        const duration = rec?.time || '15:00 – 16:00'
         setNewMeetings(prev => [...prev, {
           date: vd,
-          time,
+          time: mt || meetingForm?.selectedRec?.time?.split(' – ')[0] || '15:00',
           title: meetingForm?.title || '스프린트 회의',
-          duration,
+          duration: md || meetingForm?.selectedRec?.time || '15:00 – 16:00',
           status: '편하게 가능',
         }])
       } else if (formData._saveMeeting) {
@@ -50,17 +47,14 @@ function App() {
           status: '편하게 가능',
         }])
       } else if (formData._confirmComplete != null) {
-        const requestId = formData._confirmComplete
+        const { _confirmComplete: requestId, _date: mDate, _time: mTime, _duration: mDuration } = formData
         setConfirmedRequests(prev => [...prev, requestId])
 
-        const rec = meetingForm?.selectedRec
-        const time = rec?.time?.split(' – ')[0] || '15:00'
-        const duration = rec?.time || '15:00 – 16:00'
         setNewMeetings(prev => [...prev, {
-          date: meetingForm?.startDate,
-          time,
+          date: mDate || meetingForm?.startDate,
+          time: mTime || meetingForm?.selectedRec?.time?.split(' – ')[0] || '15:00',
           title: meetingForm?.title || '스프린트 회의',
-          duration,
+          duration: mDuration || meetingForm?.selectedRec?.time || '15:00 – 16:00',
           status: '편하게 가능',
         }])
       } else {

@@ -5,7 +5,7 @@ export default function ScheduleSection({ selectedDay, newMeetings = [] }) {
   const dayEvents = events[selectedDay] || []
   const dayNewMeetings = newMeetings.filter(m => {
     const d = new Date(m.date + 'T00:00:00')
-    return d.getDate() === selectedDay
+    return !isNaN(d.getTime()) && d.getDate() === selectedDay
   })
 
   const allEvents = [...dayEvents, ...dayNewMeetings.map(m => ({

@@ -14,6 +14,8 @@ export default function MeetingCompletePage({ onNavigate, meetingForm }) {
   const participants = [...(meetingForm?.mandatory || []), ...(meetingForm?.optional || [])]
   const participantCount = participants.length || 6
   const requestId = meetingForm?.requestId
+  const startDate = meetingForm?.startDate || '2026-07-19'
+  const timeSlot = meetingForm?.selectedRec?.time || '15:00 – 16:00'
 
   return (
     <div
@@ -227,7 +229,7 @@ export default function MeetingCompletePage({ onNavigate, meetingForm }) {
         }}
       >
         <button
-          onClick={() => onNavigate('meetings', { _confirmComplete: requestId })}
+          onClick={() => onNavigate('meetings', { _confirmComplete: requestId, _date: startDate, _time: timeSlot.split(' – ')[0], _duration: timeSlot })}
           style={{
             width: '100%',
             height: 56,
@@ -245,7 +247,7 @@ export default function MeetingCompletePage({ onNavigate, meetingForm }) {
           완료
         </button>
         <button
-          onClick={() => onNavigate('calendar', { viewDate: meetingForm?.startDate, _confirmComplete: requestId })}
+          onClick={() => onNavigate('calendar', { viewDate: startDate, _confirmComplete: requestId, _date: startDate, _time: timeSlot.split(' – ')[0], _duration: timeSlot })}
           style={{
             width: '100%',
             height: 56,
