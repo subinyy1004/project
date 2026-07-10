@@ -69,8 +69,107 @@ export default function TeamsPage({ onNavigate }) {
           />
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-          {teams.filter(t => t.name.includes(search)).map((team, i) => (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <span
+            style={{
+              fontFamily: fonts.pretendard,
+              fontSize: 14,
+              fontWeight: 700,
+              lineHeight: '21px',
+              color: colors.lightText,
+            }}
+          >
+            최근 대화
+          </span>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 12,
+              backgroundColor: '#F8F8F8',
+              borderRadius: 12,
+              padding: '12px 16px',
+            }}
+          >
+            <div
+              style={{
+                width: 40,
+                height: 40,
+                borderRadius: 20,
+                backgroundColor: '#3182F6',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexShrink: 0,
+              }}
+            >
+              <span
+                style={{
+                  fontFamily: fonts.pretendard,
+                  fontSize: 15,
+                  fontWeight: 500,
+                  color: colors.white,
+                }}
+              >
+                디
+              </span>
+            </div>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div
+                style={{
+                  fontFamily: fonts.pretendard,
+                  fontSize: 14,
+                  fontWeight: 600,
+                  lineHeight: '21px',
+                  color: colors.primaryText,
+                }}
+              >
+                디자인팀
+              </div>
+              <div
+                style={{
+                  fontFamily: fonts.pretendard,
+                  fontSize: 12,
+                  fontWeight: 400,
+                  lineHeight: '18px',
+                  color: colors.lightText,
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                }}
+              >
+                네, 그럼 내일 회의 때 뵙겠습니다
+              </div>
+            </div>
+            <span
+              style={{
+                fontFamily: fonts.pretendard,
+                fontSize: 11,
+                fontWeight: 400,
+                lineHeight: '16.5px',
+                color: colors.mutedText,
+                flexShrink: 0,
+              }}
+            >
+              오전 10:15
+            </span>
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <span
+            style={{
+              fontFamily: fonts.pretendard,
+              fontSize: 14,
+              fontWeight: 700,
+              lineHeight: '21px',
+              color: colors.lightText,
+            }}
+          >
+            팀
+          </span>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {teams.filter(t => t.name.includes(search)).map((team, i) => (
             <div
               key={i}
               style={{
@@ -134,6 +233,7 @@ export default function TeamsPage({ onNavigate }) {
             </div>
           ))}
         </div>
+      </div>
       </div>
       <BottomNav activeTab="teams" onTabClick={(key) => onNavigate(key)} />
     </div>
