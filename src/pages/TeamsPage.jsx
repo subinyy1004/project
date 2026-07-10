@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import StatusBar from '../components/StatusBar'
 import BottomNav from '../components/BottomNav'
 import Icon from '../components/Icon'
@@ -11,6 +12,7 @@ const teams = [
 ]
 
 export default function TeamsPage({ onNavigate }) {
+  const [search, setSearch] = useState('')
   return (
     <div
       style={{
@@ -37,8 +39,38 @@ export default function TeamsPage({ onNavigate }) {
           Teams
         </span>
 
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 8,
+            backgroundColor: '#F5F5F5',
+            borderRadius: 10,
+            padding: '0 12px',
+          }}
+        >
+          <Icon name="search" size={20} color={colors.lightText} />
+          <input
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            placeholder="팀 검색..."
+            style={{
+              flex: 1,
+              border: 'none',
+              outline: 'none',
+              backgroundColor: 'transparent',
+              fontFamily: fonts.pretendard,
+              fontSize: 14,
+              fontWeight: 400,
+              lineHeight: '21px',
+              color: colors.primaryText,
+              padding: '10px 0',
+            }}
+          />
+        </div>
+
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-          {teams.map((team, i) => (
+          {teams.filter(t => t.name.includes(search)).map((team, i) => (
             <div
               key={i}
               style={{
