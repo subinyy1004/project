@@ -28,14 +28,8 @@ const durationLabel = (min) => {
   return `${h}시간 ${m}분`
 }
 
-export default function MeetingsPage({ onNavigate, meetingForm, confirmedRequests }) {
+export default function MeetingsPage({ onNavigate, myMeetings = [], confirmedRequests }) {
   const [tab, setTab] = useState('requested')
-
-  const createdTitle = meetingForm?.title || '스프린트 회의'
-  const createdDate = formatDate(meetingForm?.startDate)
-  const selectedTime = meetingForm?.selectedRec?.time || ''
-  const createdDuration = durationLabel(meetingForm?.selectedTime)
-  const participants = [...(meetingForm?.mandatory || []), ...(meetingForm?.optional || [])]
 
   const visibleRequests = requests.filter((_, i) => !confirmedRequests?.includes(i))
   return (
@@ -197,8 +191,9 @@ export default function MeetingsPage({ onNavigate, meetingForm, confirmedRequest
             </div>
           )
         })
-      ) : meetingForm ? (
+      ) : myMeetings.length > 0 ? myMeetings.map((mtg, i) => (
           <div
+            key={i}
             style={{
               border: `1px solid ${colors.primaryText}`,
               borderRadius: 16,
@@ -221,9 +216,9 @@ export default function MeetingsPage({ onNavigate, meetingForm, confirmedRequest
                   marginBottom: 6,
                 }}
               >
-                {createdTitle}
+                {mtg.title}
               </div>
-              {createdDate && (
+              {mtg.date && (
                 <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
                   <Icon name="schedule" size={16} color={colors.lightText} />
                   <span
@@ -235,98 +230,13 @@ export default function MeetingsPage({ onNavigate, meetingForm, confirmedRequest
                       color: colors.border,
                     }}
                   >
-                    {createdDate}{selectedTime ? ` ${selectedTime}` : ''}{createdDuration ? ` (${createdDuration})` : ''}
+                    {formatDate(mtg.date)}{mtg.duration ? ` ${mtg.duration}` : ''}
                   </span>
                 </div>
               )}
             </div>
-            <div style={{ padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: 10 }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                <Icon name="person" size={16} color={colors.lightText} />
-                <span
-                  style={{
-                    fontFamily: fonts.inter,
-                    fontSize: 14,
-                    fontWeight: 400,
-                    lineHeight: '21px',
-                    color: colors.tertiaryText,
-                  }}
-                >
-                  주최
-                </span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                <Icon name="group" size={16} color={colors.lightText} />
-                <span
-                  style={{
-                    fontFamily: fonts.pretendard,
-                    fontSize: 14,
-                    fontWeight: 400,
-                    lineHeight: '21px',
-                    color: colors.tertiaryText,
-                  }}
-                >
-                  참석자 {participants.length}명
-                </span>
-              </div>
-              {participants.length > 0 && (
-                <div style={{ display: 'flex', gap: 6 }}>
-                  {participants.slice(0, 5).map((name, i) => (
-                    <div
-                      key={i}
-                      style={{
-                        width: 28,
-                        height: 28,
-                        borderRadius: 14,
-                        backgroundColor: colors.borderLight,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}
-                    >
-                      <span
-                        style={{
-                          fontFamily: fonts.pretendard,
-                          fontSize: 11,
-                          fontWeight: 500,
-                          lineHeight: '16.5px',
-                          color: colors.tertiaryText,
-                        }}
-                      >
-                        {name[0]}
-                      </span>
-                    </div>
-                  ))}
-                  {participants.length > 5 && (
-                    <div
-                      style={{
-                        width: 28,
-                        height: 28,
-                        borderRadius: 14,
-                        backgroundColor: colors.border,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}
-                    >
-                      <span
-                        style={{
-                          fontFamily: fonts.pretendard,
-                          fontSize: 11,
-                          fontWeight: 500,
-                          lineHeight: '16.5px',
-                          color: colors.tertiaryText,
-                        }}
-                      >
-                        +{participants.length - 5}
-                      </span>
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
           </div>
-        ) : (
+        )) : (
           <div
             style={{
               flex: 1,

@@ -13,6 +13,7 @@ function App() {
   const [meetingForm, setMeetingForm] = useState(null)
   const [viewDate, setViewDate] = useState(null)
   const [newMeetings, setNewMeetings] = useState([])
+  const [myMeetings, setMyMeetings] = useState([])
   const [confirmedRequests, setConfirmedRequests] = useState([])
 
   const handleNavigate = (pageName, formData) => {
@@ -24,13 +25,15 @@ function App() {
 
         if (cc != null) setConfirmedRequests(prev => [...prev, cc])
 
-        setNewMeetings(prev => [...prev, {
+        const meetingEntry = {
           date: vd,
           time: mt || meetingForm?.selectedRec?.time?.split(' – ')[0] || '15:00',
           title: meetingForm?.title || '스프린트 회의',
           duration: md || meetingForm?.selectedRec?.time || '15:00 – 16:00',
           status: '편하게 가능',
-        }])
+        }
+        setNewMeetings(prev => [...prev, meetingEntry])
+        if (cc == null) setMyMeetings(prev => [...prev, meetingEntry])
       } else if (formData._saveMeeting) {
         const { _saveMeeting, ...rest } = formData
         if (Object.keys(rest).length > 0) setMeetingForm(prev => ({ ...prev, ...rest }))
@@ -39,13 +42,15 @@ function App() {
         const rec = meetingForm?.selectedRec
         const time = rec?.time?.split(' – ')[0] || '15:00'
         const duration = rec?.time || '15:00 – 16:00'
-        setNewMeetings(prev => [...prev, {
+        const meetingEntry = {
           date: meetingForm?.startDate,
-          time,
           title: meetingForm?.title || '스프린트 회의',
+          time,
           duration,
           status: '편하게 가능',
-        }])
+        }
+        setNewMeetings(prev => [...prev, meetingEntry])
+        setMyMeetings(prev => [...prev, meetingEntry])
       } else if (formData._confirmComplete != null) {
         const { _confirmComplete: requestId, _date: mDate, _time: mTime, _duration: mDuration } = formData
         setConfirmedRequests(prev => [...prev, requestId])
@@ -84,7 +89,7 @@ function App() {
   }
 
   if (page === 'meetings') {
-    return <MeetingsPage onNavigate={handleNavigate} meetingForm={meetingForm} confirmedRequests={confirmedRequests} />
+    return <MeetingsPage onNavigate={handleNavigate} myMeetings={myMeetings} confirmedRequests={confirmedRequests} />
   }
 
   if (page === 'meeting-confirm') {
