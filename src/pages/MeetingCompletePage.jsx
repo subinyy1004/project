@@ -64,7 +64,7 @@ export default function MeetingCompletePage({ onNavigate, meetingForm }) {
             textAlign: 'center',
           }}
         >
-          회의가 확정되었습니다
+          {isDecline ? '참석 여부를 전달했습니다' : '회의가 확정되었습니다'}
         </div>
         <div style={{ height: 8 }} />
 
@@ -79,11 +79,12 @@ export default function MeetingCompletePage({ onNavigate, meetingForm }) {
             textAlign: 'center',
           }}
         >
-          참석자 모두에게 알림을 보냈습니다
+          {isDecline ? '회의 불참 의사를 전달했습니다.' : '참석자 모두에게 알림을 보냈습니다'}
         </div>
         <div style={{ height: 24 }} />
 
         {/* Meeting info card */}
+        {!isDecline && (
         <div
           style={{
             width: '100%',
@@ -222,7 +223,7 @@ export default function MeetingCompletePage({ onNavigate, meetingForm }) {
             </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* CTA area */}
       <div
