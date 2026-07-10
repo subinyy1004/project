@@ -178,40 +178,40 @@ function MessengerView({ target, onBack }) {
         ))}
       </div>
       <div style={{ display: 'flex', gap: 8, alignItems: 'center', padding: '12px 16px', borderTop: `1px solid ${colors.borderLight}` }}>
-        <input
-          value={input}
-          onChange={e => setInput(e.target.value)}
-          onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); send() } }}
-          placeholder="메시지 입력..."
-          style={{
-            flex: 1,
-            border: `1px solid ${colors.borderLight}`,
-            borderRadius: 20,
-            padding: '10px 14px',
-            fontFamily: fonts.pretendard,
-            fontSize: 14,
-            outline: 'none',
-            backgroundColor: '#F8F8F8',
-          }}
-        />
-        <button
-          onClick={send}
-          type="button"
-          style={{
-            width: 36,
-            height: 36,
-            borderRadius: 18,
-            backgroundColor: colors.primaryText,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            cursor: 'pointer',
-            border: 'none',
-            padding: 0,
-          }}
-        >
-          <Icon name="send" size={18} color={colors.white} />
-        </button>
+        <form onSubmit={e => { e.preventDefault(); send() }} style={{ flex: 1, display: 'flex', gap: 8, alignItems: 'center' }}>
+          <input
+            value={input}
+            onChange={e => setInput(e.target.value)}
+            placeholder="메시지 입력..."
+            style={{
+              flex: 1,
+              border: `1px solid ${colors.borderLight}`,
+              borderRadius: 20,
+              padding: '10px 14px',
+              fontFamily: fonts.pretendard,
+              fontSize: 14,
+              outline: 'none',
+              backgroundColor: '#F8F8F8',
+            }}
+          />
+          <button
+            type="submit"
+            style={{
+              width: 36,
+              height: 36,
+              borderRadius: 18,
+              backgroundColor: colors.primaryText,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              border: 'none',
+              padding: 0,
+            }}
+          >
+            <Icon name="send" size={18} color={colors.white} />
+          </button>
+        </form>
       </div>
     </div>
   )
@@ -321,6 +321,20 @@ export default function TeamsPage({ onNavigate }) {
                   >
                     {chat.name}
                   </span>
+                  {chat.type === 'group' && (
+                    <span
+                      style={{
+                        fontFamily: fonts.pretendard,
+                        fontSize: 12,
+                        fontWeight: 400,
+                        lineHeight: '18px',
+                        color: colors.mutedText,
+                        marginLeft: 4,
+                      }}
+                    >
+                      {chat.people.length}
+                    </span>
+                  )}
                   {chat.type === 'group' && (
                     <span
                       style={{
