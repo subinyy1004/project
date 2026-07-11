@@ -251,6 +251,7 @@ export default function TeamsPage({ onNavigate }) {
   const [expandedTeam, setExpandedTeam] = useState(null)
   const [messaging, setMessaging] = useState(null)
   const [chatList, setChatList] = useState(initialChats)
+  const [selectedMember, setSelectedMember] = useState(null)
 
   const handleNewChat = (name, text, time) => {
     const member = findMember(name)
@@ -286,6 +287,7 @@ export default function TeamsPage({ onNavigate }) {
         flexDirection: 'column',
         borderRadius: 40,
         overflow: 'hidden',
+        position: 'relative',
       }}
     >
       <StatusBar />
@@ -546,7 +548,9 @@ export default function TeamsPage({ onNavigate }) {
                               }}
                             />
                           </div>
-                          <span style={{ flex: 1, fontFamily: fonts.pretendard, fontSize: 15, fontWeight: 500, lineHeight: '22.5px', color: colors.tertiaryText }}>
+                          <span
+                            onClick={e => { e.stopPropagation(); setSelectedMember(member) }}
+                            style={{ flex: 1, fontFamily: fonts.pretendard, fontSize: 15, fontWeight: 500, lineHeight: '22.5px', color: colors.tertiaryText, cursor: 'pointer' }}>
                             {member.name}
                           </span>
                           <div
@@ -565,6 +569,89 @@ export default function TeamsPage({ onNavigate }) {
           </div>
         </div>
       </div>
+      {selectedMember && (
+        <div
+          onClick={() => setSelectedMember(null)}
+          style={{
+            position: 'absolute',
+            inset: 0,
+            backgroundColor: 'rgba(0,0,0,0.30)',
+            zIndex: 20,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <div
+            onClick={e => e.stopPropagation()}
+            style={{
+              width: 300,
+              backgroundColor: colors.white,
+              borderRadius: 20,
+              padding: 24,
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 16,
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+              <div
+                style={{
+                  width: 48,
+                  height: 48,
+                  borderRadius: 24,
+                  backgroundColor: (() => {
+                    const t = teams.find(t => t.members.some(m => m.name === selectedMember.name))
+                    return t ? t.color : '#3182F6'
+                  })(),
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexShrink: 0,
+                }}
+              >
+                <span style={{ fontFamily: fonts.pretendard, fontSize: 20, fontWeight: 600, color: colors.white }}>
+                  {selectedMember.name[0]}
+                </span>
+              </div>
+              <div>
+                <div style={{ fontFamily: fonts.pretendard, fontSize: 12, fontWeight: 400, lineHeight: '18px', color: colors.accent }}>
+                  {selectedMember.name}
+                </div>
+                <div style={{ fontFamily: fonts.pretendard, fontSize: 14, fontWeight: 500, lineHeight: '21px', color: colors.primaryText }}>
+                  {selectedMember.status === 'login' ? '편하게 가능' : selectedMember.status === 'working' ? '조정 가능' : '어렵습니다'}
+                </div>
+              </div>
+            </div>
+            <div style={{ height: 1, backgroundColor: colors.borderLight }} />
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              <span style={{ fontFamily: fonts.pretendard, fontSize: 12, fontWeight: 600, lineHeight: '18px', color: colors.lightText }}>
+                내 오늘 상태
+              </span>
+              <div
+                style={{
+                  border: `1px solid ${colors.cardStroke}`,
+                  borderRadius: 12,
+                  padding: '12px 16px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 10,
+                  backgroundColor: selectedMember.status === 'login' ? '#E8F1FF' : selectedMember.status === 'working' ? '#FEE685' : '#FEF2F2',
+                }}
+              >
+                <Icon
+                  name={selectedMember.status === 'login' ? 'check_circle' : selectedMember.status === 'working' ? 'radio_button_checked' : 'cancel'}
+                  size={20}
+                  color={selectedMember.status === 'login' ? '#3182F6' : selectedMember.status === 'working' ? '#E17100' : '#EF4444'}
+                />
+                <span style={{ fontFamily: fonts.pretendard, fontSize: 14, fontWeight: 500, lineHeight: '21px', color: colors.primaryText }}>
+                  {selectedMember.status === 'login' ? '편하게 가능' : selectedMember.status === 'working' ? '조정 가능' : '어렵습니다'}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       <BottomNav activeTab="teams" onTabClick={(key) => onNavigate(key)} />
     </div>
   )
