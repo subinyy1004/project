@@ -89,6 +89,21 @@ export default function ScheduleSection({ selectedDay, currentYear, currentMonth
                   {event.duration}
                 </div>
               </div>
+
+              <div
+                style={{
+                  fontFamily: fonts.pretendard,
+                  fontSize: 11,
+                  fontWeight: 400,
+                  lineHeight: '16.5px',
+                  color: colors.mutedText,
+                  backgroundColor: colors.white,
+                  padding: '2px 8px',
+                  borderRadius: 100,
+                }}
+              >
+                {event.status}
+              </div>
             </div>
           </div>
         ))}
