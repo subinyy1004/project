@@ -327,7 +327,7 @@ export default function CreateMeetingPage({ onNavigate }) {
                     dateList={dateList}
                     selected={startDate}
                     todayStr={todayStr}
-                    onSelect={(iso) => { setStartDate(iso); setOpenDropdown(null) }}
+                    onSelect={(iso) => { setStartDate(iso); if (endDate && iso > endDate) setEndDate(''); setOpenDropdown(null) }}
                   />
                 )}
               </div>
@@ -343,7 +343,7 @@ export default function CreateMeetingPage({ onNavigate }) {
                     dateList={dateList}
                     selected={endDate}
                     todayStr={todayStr}
-                    onSelect={(iso) => { setEndDate(iso); setOpenDropdown(null) }}
+                    onSelect={(iso) => { setEndDate(iso); if (startDate && iso < startDate) setStartDate(''); setOpenDropdown(null) }}
                   />
                 )}
               </div>
