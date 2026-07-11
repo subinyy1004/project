@@ -16,6 +16,7 @@ function App() {
   const [newMeetings, setNewMeetings] = useState([])
   const [myMeetings, setMyMeetings] = useState([])
   const [confirmedRequests, setConfirmedRequests] = useState([])
+  const [attendanceStatus, setAttendanceStatus] = useState('편하게 가능')
 
   const handleNavigate = (pageName, formData) => {
     if (formData) {
@@ -111,10 +112,10 @@ function App() {
   }
 
   if (page === 'teams') {
-    return <TeamsPage onNavigate={handleNavigate} />
+    return <TeamsPage onNavigate={handleNavigate} attendanceStatus={attendanceStatus} />
   }
 
-  return <CalendarPage onNavigate={handleNavigate} initialDate={viewDate} newMeetings={newMeetings} />
+  return <CalendarPage onNavigate={handleNavigate} initialDate={viewDate} newMeetings={newMeetings} attendanceStatus={attendanceStatus} onAttendanceChange={setAttendanceStatus} />
 }
 
 export default App

@@ -110,6 +110,7 @@ const teams = [
       { name: '배지원', status: 'working', meeting: '조정 가능' },
       { name: '임소영', status: 'logout', meeting: '어렵습니다' },
       { name: '한상혁', status: 'login', meeting: '편하게 가능' },
+      { name: '나', status: 'login', meeting: 'dynamic' },
     ],
   },
 ]
@@ -252,7 +253,7 @@ function MessengerView({ target, onBack, onNewChat }) {
   )
 }
 
-export default function TeamsPage({ onNavigate }) {
+export default function TeamsPage({ onNavigate, attendanceStatus }) {
   const [search, setSearch] = useState('')
   const [expandedTeam, setExpandedTeam] = useState(null)
   const [messaging, setMessaging] = useState(null)
@@ -642,16 +643,16 @@ export default function TeamsPage({ onNavigate }) {
                   display: 'flex',
                   alignItems: 'center',
                   gap: 10,
-                  backgroundColor: meetingStyle(selectedMember.meeting).bg,
+                  backgroundColor: meetingStyle(selectedMember.name === '나' ? attendanceStatus : selectedMember.meeting).bg,
                 }}
               >
                 <Icon
-                  name={meetingStyle(selectedMember.meeting).iconName}
+                  name={meetingStyle(selectedMember.name === '나' ? attendanceStatus : selectedMember.meeting).iconName}
                   size={20}
-                  color={meetingStyle(selectedMember.meeting).iconColor}
+                  color={meetingStyle(selectedMember.name === '나' ? attendanceStatus : selectedMember.meeting).iconColor}
                 />
                 <span style={{ fontFamily: fonts.pretendard, fontSize: 14, fontWeight: 500, lineHeight: '21px', color: colors.primaryText }}>
-                  {selectedMember.meeting}
+                  {selectedMember.name === '나' ? attendanceStatus : selectedMember.meeting}
                 </span>
               </div>
             </div>

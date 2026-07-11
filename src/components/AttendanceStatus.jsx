@@ -10,10 +10,9 @@ const statusStyle = {
   '조정 가능': { bg: '#FEE685', iconColor: '#E17100', iconName: 'radio_button_checked', accent: '#E17100' },
 }
 
-export default function AttendanceStatus() {
-  const [status, setStatus] = useState('편하게 가능')
+export default function AttendanceStatus({ attendanceStatus, onAttendanceChange }) {
   const [open, setOpen] = useState(false)
-  const s = statusStyle[status]
+  const s = statusStyle[attendanceStatus]
 
   return (
     <div style={{ padding: '0 16px 12px', display: 'flex', flexDirection: 'column', gap: 12 }}>
@@ -65,7 +64,7 @@ export default function AttendanceStatus() {
                 color: colors.primaryText,
               }}
             >
-              {status}
+              {attendanceStatus}
             </div>
           </div>
         </div>
@@ -106,15 +105,15 @@ export default function AttendanceStatus() {
             {statusOptions.map((opt) => (
               <div
                 key={opt}
-                onClick={() => { setStatus(opt); setOpen(false) }}
+                onClick={() => { onAttendanceChange(opt); setOpen(false) }}
                 style={{
                   padding: '10px 16px',
                   fontFamily: fonts.pretendard,
                   fontSize: 13,
-                  fontWeight: opt === status ? 600 : 400,
+                  fontWeight: opt === attendanceStatus ? 600 : 400,
                   lineHeight: '19.5px',
                   color: colors.primaryText,
-                  backgroundColor: opt === status ? colors.borderLighter : 'transparent',
+                  backgroundColor: opt === attendanceStatus ? colors.borderLighter : 'transparent',
                   cursor: 'pointer',
                 }}
               >

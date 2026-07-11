@@ -8,7 +8,7 @@ import BottomNav from '../components/BottomNav'
 import Icon from '../components/Icon'
 import { fonts, colors, frame } from '../designTokens'
 
-export default function CalendarPage({ onNavigate, initialDate, newMeetings }) {
+export default function CalendarPage({ onNavigate, initialDate, newMeetings, attendanceStatus, onAttendanceChange }) {
   const today = new Date()
   const initDate = initialDate ? new Date(initialDate + 'T00:00:00') : today
   const [currentYear, setCurrentYear] = useState(initDate.getFullYear())
@@ -69,7 +69,7 @@ export default function CalendarPage({ onNavigate, initialDate, newMeetings }) {
           onSelectDay={setSelectedDay}
           newMeetings={newMeetings}
         />
-        <AttendanceStatus />
+        <AttendanceStatus attendanceStatus={attendanceStatus} onAttendanceChange={onAttendanceChange} />
         <ScheduleSection selectedDay={selectedDay} currentYear={currentYear} currentMonth={currentMonth} newMeetings={newMeetings} />
       </div>
 
