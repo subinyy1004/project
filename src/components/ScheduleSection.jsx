@@ -5,6 +5,8 @@ import { events } from '../data'
 
 export default function ScheduleSection({ selectedDay, currentYear, currentMonth, newMeetings = [] }) {
   const [selectedEvent, setSelectedEvent] = useState(null)
+  const [statusMenuIndex, setStatusMenuIndex] = useState(null)
+  const [statusOverrides, setStatusOverrides] = useState({})
 
   const dayEvents = events[selectedDay] || []
   const dayNewMeetings = newMeetings.filter(m => {
@@ -102,7 +104,45 @@ export default function ScheduleSection({ selectedDay, currentYear, currentMonth
                   borderRadius: 100,
                 }}
               >
-                {event.status}
+                {statusOverrides[i] || event.status}
+              </div>
+              <div
+                onClick={e => { e.stopPropagation(); setStatusMenuIndex(statusMenuIndex === i ? null : i) }}
+                style={{ cursor: 'pointer', display: 'flex', position: 'relative' }}
+              >
+                <Icon name="more_vert" size={20} color={colors.mutedText} />
+                {statusMenuIndex === i && (
+                  <div
+                    style={{
+                      position: 'absolute',
+                      top: 24,
+                      right: 0,
+                      backgroundColor: colors.white,
+                      borderRadius: 12,
+                      padding: '4px 0',
+                      boxShadow: '0 4px 16px rgba(0,0,0,0.12)',
+                      zIndex: 50,
+                      minWidth: 120,
+                    }}
+                  >
+                    {['편하게 가능', '조정 가능', '어렵습니다'].map(opt => (
+                      <div
+                        key={opt}
+                        onClick={e => { e.stopPropagation(); setStatusOverrides(prev => ({ ...prev, [i]: opt })); setStatusMenuIndex(null) }}
+                        style={{
+                          padding: '8px 16px',
+                          fontFamily: fonts.pretendard,
+                          fontSize: 13,
+                          fontWeight: opt === (statusOverrides[i] || event.status) ? 600 : 400,
+                          color: colors.primaryText,
+                          cursor: 'pointer',
+                        }}
+                      >
+                        {opt}
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           </div>
