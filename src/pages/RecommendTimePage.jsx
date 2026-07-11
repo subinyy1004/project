@@ -271,7 +271,7 @@ export default function RecommendTimePage({ onNavigate, meetingForm }) {
                     color: colors.primaryText,
                   }}
                 >
-                  필수 {rec.mandatoryAvail}/{mTotal}명 가능
+                  필수 {rec.mandatoryAvail}명 가능
                 </span>
               </div>
               <div
@@ -291,7 +291,7 @@ export default function RecommendTimePage({ onNavigate, meetingForm }) {
                     color: colors.primaryText,
                   }}
                 >
-                  선택 {rec.optionalAvail}/{oTotal}명 가능
+                  선택 {rec.optionalAvail}명 가능
                 </span>
               </div>
             </div>
