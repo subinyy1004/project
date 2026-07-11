@@ -625,7 +625,7 @@ export default function TeamsPage({ onNavigate }) {
                   {selectedMember.name}
                 </div>
                 <div style={{ fontFamily: fonts.pretendard, fontSize: 12, fontWeight: 400, lineHeight: '18px', color: colors.lightText }}>
-                  {selectedMember.status === 'login' ? '로그인' : selectedMember.status === 'working' ? '업무 중' : '오프라인'}
+                  {selectedMember.status === 'login' ? '온라인' : selectedMember.status === 'working' ? '업무 중' : '오프라인'}
                 </div>
               </div>
             </div>
