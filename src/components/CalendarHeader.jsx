@@ -3,7 +3,7 @@ import Icon from './Icon'
 
 const MONTHS = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월']
 
-export default function CalendarHeader({ year, month, onPrevMonth, onNextMonth, onToday }) {
+export default function CalendarHeader({ year, month, onPrevMonth, onNextMonth, onToday, onMonthYearClick }) {
   return (
     <div
       style={{
@@ -13,7 +13,7 @@ export default function CalendarHeader({ year, month, onPrevMonth, onNextMonth, 
         padding: '16px 16px 8px',
       }}
     >
-      <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+      <div onClick={onMonthYearClick} style={{ display: 'flex', alignItems: 'center', gap: 4, cursor: 'pointer' }}>
         <span
           style={{
             fontFamily: fonts.pretendard,
