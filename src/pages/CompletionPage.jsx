@@ -61,7 +61,7 @@ export default function CompletionPage({ onNavigate, meetingForm, selectedRec })
         }}
       >
         <div
-          onClick={() => onNavigate('calendar')}
+          onClick={() => onNavigate('calendar', { _saveMeeting: true })}
           style={{ cursor: 'pointer', display: 'flex' }}
         >
           <Icon name="close" size={24} color={colors.tertiaryText} />
