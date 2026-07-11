@@ -624,15 +624,15 @@ export default function TeamsPage({ onNavigate }) {
                 <div style={{ fontFamily: fonts.pretendard, fontSize: 12, fontWeight: 400, lineHeight: '18px', color: colors.accent }}>
                   {selectedMember.name}
                 </div>
-                <div style={{ fontFamily: fonts.pretendard, fontSize: 14, fontWeight: 500, lineHeight: '21px', color: colors.primaryText }}>
-                  {selectedMember.meeting}
+                <div style={{ fontFamily: fonts.pretendard, fontSize: 12, fontWeight: 400, lineHeight: '18px', color: colors.lightText }}>
+                  {selectedMember.status === 'login' ? '로그인' : selectedMember.status === 'working' ? '업무 중' : '오프라인'}
                 </div>
               </div>
             </div>
             <div style={{ height: 1, backgroundColor: colors.borderLight }} />
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               <span style={{ fontFamily: fonts.pretendard, fontSize: 12, fontWeight: 600, lineHeight: '18px', color: colors.lightText }}>
-                내 오늘 상태
+                회의 참석 상태
               </span>
               <div
                 style={{
