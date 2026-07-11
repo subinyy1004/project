@@ -264,7 +264,11 @@ export default function TeamsPage({ onNavigate }) {
         status: member.status,
       }, ...prev])
     } else {
-      setChatList(prev => prev.map(c => c.name === name ? { ...c, lastMsg: text, time } : c))
+      setChatList(prev => {
+        const filtered = prev.filter(c => c.name !== name)
+        const existing = prev.find(c => c.name === name)
+        return [{ ...existing, lastMsg: text, time }, ...filtered]
+      })
     }
   }
 
