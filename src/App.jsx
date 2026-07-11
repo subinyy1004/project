@@ -36,7 +36,10 @@ function App() {
           participants: [...(meetingForm?.mandatory || []), ...(meetingForm?.optional || [])],
         }
         setNewMeetings(prev => [...prev, meetingEntry])
-        if (cc == null) setMyMeetings(prev => [...prev, meetingEntry])
+        if (cc == null) {
+          const myEntry = { ...meetingEntry, organizer: '나' }
+          setMyMeetings(prev => [...prev, myEntry])
+        }
       } else if (formData._saveMeeting) {
         const { _saveMeeting, ...rest } = formData
         if (Object.keys(rest).length > 0) setMeetingForm(prev => ({ ...prev, ...rest }))
@@ -54,7 +57,7 @@ function App() {
           participants: [...(meetingForm?.mandatory || []), ...(meetingForm?.optional || [])],
           mandatory: meetingForm?.mandatory || [],
           optional: meetingForm?.optional || [],
-          organizer: '최PM',
+          organizer: '나',
         }
         setNewMeetings(prev => [...prev, meetingEntry])
         setMyMeetings(prev => [...prev, meetingEntry])
@@ -71,7 +74,7 @@ function App() {
           participants: [...(meetingForm?.mandatory || []), ...(meetingForm?.optional || [])],
           mandatory: meetingForm?.mandatory || [],
           optional: meetingForm?.optional || [],
-          organizer: '최PM',
+          organizer: '나',
         }])
       } else {
         setMeetingForm(prev => ({ ...prev, ...formData }))
