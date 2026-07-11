@@ -61,58 +61,64 @@ const teams = [
     name: '디자인팀',
     color: '#3182F6',
     members: [
-      { name: '김디자인', status: 'login' },
-      { name: '박시안', status: 'working' },
-      { name: '이미소', status: 'login' },
-      { name: '최보라', status: 'working' },
-      { name: '한지민', status: 'login' },
-      { name: '강수정', status: 'logout' },
-      { name: '오세진', status: 'working' },
-      { name: '윤다영', status: 'login' },
+      { name: '김디자인', status: 'login', meeting: '편하게 가능' },
+      { name: '박시안', status: 'working', meeting: '조정 가능' },
+      { name: '이미소', status: 'login', meeting: '편하게 가능' },
+      { name: '최보라', status: 'working', meeting: '조정 가능' },
+      { name: '한지민', status: 'login', meeting: '편하게 가능' },
+      { name: '강수정', status: 'logout', meeting: '어렵습니다' },
+      { name: '오세진', status: 'working', meeting: '조정 가능' },
+      { name: '윤다영', status: 'login', meeting: '편하게 가능' },
     ],
   },
   {
     name: '개발팀',
     color: '#10B981',
     members: [
-      { name: '김민석', status: 'login' },
-      { name: '이수진', status: 'working' },
-      { name: '박준호', status: 'login' },
-      { name: '정다은', status: 'working' },
-      { name: '최영호', status: 'logout' },
-      { name: '송지우', status: 'login' },
-      { name: '임현수', status: 'working' },
-      { name: '권태영', status: 'login' },
-      { name: '조유진', status: 'working' },
-      { name: '백승훈', status: 'logout' },
-      { name: '문지환', status: 'login' },
-      { name: '양세영', status: 'working' },
+      { name: '김민석', status: 'login', meeting: '편하게 가능' },
+      { name: '이수진', status: 'working', meeting: '조정 가능' },
+      { name: '박준호', status: 'login', meeting: '편하게 가능' },
+      { name: '정다은', status: 'working', meeting: '조정 가능' },
+      { name: '최영호', status: 'logout', meeting: '어렵습니다' },
+      { name: '송지우', status: 'login', meeting: '편하게 가능' },
+      { name: '임현수', status: 'working', meeting: '조정 가능' },
+      { name: '권태영', status: 'login', meeting: '편하게 가능' },
+      { name: '조유진', status: 'working', meeting: '조정 가능' },
+      { name: '백승훈', status: 'logout', meeting: '어렵습니다' },
+      { name: '문지환', status: 'login', meeting: '편하게 가능' },
+      { name: '양세영', status: 'working', meeting: '조정 가능' },
     ],
   },
   {
     name: '마케팅팀',
     color: '#F59E0B',
     members: [
-      { name: '홍지영', status: 'login' },
-      { name: '김나래', status: 'working' },
-      { name: '이동훈', status: 'working' },
-      { name: '박세희', status: 'login' },
-      { name: '최윤서', status: 'logout' },
+      { name: '홍지영', status: 'login', meeting: '편하게 가능' },
+      { name: '김나래', status: 'working', meeting: '조정 가능' },
+      { name: '이동훈', status: 'working', meeting: '조정 가능' },
+      { name: '박세희', status: 'login', meeting: '편하게 가능' },
+      { name: '최윤서', status: 'logout', meeting: '어렵습니다' },
     ],
   },
   {
     name: '기획팀',
     color: '#8B5CF6',
     members: [
-      { name: '정우진', status: 'login' },
-      { name: '강민수', status: 'working' },
-      { name: '송혜진', status: 'login' },
-      { name: '배지원', status: 'working' },
-      { name: '임소영', status: 'logout' },
-      { name: '한상혁', status: 'login' },
+      { name: '정우진', status: 'login', meeting: '편하게 가능' },
+      { name: '강민수', status: 'working', meeting: '조정 가능' },
+      { name: '송혜진', status: 'login', meeting: '편하게 가능' },
+      { name: '배지원', status: 'working', meeting: '조정 가능' },
+      { name: '임소영', status: 'logout', meeting: '어렵습니다' },
+      { name: '한상혁', status: 'login', meeting: '편하게 가능' },
     ],
   },
 ]
+
+function meetingStyle(m) {
+  if (m === '편하게 가능') return { bg: '#E8F1FF', iconColor: '#3182F6', iconName: 'check_circle' }
+  if (m === '조정 가능') return { bg: '#FEE685', iconColor: '#E17100', iconName: 'radio_button_checked' }
+  return { bg: '#FEF2F2', iconColor: '#EF4444', iconName: 'cancel' }
+}
 
 function findMember(name) {
   for (const team of teams) {
@@ -619,7 +625,7 @@ export default function TeamsPage({ onNavigate }) {
                   {selectedMember.name}
                 </div>
                 <div style={{ fontFamily: fonts.pretendard, fontSize: 14, fontWeight: 500, lineHeight: '21px', color: colors.primaryText }}>
-                  {selectedMember.status === 'login' ? '편하게 가능' : selectedMember.status === 'working' ? '조정 가능' : '어렵습니다'}
+                  {selectedMember.meeting}
                 </div>
               </div>
             </div>
@@ -636,16 +642,16 @@ export default function TeamsPage({ onNavigate }) {
                   display: 'flex',
                   alignItems: 'center',
                   gap: 10,
-                  backgroundColor: selectedMember.status === 'login' ? '#E8F1FF' : selectedMember.status === 'working' ? '#FEE685' : '#FEF2F2',
+                  backgroundColor: meetingStyle(selectedMember.meeting).bg,
                 }}
               >
                 <Icon
-                  name={selectedMember.status === 'login' ? 'check_circle' : selectedMember.status === 'working' ? 'radio_button_checked' : 'cancel'}
+                  name={meetingStyle(selectedMember.meeting).iconName}
                   size={20}
-                  color={selectedMember.status === 'login' ? '#3182F6' : selectedMember.status === 'working' ? '#E17100' : '#EF4444'}
+                  color={meetingStyle(selectedMember.meeting).iconColor}
                 />
                 <span style={{ fontFamily: fonts.pretendard, fontSize: 14, fontWeight: 500, lineHeight: '21px', color: colors.primaryText }}>
-                  {selectedMember.status === 'login' ? '편하게 가능' : selectedMember.status === 'working' ? '조정 가능' : '어렵습니다'}
+                  {selectedMember.meeting}
                 </span>
               </div>
             </div>
