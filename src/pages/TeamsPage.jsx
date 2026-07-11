@@ -546,9 +546,22 @@ export default function TeamsPage({ onNavigate }) {
                               }}
                             />
                           </div>
-                          <span style={{ flex: 1, fontFamily: fonts.pretendard, fontSize: 15, fontWeight: 500, lineHeight: '22.5px', color: colors.tertiaryText }}>
-                            {member.name}
-                          </span>
+                          <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 8 }}>
+                            <span style={{ fontFamily: fonts.pretendard, fontSize: 15, fontWeight: 500, lineHeight: '22.5px', color: colors.tertiaryText }}>
+                              {member.name}
+                            </span>
+                            <span
+                              style={{
+                                fontFamily: fonts.pretendard,
+                                fontSize: 11,
+                                fontWeight: 400,
+                                lineHeight: '16.5px',
+                                color: member.status === 'login' ? '#22C55E' : member.status === 'working' ? '#F59E0B' : '#AAAAAA',
+                              }}
+                            >
+                              {member.status === 'login' ? '편하게 가능' : member.status === 'working' ? '조정 가능' : '어렵습니다'}
+                            </span>
+                          </div>
                           <div
                             onClick={e => { e.stopPropagation(); setMessaging(member.name) }}
                             style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}
