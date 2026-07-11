@@ -129,8 +129,12 @@ function findMember(name) {
   return null
 }
 
+const messagesStore = Object.fromEntries(
+  Object.entries(initialMessages).map(([k, v]) => [k, [...v]])
+)
+
 function MessengerView({ target, onBack, onNewChat }) {
-  const [messages, setMessages] = useState(() => initialMessages[target] || [])
+  const [messages, setMessages] = useState(() => messagesStore[target] || [])
   const [input, setInput] = useState('')
 
   const send = () => {
@@ -141,7 +145,10 @@ function MessengerView({ target, onBack, onNewChat }) {
     const m = now.getMinutes()
     const ampm = h < 12 ? '오전' : '오후'
     const hour = h % 12 || 12
-    setMessages(prev => [...prev, { from: '나', text, time: `${ampm} ${hour}:${String(m).padStart(2, '0')}` }])
+    const newMsg = { from: '나', text, time: `${ampm} ${hour}:${String(m).padStart(2, '0')}` }
+    const next = [...messages, newMsg]
+    setMessages(next)
+    messagesStore[target] = next
     setInput('')
     onNewChat?.(target, text, `${ampm} ${hour}:${String(m).padStart(2, '0')}`)
   }
